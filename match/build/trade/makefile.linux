@@ -1,0 +1,282 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././/trade
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p trade_build_dir
+	-mkdir -p ././/
+	
+function_obj=trade_build_dir/BaseFunction.cpp.o trade_build_dir/Config.cpp.o trade_build_dir/platform.cpp.o trade_build_dir/printinfo.cpp.o trade_build_dir/profile.cpp.o trade_build_dir/utility.cpp.o trade_build_dir/utils.cpp.o trade_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=trade_build_dir/CFilelogService.cpp.o trade_build_dir/CLogger.cpp.o trade_build_dir/CProbeLogger.cpp.o trade_build_dir/CSyslogService.cpp.o trade_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+crypt_obj=trade_build_dir/cryptUtility.cpp.o trade_build_dir/Des.cpp.o trade_build_dir/hexEncode.cpp.o trade_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=trade_build_dir/BigDigit.cpp.o trade_build_dir/CDate.cpp.o trade_build_dir/CErrorEngine.cpp.o trade_build_dir/CSequence.cpp.o trade_build_dir/CSVParser.cpp.o trade_build_dir/CSVToField.cpp.o trade_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+netstruct_obj=trade_build_dir/errorDefine.cpp.o trade_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=trade_build_dir/FieldData.cpp.o trade_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+mdbbase_obj=trade_build_dir/mdb.cpp.o trade_build_dir/mdbAction.cpp.o trade_build_dir/mdbIter.cpp.o trade_build_dir/mdbLog.cpp.o trade_build_dir/mdbSearch.cpp.o trade_build_dir/mdbStruct.cpp.o trade_build_dir/mdbTable.cpp.o 
+mdbbase_includedir=-I../../src_base/mdb/mdbbase/.
+mdbstruct_obj=trade_build_dir/Allocator.cpp.o trade_build_dir/CAVLTree.cpp.o trade_build_dir/CBaseObject.cpp.o trade_build_dir/CDatabaseDataFactory.cpp.o trade_build_dir/CDatabaseResource.cpp.o trade_build_dir/CDoubleHash.cpp.o trade_build_dir/CFixMem.cpp.o trade_build_dir/CHashIndex.cpp.o trade_build_dir/CTransaction.cpp.o 
+mdbstruct_includedir=-I../../src_base/mdb/mdbstruct/.
+mdbchange_obj=trade_build_dir/AlterService.cpp.o trade_build_dir/AlterServiceInterface.cpp.o trade_build_dir/TableTrigger.cpp.o 
+mdbchange_includedir=-I../../src_base/mdb/mdbchange/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=trade_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+service_obj=trade_build_dir/ServiceShare.cpp.o trade_build_dir/tradingTools.cpp.o 
+service_includedir=-I../../src/service/.
+serviceQuery_obj=trade_build_dir/QueryServiceInterface.cpp.o 
+serviceQuery_includedir=-I../../src/service/serviceQuery/.
+serviceLogin_obj=trade_build_dir/LoginService.cpp.o trade_build_dir/LoginServiceInterface.cpp.o 
+serviceLogin_includedir=-I../../src/service/serviceLogin/.
+serviceSettlement_obj=trade_build_dir/CSettlementService.cpp.o trade_build_dir/SettlementServiceInterface.cpp.o 
+serviceSettlement_includedir=-I../../src/service/serviceSettlement/.
+serviceTrade_obj=trade_build_dir/CPositionChangeList.cpp.o trade_build_dir/CTradeService.cpp.o trade_build_dir/TradeServiceInterface.cpp.o 
+serviceTrade_includedir=-I../../src/service/serviceTrade/.
+wedge_obj=trade_build_dir/CWedge.cpp.o trade_build_dir/CWedgeConfig.cpp.o trade_build_dir/CWedgeGroup.cpp.o 
+wedge_includedir=-I../../src/service/serviceTrade/wedge/.
+wedgeMatch_obj=trade_build_dir/genTrade.cpp.o trade_build_dir/KlineTriggers.cpp.o trade_build_dir/marketDataWedges.cpp.o trade_build_dir/matchWedges.cpp.o trade_build_dir/OrderBook.cpp.o trade_build_dir/TriggerOrderWedges.cpp.o 
+wedgeMatch_includedir=-I../../src/service/serviceTrade/wedge/wedgeMatch/.
+wedgeRisk_obj=trade_build_dir/accountAlgorithms.cpp.o trade_build_dir/accountWedges.cpp.o trade_build_dir/positionControlers.cpp.o trade_build_dir/positionLimitWedges.cpp.o 
+wedgeRisk_includedir=-I../../src/service/serviceTrade/wedge/wedgeRisk/.
+wedgeControl_obj=trade_build_dir/baseWedges.cpp.o trade_build_dir/orderTypeWedges.cpp.o trade_build_dir/priceControlWedges.cpp.o 
+wedgeControl_includedir=-I../../src/service/serviceTrade/wedge/wedgeControl/.
+trade_obj=trade_build_dir/BaseEngine.cpp.o trade_build_dir/Engine.cpp.o trade_build_dir/Exchange.cpp.o trade_build_dir/MyAlterService.cpp.o trade_build_dir/MyAlterServiceInterface.cpp.o trade_build_dir/TradeEngine.cpp.o 
+trade_includedir=-I../../src/trade/.
+
+all_objs=$(function_obj) $(logger_obj) $(crypt_obj) $(datastruct_obj) $(netstruct_obj) $(field_obj) $(mdbbase_obj) $(mdbstruct_obj) $(mdbchange_obj) $(ofapibase_obj) $(service_obj) $(serviceQuery_obj) $(serviceLogin_obj) $(serviceSettlement_obj) $(serviceTrade_obj) $(wedge_obj) $(wedgeMatch_obj) $(wedgeRisk_obj) $(wedgeControl_obj) $(trade_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(logger_includedir)  $(crypt_includedir)  $(datastruct_includedir)  $(netstruct_includedir)  $(field_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(mdbchange_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(service_includedir)  $(serviceQuery_includedir)  $(serviceLogin_includedir)  $(serviceSettlement_includedir)  $(serviceTrade_includedir)  $(wedge_includedir)  $(wedgeMatch_includedir)  $(wedgeRisk_includedir)  $(wedgeControl_includedir)  $(trade_includedir) 
+
+trade_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -otrade_build_dir/BaseFunction.cpp.o
+trade_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -otrade_build_dir/Config.cpp.o
+trade_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -otrade_build_dir/platform.cpp.o
+trade_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -otrade_build_dir/printinfo.cpp.o
+trade_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -otrade_build_dir/profile.cpp.o
+trade_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -otrade_build_dir/utility.cpp.o
+trade_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -otrade_build_dir/utils.cpp.o
+trade_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -otrade_build_dir/version.cpp.o
+trade_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -otrade_build_dir/CFilelogService.cpp.o
+trade_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -otrade_build_dir/CLogger.cpp.o
+trade_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -otrade_build_dir/CProbeLogger.cpp.o
+trade_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -otrade_build_dir/CSyslogService.cpp.o
+trade_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -otrade_build_dir/monitorIndex.cpp.o
+trade_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -otrade_build_dir/cryptUtility.cpp.o
+trade_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -otrade_build_dir/Des.cpp.o
+trade_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -otrade_build_dir/hexEncode.cpp.o
+trade_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -otrade_build_dir/md5Handler.cpp.o
+trade_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -otrade_build_dir/BigDigit.cpp.o
+trade_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -otrade_build_dir/CDate.cpp.o
+trade_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -otrade_build_dir/CErrorEngine.cpp.o
+trade_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -otrade_build_dir/CSequence.cpp.o
+trade_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -otrade_build_dir/CSVParser.cpp.o
+trade_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -otrade_build_dir/CSVToField.cpp.o
+trade_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -otrade_build_dir/FieldDescribe.cpp.o
+trade_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -otrade_build_dir/errorDefine.cpp.o
+trade_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -otrade_build_dir/TableDefine.cpp.o
+trade_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -otrade_build_dir/FieldData.cpp.o
+trade_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -otrade_build_dir/FieldMap.cpp.o
+trade_build_dir/mdb.cpp.o: ../../src_base/mdb/mdbbase/mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdb.cpp -otrade_build_dir/mdb.cpp.o
+trade_build_dir/mdbAction.cpp.o: ../../src_base/mdb/mdbbase/mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbAction.cpp -otrade_build_dir/mdbAction.cpp.o
+trade_build_dir/mdbIter.cpp.o: ../../src_base/mdb/mdbbase/mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbIter.cpp -otrade_build_dir/mdbIter.cpp.o
+trade_build_dir/mdbLog.cpp.o: ../../src_base/mdb/mdbbase/mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbLog.cpp -otrade_build_dir/mdbLog.cpp.o
+trade_build_dir/mdbSearch.cpp.o: ../../src_base/mdb/mdbbase/mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbSearch.cpp -otrade_build_dir/mdbSearch.cpp.o
+trade_build_dir/mdbStruct.cpp.o: ../../src_base/mdb/mdbbase/mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbStruct.cpp -otrade_build_dir/mdbStruct.cpp.o
+trade_build_dir/mdbTable.cpp.o: ../../src_base/mdb/mdbbase/mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbTable.cpp -otrade_build_dir/mdbTable.cpp.o
+trade_build_dir/Allocator.cpp.o: ../../src_base/mdb/mdbstruct/Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/Allocator.cpp -otrade_build_dir/Allocator.cpp.o
+trade_build_dir/CAVLTree.cpp.o: ../../src_base/mdb/mdbstruct/CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CAVLTree.cpp -otrade_build_dir/CAVLTree.cpp.o
+trade_build_dir/CBaseObject.cpp.o: ../../src_base/mdb/mdbstruct/CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CBaseObject.cpp -otrade_build_dir/CBaseObject.cpp.o
+trade_build_dir/CDatabaseDataFactory.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp -otrade_build_dir/CDatabaseDataFactory.cpp.o
+trade_build_dir/CDatabaseResource.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp -otrade_build_dir/CDatabaseResource.cpp.o
+trade_build_dir/CDoubleHash.cpp.o: ../../src_base/mdb/mdbstruct/CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDoubleHash.cpp -otrade_build_dir/CDoubleHash.cpp.o
+trade_build_dir/CFixMem.cpp.o: ../../src_base/mdb/mdbstruct/CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CFixMem.cpp -otrade_build_dir/CFixMem.cpp.o
+trade_build_dir/CHashIndex.cpp.o: ../../src_base/mdb/mdbstruct/CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CHashIndex.cpp -otrade_build_dir/CHashIndex.cpp.o
+trade_build_dir/CTransaction.cpp.o: ../../src_base/mdb/mdbstruct/CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CTransaction.cpp -otrade_build_dir/CTransaction.cpp.o
+trade_build_dir/AlterService.cpp.o: ../../src_base/mdb/mdbchange/AlterService.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbchange/AlterService.cpp -otrade_build_dir/AlterService.cpp.o
+trade_build_dir/AlterServiceInterface.cpp.o: ../../src_base/mdb/mdbchange/AlterServiceInterface.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbchange/AlterServiceInterface.cpp -otrade_build_dir/AlterServiceInterface.cpp.o
+trade_build_dir/TableTrigger.cpp.o: ../../src_base/mdb/mdbchange/TableTrigger.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbchange/TableTrigger.cpp -otrade_build_dir/TableTrigger.cpp.o
+trade_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -otrade_build_dir/OutFogServiceApiWrapper.cpp.o
+trade_build_dir/ServiceShare.cpp.o: ../../src/service/ServiceShare.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/ServiceShare.cpp -otrade_build_dir/ServiceShare.cpp.o
+trade_build_dir/tradingTools.cpp.o: ../../src/service/tradingTools.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/tradingTools.cpp -otrade_build_dir/tradingTools.cpp.o
+trade_build_dir/QueryServiceInterface.cpp.o: ../../src/service/serviceQuery/QueryServiceInterface.cpp $(serviceQuery_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceQuery/QueryServiceInterface.cpp -otrade_build_dir/QueryServiceInterface.cpp.o
+trade_build_dir/LoginService.cpp.o: ../../src/service/serviceLogin/LoginService.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginService.cpp -otrade_build_dir/LoginService.cpp.o
+trade_build_dir/LoginServiceInterface.cpp.o: ../../src/service/serviceLogin/LoginServiceInterface.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginServiceInterface.cpp -otrade_build_dir/LoginServiceInterface.cpp.o
+trade_build_dir/CSettlementService.cpp.o: ../../src/service/serviceSettlement/CSettlementService.cpp $(serviceSettlement_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceSettlement/CSettlementService.cpp -otrade_build_dir/CSettlementService.cpp.o
+trade_build_dir/SettlementServiceInterface.cpp.o: ../../src/service/serviceSettlement/SettlementServiceInterface.cpp $(serviceSettlement_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceSettlement/SettlementServiceInterface.cpp -otrade_build_dir/SettlementServiceInterface.cpp.o
+trade_build_dir/CPositionChangeList.cpp.o: ../../src/service/serviceTrade/CPositionChangeList.cpp $(serviceTrade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/CPositionChangeList.cpp -otrade_build_dir/CPositionChangeList.cpp.o
+trade_build_dir/CTradeService.cpp.o: ../../src/service/serviceTrade/CTradeService.cpp $(serviceTrade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/CTradeService.cpp -otrade_build_dir/CTradeService.cpp.o
+trade_build_dir/TradeServiceInterface.cpp.o: ../../src/service/serviceTrade/TradeServiceInterface.cpp $(serviceTrade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/TradeServiceInterface.cpp -otrade_build_dir/TradeServiceInterface.cpp.o
+trade_build_dir/CWedge.cpp.o: ../../src/service/serviceTrade/wedge/CWedge.cpp $(wedge_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/CWedge.cpp -otrade_build_dir/CWedge.cpp.o
+trade_build_dir/CWedgeConfig.cpp.o: ../../src/service/serviceTrade/wedge/CWedgeConfig.cpp $(wedge_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/CWedgeConfig.cpp -otrade_build_dir/CWedgeConfig.cpp.o
+trade_build_dir/CWedgeGroup.cpp.o: ../../src/service/serviceTrade/wedge/CWedgeGroup.cpp $(wedge_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/CWedgeGroup.cpp -otrade_build_dir/CWedgeGroup.cpp.o
+trade_build_dir/genTrade.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/genTrade.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/genTrade.cpp -otrade_build_dir/genTrade.cpp.o
+trade_build_dir/KlineTriggers.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/KlineTriggers.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/KlineTriggers.cpp -otrade_build_dir/KlineTriggers.cpp.o
+trade_build_dir/marketDataWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/marketDataWedges.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/marketDataWedges.cpp -otrade_build_dir/marketDataWedges.cpp.o
+trade_build_dir/matchWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/matchWedges.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/matchWedges.cpp -otrade_build_dir/matchWedges.cpp.o
+trade_build_dir/OrderBook.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/OrderBook.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/OrderBook.cpp -otrade_build_dir/OrderBook.cpp.o
+trade_build_dir/TriggerOrderWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeMatch/TriggerOrderWedges.cpp $(wedgeMatch_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeMatch/TriggerOrderWedges.cpp -otrade_build_dir/TriggerOrderWedges.cpp.o
+trade_build_dir/accountAlgorithms.cpp.o: ../../src/service/serviceTrade/wedge/wedgeRisk/accountAlgorithms.cpp $(wedgeRisk_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeRisk/accountAlgorithms.cpp -otrade_build_dir/accountAlgorithms.cpp.o
+trade_build_dir/accountWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeRisk/accountWedges.cpp $(wedgeRisk_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeRisk/accountWedges.cpp -otrade_build_dir/accountWedges.cpp.o
+trade_build_dir/positionControlers.cpp.o: ../../src/service/serviceTrade/wedge/wedgeRisk/positionControlers.cpp $(wedgeRisk_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeRisk/positionControlers.cpp -otrade_build_dir/positionControlers.cpp.o
+trade_build_dir/positionLimitWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeRisk/positionLimitWedges.cpp $(wedgeRisk_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeRisk/positionLimitWedges.cpp -otrade_build_dir/positionLimitWedges.cpp.o
+trade_build_dir/baseWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeControl/baseWedges.cpp $(wedgeControl_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeControl/baseWedges.cpp -otrade_build_dir/baseWedges.cpp.o
+trade_build_dir/orderTypeWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeControl/orderTypeWedges.cpp $(wedgeControl_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeControl/orderTypeWedges.cpp -otrade_build_dir/orderTypeWedges.cpp.o
+trade_build_dir/priceControlWedges.cpp.o: ../../src/service/serviceTrade/wedge/wedgeControl/priceControlWedges.cpp $(wedgeControl_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceTrade/wedge/wedgeControl/priceControlWedges.cpp -otrade_build_dir/priceControlWedges.cpp.o
+trade_build_dir/BaseEngine.cpp.o: ../../src/trade/BaseEngine.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/BaseEngine.cpp -otrade_build_dir/BaseEngine.cpp.o
+trade_build_dir/Engine.cpp.o: ../../src/trade/Engine.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/Engine.cpp -otrade_build_dir/Engine.cpp.o
+trade_build_dir/Exchange.cpp.o: ../../src/trade/Exchange.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/Exchange.cpp -otrade_build_dir/Exchange.cpp.o
+trade_build_dir/MyAlterService.cpp.o: ../../src/trade/MyAlterService.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/MyAlterService.cpp -otrade_build_dir/MyAlterService.cpp.o
+trade_build_dir/MyAlterServiceInterface.cpp.o: ../../src/trade/MyAlterServiceInterface.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/MyAlterServiceInterface.cpp -otrade_build_dir/MyAlterServiceInterface.cpp.o
+trade_build_dir/TradeEngine.cpp.o: ../../src/trade/TradeEngine.cpp $(trade_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/trade/TradeEngine.cpp -otrade_build_dir/TradeEngine.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(mdbchange_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(service_obj)
+	-$(DEL) $(serviceQuery_obj)
+	-$(DEL) $(serviceLogin_obj)
+	-$(DEL) $(serviceSettlement_obj)
+	-$(DEL) $(serviceTrade_obj)
+	-$(DEL) $(wedge_obj)
+	-$(DEL) $(wedgeMatch_obj)
+	-$(DEL) $(wedgeRisk_obj)
+	-$(DEL) $(wedgeControl_obj)
+	-$(DEL) $(trade_obj)
+
+	-$(DEL) $(target)

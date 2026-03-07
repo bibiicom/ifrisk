@@ -1,0 +1,32 @@
+#日志文件路径
+SyslogPath=public.log
+
+#日志文件路径
+SyslogPath=risk.log
+#日志运行级别
+#define LOG_NONE		0
+#define LOG_EMERGENCY	1
+#define LOG_CRITICAL	2
+#define LOG_ERROR		3
+#define LOG_WARNING		4
+#define LOG_INFO		5
+#define LOG_DEBUG		6
+LogLevel=3
+
+########################################################
+#	说明内存数据库使用内存的各个参数
+########################################################
+#	说明内存数据库的大小，以M为单位，在32位下，缺省为512，在64位下，缺省为4096
+MemorySize=512
+#	说明内存数据库中分块的数量，在32位下，缺省为16384，在64位下，缺省为131072
+MaxBlockCount=131072
+##snap文件位置
+SnapPath=./snap/
+
+########################################################
+#	说明当前的运行等级：fast或者normal。缺省为normal
+########################################################
+RunMode=normal
+
+##获取数据库K线的最后的个数,大于0表示会连接数据库
+LoadKLineCount=400

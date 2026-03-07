@@ -1,0 +1,31 @@
+/////////////////////////////////////////////////////////////////////////
+///@system 交易引擎系统
+///@company 上海兆百网络科技有限公司
+///CWedgeConfig.h
+///	定义了类CWedgeConfig
+/////////////////////////////////////////////////////////////////////////
+
+#ifndef CWedgeCONFIG_H
+#define CWedgeCONFIG_H
+
+#include "CTradeService.h"
+#include "CWedgeGroup.h"
+#include "Wedge.h"
+
+/////////////////////////////////////////////////////////////////////////
+///CWedgeConfig是一个进行交易规则配置的交易服务实现
+/////////////////////////////////////////////////////////////////////////
+class CWedgeConfig : public CTradeService
+{
+public:
+	///构造函数
+	///@param	pMDB	本实现使用的内存数据库
+	///@param	pErrorEngine	用于报错的错误引擎
+	CWedgeConfig(CMDB *pMDB, CErrorEngine *pErrorEngine);
+
+	///析构函数
+	virtual ~CWedgeConfig(void);
+
+};
+
+#endif

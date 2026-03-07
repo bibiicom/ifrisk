@@ -1,0 +1,77 @@
+#ifndef _FIELDDATA_H__
+#define _FIELDDATA_H__
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#include "FieldDescribe.h"
+#include "DataType.h"
+
+!!enter XTP!!
+!!travel macros!!
+#define !!@name!!
+!!next!!
+
+!!travel fields!!
+///!!@comment!!
+class C!!@name!!Field
+{
+public:
+!!travel self!!
+	///!!@label!!
+	!!@type!!	!!@name!!;
+!!next!!
+	
+	void DescribeMembers()
+	{
+	!!travel self!!
+		!!let thisprecision="0"!!
+		!!let typeall=@type!!
+		!!enter XTP!!
+			!!travel types!!
+				!!let typeadd=multiaddstring(3,"C",@typename,"Type")!!
+				!!if !strcmp(@typeadd,@typeall)!!
+					!!if valid_name("precision")!!
+						!!let thisprecision=@precision!!
+					!!endif!!
+				!!endif!!
+			!!next!!
+		!!leave!!
+		m_Describe.SetupMember(!!@name!!,(int)((char *)&!!@name!!-(char *)this),"!!@name!!",sizeof(!!@name!!),"!!@api1!!","!!@short1!!",!!@thisprecision!!);
+	!!next!!
+	}
+	
+	static CFieldDescribe m_Describe;
+};
+const int FID_!!@name!!=!!@fid!!;
+
+!!next!!
+
+!!leave!!  
+
+!!enter XTP!!
+!!travel packages!!
+//!!@comment!!
+const int TID_!!@name!!=!!@tid!!;
+!!next!!
+!!leave!!
+
+
+!!enter XTP!!
+!!enter topics!!	
+!!travel self!!
+#define OF_!!@name!! !!@value!!	//!!@comment!!,!!@comment!!
+!!next!!
+!!leave!!	
+!!leave!!
+
+!!enter XTP!!
+!!enter topics!!	
+!!travel self!!
+#define S_!!@name!! "!!@value!!"	//!!@comment!!,!!@comment!!
+!!next!!
+!!leave!!	
+!!leave!!
+
+#endif

@@ -1,0 +1,219 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././/public
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p public_build_dir
+	-mkdir -p ././/
+	
+crypt_obj=public_build_dir/cryptUtility.cpp.o public_build_dir/Des.cpp.o public_build_dir/hexEncode.cpp.o public_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=public_build_dir/BigDigit.cpp.o public_build_dir/CDate.cpp.o public_build_dir/CErrorEngine.cpp.o public_build_dir/CSequence.cpp.o public_build_dir/CSVParser.cpp.o public_build_dir/CSVToField.cpp.o public_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+function_obj=public_build_dir/BaseFunction.cpp.o public_build_dir/Config.cpp.o public_build_dir/platform.cpp.o public_build_dir/printinfo.cpp.o public_build_dir/profile.cpp.o public_build_dir/utility.cpp.o public_build_dir/utils.cpp.o public_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=public_build_dir/CFilelogService.cpp.o public_build_dir/CLogger.cpp.o public_build_dir/CProbeLogger.cpp.o public_build_dir/CSyslogService.cpp.o public_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+netstruct_obj=public_build_dir/errorDefine.cpp.o public_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=public_build_dir/FieldData.cpp.o public_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+mdbbase_obj=public_build_dir/mdb.cpp.o public_build_dir/mdbAction.cpp.o public_build_dir/mdbIter.cpp.o public_build_dir/mdbLog.cpp.o public_build_dir/mdbSearch.cpp.o public_build_dir/mdbStruct.cpp.o public_build_dir/mdbTable.cpp.o 
+mdbbase_includedir=-I../../src_base/mdb/mdbbase/.
+mdbstruct_obj=public_build_dir/Allocator.cpp.o public_build_dir/CAVLTree.cpp.o public_build_dir/CBaseObject.cpp.o public_build_dir/CDatabaseDataFactory.cpp.o public_build_dir/CDatabaseResource.cpp.o public_build_dir/CDoubleHash.cpp.o public_build_dir/CFixMem.cpp.o public_build_dir/CHashIndex.cpp.o public_build_dir/CTransaction.cpp.o 
+mdbstruct_includedir=-I../../src_base/mdb/mdbstruct/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=public_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+sqlapi_include_includedir=-I../../libs/sqlapi/4.1.3/include/.
+sqlapi_lib_lib=-L../../libs/sqlapi/4.1.3/./linux_x64 -lmysqlclient_r -lsqlapi ../../libs/sqlapi/4.1.3/./linux_x64/libmysqlclient.so.18 
+sqlapi_lib_includedir= 
+dbconnect_obj=public_build_dir/DbConnection.cpp.o public_build_dir/DbHelper.cpp.o 
+dbconnect_includedir=-I../../libs/sqlapi/dbconnect/.
+modMarketData_obj=public_build_dir/CServiceTimer.cpp.o public_build_dir/MarketDataService.cpp.o public_build_dir/MarketDataTimer.cpp.o public_build_dir/MarketDataTriggers.cpp.o 
+modMarketData_includedir=-I../../src/modMarketData/.
+serviceLogin_obj=public_build_dir/LoginService.cpp.o public_build_dir/LoginServiceInterface.cpp.o 
+serviceLogin_includedir=-I../../src/service/serviceLogin/.
+service_obj=public_build_dir/ServiceShare.cpp.o public_build_dir/tradingTools.cpp.o 
+service_includedir=-I../../src/service/.
+public_obj=public_build_dir/App.cpp.o 
+public_includedir=-I../../src/public/.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(mdbbase_obj) $(mdbstruct_obj) $(ofapibase_obj) $(dbconnect_obj) $(modMarketData_obj) $(serviceLogin_obj) $(service_obj) $(public_obj) 
+
+all_libs=$(sqlapi_lib_lib) 
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(sqlapi_include_includedir)  $(sqlapi_lib_includedir)  $(dbconnect_includedir)  $(modMarketData_includedir)  $(serviceLogin_includedir)  $(service_includedir)  $(public_includedir) 
+
+public_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -opublic_build_dir/cryptUtility.cpp.o
+public_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -opublic_build_dir/Des.cpp.o
+public_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -opublic_build_dir/hexEncode.cpp.o
+public_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -opublic_build_dir/md5Handler.cpp.o
+public_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -opublic_build_dir/BigDigit.cpp.o
+public_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -opublic_build_dir/CDate.cpp.o
+public_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -opublic_build_dir/CErrorEngine.cpp.o
+public_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -opublic_build_dir/CSequence.cpp.o
+public_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -opublic_build_dir/CSVParser.cpp.o
+public_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -opublic_build_dir/CSVToField.cpp.o
+public_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -opublic_build_dir/FieldDescribe.cpp.o
+public_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -opublic_build_dir/BaseFunction.cpp.o
+public_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -opublic_build_dir/Config.cpp.o
+public_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -opublic_build_dir/platform.cpp.o
+public_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -opublic_build_dir/printinfo.cpp.o
+public_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -opublic_build_dir/profile.cpp.o
+public_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -opublic_build_dir/utility.cpp.o
+public_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -opublic_build_dir/utils.cpp.o
+public_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -opublic_build_dir/version.cpp.o
+public_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -opublic_build_dir/CFilelogService.cpp.o
+public_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -opublic_build_dir/CLogger.cpp.o
+public_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -opublic_build_dir/CProbeLogger.cpp.o
+public_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -opublic_build_dir/CSyslogService.cpp.o
+public_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -opublic_build_dir/monitorIndex.cpp.o
+public_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -opublic_build_dir/errorDefine.cpp.o
+public_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -opublic_build_dir/TableDefine.cpp.o
+public_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -opublic_build_dir/FieldData.cpp.o
+public_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -opublic_build_dir/FieldMap.cpp.o
+public_build_dir/mdb.cpp.o: ../../src_base/mdb/mdbbase/mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdb.cpp -opublic_build_dir/mdb.cpp.o
+public_build_dir/mdbAction.cpp.o: ../../src_base/mdb/mdbbase/mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbAction.cpp -opublic_build_dir/mdbAction.cpp.o
+public_build_dir/mdbIter.cpp.o: ../../src_base/mdb/mdbbase/mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbIter.cpp -opublic_build_dir/mdbIter.cpp.o
+public_build_dir/mdbLog.cpp.o: ../../src_base/mdb/mdbbase/mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbLog.cpp -opublic_build_dir/mdbLog.cpp.o
+public_build_dir/mdbSearch.cpp.o: ../../src_base/mdb/mdbbase/mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbSearch.cpp -opublic_build_dir/mdbSearch.cpp.o
+public_build_dir/mdbStruct.cpp.o: ../../src_base/mdb/mdbbase/mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbStruct.cpp -opublic_build_dir/mdbStruct.cpp.o
+public_build_dir/mdbTable.cpp.o: ../../src_base/mdb/mdbbase/mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbTable.cpp -opublic_build_dir/mdbTable.cpp.o
+public_build_dir/Allocator.cpp.o: ../../src_base/mdb/mdbstruct/Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/Allocator.cpp -opublic_build_dir/Allocator.cpp.o
+public_build_dir/CAVLTree.cpp.o: ../../src_base/mdb/mdbstruct/CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CAVLTree.cpp -opublic_build_dir/CAVLTree.cpp.o
+public_build_dir/CBaseObject.cpp.o: ../../src_base/mdb/mdbstruct/CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CBaseObject.cpp -opublic_build_dir/CBaseObject.cpp.o
+public_build_dir/CDatabaseDataFactory.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp -opublic_build_dir/CDatabaseDataFactory.cpp.o
+public_build_dir/CDatabaseResource.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp -opublic_build_dir/CDatabaseResource.cpp.o
+public_build_dir/CDoubleHash.cpp.o: ../../src_base/mdb/mdbstruct/CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDoubleHash.cpp -opublic_build_dir/CDoubleHash.cpp.o
+public_build_dir/CFixMem.cpp.o: ../../src_base/mdb/mdbstruct/CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CFixMem.cpp -opublic_build_dir/CFixMem.cpp.o
+public_build_dir/CHashIndex.cpp.o: ../../src_base/mdb/mdbstruct/CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CHashIndex.cpp -opublic_build_dir/CHashIndex.cpp.o
+public_build_dir/CTransaction.cpp.o: ../../src_base/mdb/mdbstruct/CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CTransaction.cpp -opublic_build_dir/CTransaction.cpp.o
+public_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -opublic_build_dir/OutFogServiceApiWrapper.cpp.o
+public_build_dir/DbConnection.cpp.o: ../../libs/sqlapi/dbconnect/DbConnection.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/sqlapi/dbconnect/DbConnection.cpp -opublic_build_dir/DbConnection.cpp.o
+public_build_dir/DbHelper.cpp.o: ../../libs/sqlapi/dbconnect/DbHelper.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/sqlapi/dbconnect/DbHelper.cpp -opublic_build_dir/DbHelper.cpp.o
+public_build_dir/CServiceTimer.cpp.o: ../../src/modMarketData/CServiceTimer.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/CServiceTimer.cpp -opublic_build_dir/CServiceTimer.cpp.o
+public_build_dir/MarketDataService.cpp.o: ../../src/modMarketData/MarketDataService.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataService.cpp -opublic_build_dir/MarketDataService.cpp.o
+public_build_dir/MarketDataTimer.cpp.o: ../../src/modMarketData/MarketDataTimer.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataTimer.cpp -opublic_build_dir/MarketDataTimer.cpp.o
+public_build_dir/MarketDataTriggers.cpp.o: ../../src/modMarketData/MarketDataTriggers.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataTriggers.cpp -opublic_build_dir/MarketDataTriggers.cpp.o
+public_build_dir/LoginService.cpp.o: ../../src/service/serviceLogin/LoginService.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginService.cpp -opublic_build_dir/LoginService.cpp.o
+public_build_dir/LoginServiceInterface.cpp.o: ../../src/service/serviceLogin/LoginServiceInterface.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginServiceInterface.cpp -opublic_build_dir/LoginServiceInterface.cpp.o
+public_build_dir/ServiceShare.cpp.o: ../../src/service/ServiceShare.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/ServiceShare.cpp -opublic_build_dir/ServiceShare.cpp.o
+public_build_dir/tradingTools.cpp.o: ../../src/service/tradingTools.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/tradingTools.cpp -opublic_build_dir/tradingTools.cpp.o
+public_build_dir/App.cpp.o: ../../src/public/App.cpp $(public_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/public/App.cpp -opublic_build_dir/App.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(dbconnect_obj)
+	-$(DEL) $(modMarketData_obj)
+	-$(DEL) $(serviceLogin_obj)
+	-$(DEL) $(service_obj)
+	-$(DEL) $(public_obj)
+
+	-$(DEL) $(target)

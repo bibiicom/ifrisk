@@ -1,0 +1,151 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DLINUX -DGCC -DISLIB
+target=.//libOneMegaApi.so
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG -DLIB_ONE_MEGA_API_EXPORT -DONE_MEGAAPI_IS_LIB -DMEGAAPI $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p OneMegaApi_build_dir
+	-mkdir -p .//
+	
+function_obj=OneMegaApi_build_dir/BaseFunction.cpp.o OneMegaApi_build_dir/Config.cpp.o OneMegaApi_build_dir/platform.cpp.o OneMegaApi_build_dir/printinfo.cpp.o OneMegaApi_build_dir/profile.cpp.o OneMegaApi_build_dir/utility.cpp.o OneMegaApi_build_dir/utils.cpp.o OneMegaApi_build_dir/version.cpp.o 
+function_includedir=-I../../../src_base/function/.
+datastruct_obj=OneMegaApi_build_dir/BigDigit.cpp.o OneMegaApi_build_dir/CDate.cpp.o OneMegaApi_build_dir/CErrorEngine.cpp.o OneMegaApi_build_dir/CSequence.cpp.o OneMegaApi_build_dir/CSVParser.cpp.o OneMegaApi_build_dir/CSVToField.cpp.o OneMegaApi_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../src_base/datastruct/.
+thread_obj=OneMegaApi_build_dir/Semaphore.cpp.o OneMegaApi_build_dir/Thread.cpp.o 
+thread_includedir=-I../../../src_base/thread/.
+xml_obj=OneMegaApi_build_dir/CXML.cpp.o OneMegaApi_build_dir/XMLAction.cpp.o 
+xml_includedir=-I../../../src_base/xml/.
+logger_obj=OneMegaApi_build_dir/CFilelogService.cpp.o OneMegaApi_build_dir/CLogger.cpp.o OneMegaApi_build_dir/CProbeLogger.cpp.o OneMegaApi_build_dir/CSyslogService.cpp.o OneMegaApi_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../../src_base/logger/.
+netstruct_obj=OneMegaApi_build_dir/errorDefine.cpp.o OneMegaApi_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../../src_base/netstruct/.
+field_obj=OneMegaApi_build_dir/FieldData.cpp.o OneMegaApi_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../../src_base/field/.
+ofserviceapi_include_includedir=-I../../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=OneMegaApi_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../../libs/ofserviceapi/ofapibase/.
+include_includedir=-I../../../src_api/include/.
+api_obj=OneMegaApi_build_dir/ApiImpl.cpp.o 
+api_includedir=-I../../../src_api/api/.
+
+all_objs=$(function_obj) $(datastruct_obj) $(thread_obj) $(xml_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(ofapibase_obj) $(api_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(datastruct_includedir)  $(thread_includedir)  $(xml_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(include_includedir)  $(api_includedir) 
+
+OneMegaApi_build_dir/BaseFunction.cpp.o: ../../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/BaseFunction.cpp -oOneMegaApi_build_dir/BaseFunction.cpp.o
+OneMegaApi_build_dir/Config.cpp.o: ../../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/Config.cpp -oOneMegaApi_build_dir/Config.cpp.o
+OneMegaApi_build_dir/platform.cpp.o: ../../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/platform.cpp -oOneMegaApi_build_dir/platform.cpp.o
+OneMegaApi_build_dir/printinfo.cpp.o: ../../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/printinfo.cpp -oOneMegaApi_build_dir/printinfo.cpp.o
+OneMegaApi_build_dir/profile.cpp.o: ../../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/profile.cpp -oOneMegaApi_build_dir/profile.cpp.o
+OneMegaApi_build_dir/utility.cpp.o: ../../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utility.cpp -oOneMegaApi_build_dir/utility.cpp.o
+OneMegaApi_build_dir/utils.cpp.o: ../../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utils.cpp -oOneMegaApi_build_dir/utils.cpp.o
+OneMegaApi_build_dir/version.cpp.o: ../../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/version.cpp -oOneMegaApi_build_dir/version.cpp.o
+OneMegaApi_build_dir/BigDigit.cpp.o: ../../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/BigDigit.cpp -oOneMegaApi_build_dir/BigDigit.cpp.o
+OneMegaApi_build_dir/CDate.cpp.o: ../../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CDate.cpp -oOneMegaApi_build_dir/CDate.cpp.o
+OneMegaApi_build_dir/CErrorEngine.cpp.o: ../../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CErrorEngine.cpp -oOneMegaApi_build_dir/CErrorEngine.cpp.o
+OneMegaApi_build_dir/CSequence.cpp.o: ../../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSequence.cpp -oOneMegaApi_build_dir/CSequence.cpp.o
+OneMegaApi_build_dir/CSVParser.cpp.o: ../../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVParser.cpp -oOneMegaApi_build_dir/CSVParser.cpp.o
+OneMegaApi_build_dir/CSVToField.cpp.o: ../../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVToField.cpp -oOneMegaApi_build_dir/CSVToField.cpp.o
+OneMegaApi_build_dir/FieldDescribe.cpp.o: ../../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/FieldDescribe.cpp -oOneMegaApi_build_dir/FieldDescribe.cpp.o
+OneMegaApi_build_dir/Semaphore.cpp.o: ../../../src_base/thread/Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Semaphore.cpp -oOneMegaApi_build_dir/Semaphore.cpp.o
+OneMegaApi_build_dir/Thread.cpp.o: ../../../src_base/thread/Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Thread.cpp -oOneMegaApi_build_dir/Thread.cpp.o
+OneMegaApi_build_dir/CXML.cpp.o: ../../../src_base/xml/CXML.cpp $(xml_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/xml/CXML.cpp -oOneMegaApi_build_dir/CXML.cpp.o
+OneMegaApi_build_dir/XMLAction.cpp.o: ../../../src_base/xml/XMLAction.cpp $(xml_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/xml/XMLAction.cpp -oOneMegaApi_build_dir/XMLAction.cpp.o
+OneMegaApi_build_dir/CFilelogService.cpp.o: ../../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CFilelogService.cpp -oOneMegaApi_build_dir/CFilelogService.cpp.o
+OneMegaApi_build_dir/CLogger.cpp.o: ../../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CLogger.cpp -oOneMegaApi_build_dir/CLogger.cpp.o
+OneMegaApi_build_dir/CProbeLogger.cpp.o: ../../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CProbeLogger.cpp -oOneMegaApi_build_dir/CProbeLogger.cpp.o
+OneMegaApi_build_dir/CSyslogService.cpp.o: ../../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CSyslogService.cpp -oOneMegaApi_build_dir/CSyslogService.cpp.o
+OneMegaApi_build_dir/monitorIndex.cpp.o: ../../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/monitorIndex.cpp -oOneMegaApi_build_dir/monitorIndex.cpp.o
+OneMegaApi_build_dir/errorDefine.cpp.o: ../../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/errorDefine.cpp -oOneMegaApi_build_dir/errorDefine.cpp.o
+OneMegaApi_build_dir/TableDefine.cpp.o: ../../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/TableDefine.cpp -oOneMegaApi_build_dir/TableDefine.cpp.o
+OneMegaApi_build_dir/FieldData.cpp.o: ../../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldData.cpp -oOneMegaApi_build_dir/FieldData.cpp.o
+OneMegaApi_build_dir/FieldMap.cpp.o: ../../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldMap.cpp -oOneMegaApi_build_dir/FieldMap.cpp.o
+OneMegaApi_build_dir/OutFogServiceApiWrapper.cpp.o: ../../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -oOneMegaApi_build_dir/OutFogServiceApiWrapper.cpp.o
+OneMegaApi_build_dir/ApiImpl.cpp.o: ../../../src_api/api/ApiImpl.cpp $(api_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_api/api/ApiImpl.cpp -oOneMegaApi_build_dir/ApiImpl.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(xml_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(api_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .//OneMegaApi.a

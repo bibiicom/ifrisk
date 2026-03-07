@@ -1,0 +1,70 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DWINDOWS -DMSVC
+target=.\.\test.exe
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  test_build_dir
+	-mkdir  .\.\
+	
+mysql_include_includedir=-I..\..\mysql\8.0.42\include\.
+mysql_lib_lib=/libpath:..\..\mysql\8.0.42\.\windows_x64 mysql.lib 
+mysql_lib_includedir= 
+_obj=test_build_dir\test.cpp.obj 
+_includedir= 
+
+all_objs=$(_obj) 
+
+all_libs=$(mysql_lib_lib) 
+INCLUDEDIR= $(mysql_include_includedir)  $(mysql_lib_includedir)  $(_includedir) 
+
+test_build_dir\test.cpp.obj: .\\test.cpp $(_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\\test.cpp /Fotest_build_dir\test.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -out:$@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\.\test.pdb

@@ -1,0 +1,209 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././/private
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p private_build_dir
+	-mkdir -p ././/
+	
+crypt_obj=private_build_dir/cryptUtility.cpp.o private_build_dir/Des.cpp.o private_build_dir/hexEncode.cpp.o private_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=private_build_dir/BigDigit.cpp.o private_build_dir/CDate.cpp.o private_build_dir/CErrorEngine.cpp.o private_build_dir/CSequence.cpp.o private_build_dir/CSVParser.cpp.o private_build_dir/CSVToField.cpp.o private_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+function_obj=private_build_dir/BaseFunction.cpp.o private_build_dir/Config.cpp.o private_build_dir/platform.cpp.o private_build_dir/printinfo.cpp.o private_build_dir/profile.cpp.o private_build_dir/utility.cpp.o private_build_dir/utils.cpp.o private_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=private_build_dir/CFilelogService.cpp.o private_build_dir/CLogger.cpp.o private_build_dir/CProbeLogger.cpp.o private_build_dir/CSyslogService.cpp.o private_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+netstruct_obj=private_build_dir/errorDefine.cpp.o private_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=private_build_dir/FieldData.cpp.o private_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+mdbbase_obj=private_build_dir/mdb.cpp.o private_build_dir/mdbAction.cpp.o private_build_dir/mdbIter.cpp.o private_build_dir/mdbLog.cpp.o private_build_dir/mdbSearch.cpp.o private_build_dir/mdbStruct.cpp.o private_build_dir/mdbTable.cpp.o 
+mdbbase_includedir=-I../../src_base/mdb/mdbbase/.
+mdbstruct_obj=private_build_dir/Allocator.cpp.o private_build_dir/CAVLTree.cpp.o private_build_dir/CBaseObject.cpp.o private_build_dir/CDatabaseDataFactory.cpp.o private_build_dir/CDatabaseResource.cpp.o private_build_dir/CDoubleHash.cpp.o private_build_dir/CFixMem.cpp.o private_build_dir/CHashIndex.cpp.o private_build_dir/CTransaction.cpp.o 
+mdbstruct_includedir=-I../../src_base/mdb/mdbstruct/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=private_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+modMarketData_obj=private_build_dir/CServiceTimer.cpp.o private_build_dir/MarketDataService.cpp.o private_build_dir/MarketDataTimer.cpp.o private_build_dir/MarketDataTriggers.cpp.o 
+modMarketData_includedir=-I../../src/modMarketData/.
+serviceLogin_obj=private_build_dir/LoginService.cpp.o private_build_dir/LoginServiceInterface.cpp.o 
+serviceLogin_includedir=-I../../src/service/serviceLogin/.
+service_obj=private_build_dir/ServiceShare.cpp.o private_build_dir/tradingTools.cpp.o 
+service_includedir=-I../../src/service/.
+private_obj=private_build_dir/App.cpp.o 
+private_includedir=-I../../src/private/.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(mdbbase_obj) $(mdbstruct_obj) $(ofapibase_obj) $(modMarketData_obj) $(serviceLogin_obj) $(service_obj) $(private_obj) 
+
+all_libs=
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(modMarketData_includedir)  $(serviceLogin_includedir)  $(service_includedir)  $(private_includedir) 
+
+private_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -oprivate_build_dir/cryptUtility.cpp.o
+private_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -oprivate_build_dir/Des.cpp.o
+private_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -oprivate_build_dir/hexEncode.cpp.o
+private_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -oprivate_build_dir/md5Handler.cpp.o
+private_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -oprivate_build_dir/BigDigit.cpp.o
+private_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -oprivate_build_dir/CDate.cpp.o
+private_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -oprivate_build_dir/CErrorEngine.cpp.o
+private_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -oprivate_build_dir/CSequence.cpp.o
+private_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -oprivate_build_dir/CSVParser.cpp.o
+private_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -oprivate_build_dir/CSVToField.cpp.o
+private_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -oprivate_build_dir/FieldDescribe.cpp.o
+private_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -oprivate_build_dir/BaseFunction.cpp.o
+private_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -oprivate_build_dir/Config.cpp.o
+private_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -oprivate_build_dir/platform.cpp.o
+private_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -oprivate_build_dir/printinfo.cpp.o
+private_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -oprivate_build_dir/profile.cpp.o
+private_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -oprivate_build_dir/utility.cpp.o
+private_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -oprivate_build_dir/utils.cpp.o
+private_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -oprivate_build_dir/version.cpp.o
+private_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -oprivate_build_dir/CFilelogService.cpp.o
+private_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -oprivate_build_dir/CLogger.cpp.o
+private_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -oprivate_build_dir/CProbeLogger.cpp.o
+private_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -oprivate_build_dir/CSyslogService.cpp.o
+private_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -oprivate_build_dir/monitorIndex.cpp.o
+private_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -oprivate_build_dir/errorDefine.cpp.o
+private_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -oprivate_build_dir/TableDefine.cpp.o
+private_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -oprivate_build_dir/FieldData.cpp.o
+private_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -oprivate_build_dir/FieldMap.cpp.o
+private_build_dir/mdb.cpp.o: ../../src_base/mdb/mdbbase/mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdb.cpp -oprivate_build_dir/mdb.cpp.o
+private_build_dir/mdbAction.cpp.o: ../../src_base/mdb/mdbbase/mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbAction.cpp -oprivate_build_dir/mdbAction.cpp.o
+private_build_dir/mdbIter.cpp.o: ../../src_base/mdb/mdbbase/mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbIter.cpp -oprivate_build_dir/mdbIter.cpp.o
+private_build_dir/mdbLog.cpp.o: ../../src_base/mdb/mdbbase/mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbLog.cpp -oprivate_build_dir/mdbLog.cpp.o
+private_build_dir/mdbSearch.cpp.o: ../../src_base/mdb/mdbbase/mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbSearch.cpp -oprivate_build_dir/mdbSearch.cpp.o
+private_build_dir/mdbStruct.cpp.o: ../../src_base/mdb/mdbbase/mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbStruct.cpp -oprivate_build_dir/mdbStruct.cpp.o
+private_build_dir/mdbTable.cpp.o: ../../src_base/mdb/mdbbase/mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbTable.cpp -oprivate_build_dir/mdbTable.cpp.o
+private_build_dir/Allocator.cpp.o: ../../src_base/mdb/mdbstruct/Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/Allocator.cpp -oprivate_build_dir/Allocator.cpp.o
+private_build_dir/CAVLTree.cpp.o: ../../src_base/mdb/mdbstruct/CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CAVLTree.cpp -oprivate_build_dir/CAVLTree.cpp.o
+private_build_dir/CBaseObject.cpp.o: ../../src_base/mdb/mdbstruct/CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CBaseObject.cpp -oprivate_build_dir/CBaseObject.cpp.o
+private_build_dir/CDatabaseDataFactory.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp -oprivate_build_dir/CDatabaseDataFactory.cpp.o
+private_build_dir/CDatabaseResource.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp -oprivate_build_dir/CDatabaseResource.cpp.o
+private_build_dir/CDoubleHash.cpp.o: ../../src_base/mdb/mdbstruct/CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDoubleHash.cpp -oprivate_build_dir/CDoubleHash.cpp.o
+private_build_dir/CFixMem.cpp.o: ../../src_base/mdb/mdbstruct/CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CFixMem.cpp -oprivate_build_dir/CFixMem.cpp.o
+private_build_dir/CHashIndex.cpp.o: ../../src_base/mdb/mdbstruct/CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CHashIndex.cpp -oprivate_build_dir/CHashIndex.cpp.o
+private_build_dir/CTransaction.cpp.o: ../../src_base/mdb/mdbstruct/CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CTransaction.cpp -oprivate_build_dir/CTransaction.cpp.o
+private_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -oprivate_build_dir/OutFogServiceApiWrapper.cpp.o
+private_build_dir/CServiceTimer.cpp.o: ../../src/modMarketData/CServiceTimer.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/CServiceTimer.cpp -oprivate_build_dir/CServiceTimer.cpp.o
+private_build_dir/MarketDataService.cpp.o: ../../src/modMarketData/MarketDataService.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataService.cpp -oprivate_build_dir/MarketDataService.cpp.o
+private_build_dir/MarketDataTimer.cpp.o: ../../src/modMarketData/MarketDataTimer.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataTimer.cpp -oprivate_build_dir/MarketDataTimer.cpp.o
+private_build_dir/MarketDataTriggers.cpp.o: ../../src/modMarketData/MarketDataTriggers.cpp $(modMarketData_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/modMarketData/MarketDataTriggers.cpp -oprivate_build_dir/MarketDataTriggers.cpp.o
+private_build_dir/LoginService.cpp.o: ../../src/service/serviceLogin/LoginService.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginService.cpp -oprivate_build_dir/LoginService.cpp.o
+private_build_dir/LoginServiceInterface.cpp.o: ../../src/service/serviceLogin/LoginServiceInterface.cpp $(serviceLogin_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/serviceLogin/LoginServiceInterface.cpp -oprivate_build_dir/LoginServiceInterface.cpp.o
+private_build_dir/ServiceShare.cpp.o: ../../src/service/ServiceShare.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/ServiceShare.cpp -oprivate_build_dir/ServiceShare.cpp.o
+private_build_dir/tradingTools.cpp.o: ../../src/service/tradingTools.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/service/tradingTools.cpp -oprivate_build_dir/tradingTools.cpp.o
+private_build_dir/App.cpp.o: ../../src/private/App.cpp $(private_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/private/App.cpp -oprivate_build_dir/App.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(modMarketData_obj)
+	-$(DEL) $(serviceLogin_obj)
+	-$(DEL) $(service_obj)
+	-$(DEL) $(private_obj)
+
+	-$(DEL) $(target)

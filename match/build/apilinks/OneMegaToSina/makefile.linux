@@ -1,0 +1,136 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DLINUX -DGCC -DISLIB
+target=././libOneMegaToSina.so
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DONE_MEGAAPI_IS_LIB -DLIB_ONE_MEGA_API_EXPORT -DMG_ENABLE_OPENSSL=0 $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p OneMegaToSina_build_dir
+	-mkdir -p ././
+	
+datastruct_obj=OneMegaToSina_build_dir/BigDigit.cpp.o OneMegaToSina_build_dir/CDate.cpp.o OneMegaToSina_build_dir/CErrorEngine.cpp.o OneMegaToSina_build_dir/CSequence.cpp.o OneMegaToSina_build_dir/CSVParser.cpp.o OneMegaToSina_build_dir/CSVToField.cpp.o OneMegaToSina_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../src_base/datastruct/.
+function_obj=OneMegaToSina_build_dir/BaseFunction.cpp.o OneMegaToSina_build_dir/Config.cpp.o OneMegaToSina_build_dir/platform.cpp.o OneMegaToSina_build_dir/printinfo.cpp.o OneMegaToSina_build_dir/profile.cpp.o OneMegaToSina_build_dir/utility.cpp.o OneMegaToSina_build_dir/utils.cpp.o OneMegaToSina_build_dir/version.cpp.o 
+function_includedir=-I../../../src_base/function/.
+mongoose79_obj=OneMegaToSina_build_dir/HttpClient.cpp.o OneMegaToSina_build_dir/SMTPClient.cpp.o OneMegaToSina_build_dir/WSClient.cpp.o OneMegaToSina_build_dir/mongoose.c.o 
+mongoose79_includedir=-I../../../src_base/mongoose79/.
+tool_obj=OneMegaToSina_build_dir/tool.cpp.o 
+tool_includedir=-I../../../src_base/tool/.
+jsoncpp_obj=OneMegaToSina_build_dir/json_reader.cpp.o OneMegaToSina_build_dir/json_value.cpp.o OneMegaToSina_build_dir/json_writer.cpp.o 
+jsoncpp_includedir=-I../../../src_base/jsoncpp/.
+thread_obj=OneMegaToSina_build_dir/Semaphore.cpp.o OneMegaToSina_build_dir/Thread.cpp.o 
+thread_includedir=-I../../../src_base/thread/.
+include_includedir=-I../../../src_api/include/.
+OneMegaToSina_obj=OneMegaToSina_build_dir/Link.cpp.o 
+OneMegaToSina_includedir=-I./.
+
+all_objs=$(datastruct_obj) $(function_obj) $(mongoose79_obj) $(tool_obj) $(jsoncpp_obj) $(thread_obj) $(OneMegaToSina_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(mongoose79_includedir)  $(tool_includedir)  $(jsoncpp_includedir)  $(thread_includedir)  $(include_includedir)  $(OneMegaToSina_includedir) 
+
+OneMegaToSina_build_dir/BigDigit.cpp.o: ../../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/BigDigit.cpp -oOneMegaToSina_build_dir/BigDigit.cpp.o
+OneMegaToSina_build_dir/CDate.cpp.o: ../../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CDate.cpp -oOneMegaToSina_build_dir/CDate.cpp.o
+OneMegaToSina_build_dir/CErrorEngine.cpp.o: ../../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CErrorEngine.cpp -oOneMegaToSina_build_dir/CErrorEngine.cpp.o
+OneMegaToSina_build_dir/CSequence.cpp.o: ../../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSequence.cpp -oOneMegaToSina_build_dir/CSequence.cpp.o
+OneMegaToSina_build_dir/CSVParser.cpp.o: ../../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVParser.cpp -oOneMegaToSina_build_dir/CSVParser.cpp.o
+OneMegaToSina_build_dir/CSVToField.cpp.o: ../../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVToField.cpp -oOneMegaToSina_build_dir/CSVToField.cpp.o
+OneMegaToSina_build_dir/FieldDescribe.cpp.o: ../../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/FieldDescribe.cpp -oOneMegaToSina_build_dir/FieldDescribe.cpp.o
+OneMegaToSina_build_dir/BaseFunction.cpp.o: ../../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/BaseFunction.cpp -oOneMegaToSina_build_dir/BaseFunction.cpp.o
+OneMegaToSina_build_dir/Config.cpp.o: ../../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/Config.cpp -oOneMegaToSina_build_dir/Config.cpp.o
+OneMegaToSina_build_dir/platform.cpp.o: ../../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/platform.cpp -oOneMegaToSina_build_dir/platform.cpp.o
+OneMegaToSina_build_dir/printinfo.cpp.o: ../../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/printinfo.cpp -oOneMegaToSina_build_dir/printinfo.cpp.o
+OneMegaToSina_build_dir/profile.cpp.o: ../../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/profile.cpp -oOneMegaToSina_build_dir/profile.cpp.o
+OneMegaToSina_build_dir/utility.cpp.o: ../../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utility.cpp -oOneMegaToSina_build_dir/utility.cpp.o
+OneMegaToSina_build_dir/utils.cpp.o: ../../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utils.cpp -oOneMegaToSina_build_dir/utils.cpp.o
+OneMegaToSina_build_dir/version.cpp.o: ../../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/version.cpp -oOneMegaToSina_build_dir/version.cpp.o
+OneMegaToSina_build_dir/HttpClient.cpp.o: ../../../src_base/mongoose79/HttpClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mongoose79/HttpClient.cpp -oOneMegaToSina_build_dir/HttpClient.cpp.o
+OneMegaToSina_build_dir/SMTPClient.cpp.o: ../../../src_base/mongoose79/SMTPClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mongoose79/SMTPClient.cpp -oOneMegaToSina_build_dir/SMTPClient.cpp.o
+OneMegaToSina_build_dir/WSClient.cpp.o: ../../../src_base/mongoose79/WSClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mongoose79/WSClient.cpp -oOneMegaToSina_build_dir/WSClient.cpp.o
+OneMegaToSina_build_dir/mongoose.c.o: ../../../src_base/mongoose79/mongoose.c $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mongoose79/mongoose.c -oOneMegaToSina_build_dir/mongoose.c.o
+OneMegaToSina_build_dir/tool.cpp.o: ../../../src_base/tool/tool.cpp $(tool_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/tool/tool.cpp -oOneMegaToSina_build_dir/tool.cpp.o
+OneMegaToSina_build_dir/json_reader.cpp.o: ../../../src_base/jsoncpp/json_reader.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/jsoncpp/json_reader.cpp -oOneMegaToSina_build_dir/json_reader.cpp.o
+OneMegaToSina_build_dir/json_value.cpp.o: ../../../src_base/jsoncpp/json_value.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/jsoncpp/json_value.cpp -oOneMegaToSina_build_dir/json_value.cpp.o
+OneMegaToSina_build_dir/json_writer.cpp.o: ../../../src_base/jsoncpp/json_writer.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/jsoncpp/json_writer.cpp -oOneMegaToSina_build_dir/json_writer.cpp.o
+OneMegaToSina_build_dir/Semaphore.cpp.o: ../../../src_base/thread/Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Semaphore.cpp -oOneMegaToSina_build_dir/Semaphore.cpp.o
+OneMegaToSina_build_dir/Thread.cpp.o: ../../../src_base/thread/Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Thread.cpp -oOneMegaToSina_build_dir/Thread.cpp.o
+OneMegaToSina_build_dir/Link.cpp.o: ./Link.cpp $(OneMegaToSina_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ./Link.cpp -oOneMegaToSina_build_dir/Link.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(mongoose79_obj)
+	-$(DEL) $(tool_obj)
+	-$(DEL) $(jsoncpp_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(OneMegaToSina_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) ././OneMegaToSina.a

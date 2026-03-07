@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="gb2312"?>
+<system author="" version="1.0">
+	<tables writeTable="yes" comment="" desc="" isAsc="yes" indexName="noIndex" searchUnique="yes" checkDefault="no" checkParameter="yes" hasTable="yes" manager="root" isPK="no" stableIndex="no" runLevel="0,s" priority="2">
+		<table name="CurrentTime" usage="当前时间" manager="Init" >
+			<fields ref="CurrentTime"/>
+			<foreigns/>
+			<index>
+				<defineIndex name="SystemIDIndex" stableIndex="yes">
+					<indexKey name="SystemID"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="BySystemID" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="SystemID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Member" usage="成员" manager="Init" >
+			<fields ref="Member"/>
+			<hashkeys>
+				<hashkey name="MemberID" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="MemberIDHashIndex" hashKey="MemberID" hashKeySize="1572869" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<search>
+				<defineSearch name="ByMemberID" hashIndexName="MemberIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="ServiceConfig" usage="业务配置" manager="Init" >
+			<fields ref="ServiceConfig"/>
+			<foreigns/>
+			<index>
+				<defineIndex name="ConfigIndex" stableIndex="yes">
+					<indexKey name="ConfigName"/>
+					<indexKey name="Index1"/>
+					<indexKey name="Index2"/>
+				</defineIndex>
+			</index>
+			<hashkeys>
+			</hashkeys>
+			<hashindex>
+			</hashindex>
+			<search>
+				<defineSearch name="ByConfig" indexName="ConfigIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="ConfigName"/>
+						<paraDefine name="Index1"/>
+						<paraDefine name="Index2"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByIndex1" indexName="ConfigIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ConfigName"/>
+						<paraDefine name="Index1"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Index2" value='""'/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="UserSession" manager="Init" usage="交易员在线会话" >
+			<fields ref="UserSession"/>
+			<foreigns>
+			</foreigns>
+			<hashkeys>
+				<hashkey name="Token" stableHashKey="no">
+					<hashitem name="Token"/>
+				</hashkey>
+			</hashkeys>	
+			<hashindex>
+				<defineHashIndex name="TokenIndex" hashKey="Token" hashKeySize="102560" stableIndex="no" runLevel="0,s,p,r"/>
+			</hashindex>
+			<index>
+				<defineIndex name="UserIDAndAppIDIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="UserID"/>
+					<indexKey name="APPID"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByToken" hashIndexName="TokenIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="Token"/>
+					</parameter>
+					<default/>
+				</defineSearch>				
+				<defineSearch name="ByUserIDAndAppID" indexName="UserIDAndAppIDIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="UserID"/>
+						<paraDefine name="APPID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<!--以下数据由结算组管理，需要初始化-->
+		<table name="Instrument" usage="标的" manager="Init" >
+			<fields ref="Instrument"/>
+			<hashkeys>
+				<hashkey name="InstrumentID" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+				<foreign name="ClearCurrency" key="ClearCurrency,SettlementGroup" factory="Currency" method="ByCurrency" comment="对应的清算币种"/>
+				<foreign name="BaseCurrency" key="BaseCurrency,SettlementGroup" factory="Currency" method="ByCurrency" comment="对应的基础币种"/>
+			</foreigns>
+			<index>
+				<defineIndex name="SettlementGroupIndex" stableIndex="no">
+					<indexKey name="SettlementGroup"/>
+				</defineIndex>
+				<defineIndex name="ProductGroupIndex" stableIndex="no" runLevel="0,p">
+					<indexKey name="ProductGroup"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="InstrumentIDHashIndex" hashKey="InstrumentID" hashKeySize="769" stableIndex="yes" runLevel="0,s,t,p,r"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrumentID" hashIndexName="InstrumentIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" indexName="SettlementGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByProductGroup" indexName="ProductGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ProductGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>	
+		<table name="TradingRight" usage="交易权限" manager="Init">
+			<fields ref="TradingRight"/>
+			<hashkeys>
+				<hashkey name="MemberIDAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Direction"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberIDAndInstrumentHashIndex" hashKey="MemberIDAndInstrument" hashKeySize="4096" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberIDAndInstrument" hashIndexName="MemberIDAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Direction"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MarginRate" usage="标的保证金率" manager="Init" >
+			<fields ref="MarginRate"/>
+			<hashkeys>
+				<hashkey name="MemberAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberAndInstrumentHashIndex" hashKey="MemberAndInstrument" hashKeySize="12289" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberAndInstrument" hashIndexName="MemberAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="CFDRate" usage="CFD溢价率" manager="Init" >
+			<fields ref="CFDRate"/>
+			<hashkeys>
+				<hashkey name="MemberAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="TriggerOrderType"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberAndInstrumentHashIndex" hashKey="MemberAndInstrument" hashKeySize="12289" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberAndInstrument" hashIndexName="MemberAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TriggerOrderType"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>	
+		<table name="Fee" usage="手续费率" manager="Init" >
+			<fields ref="Fee"/>
+			<hashkeys>
+				<hashkey name="MemberIDAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>	
+					<hashitem name="MatchRole"/>	
+				</hashkey>
+			</hashkeys>	
+			<foreigns>
+			</foreigns>
+			<index>			
+			</index>
+			<hashindex>
+				<defineHashIndex name="MemberIDAndInstrumentHashIndex" hashKey="MemberIDAndInstrument" stableIndex="yes" hashKeySize="6151" runLevel="0,s,r"/>
+			</hashindex>
+			<search>		
+				<defineSearch name="ByMemberIDAndInstrument" hashIndexName="MemberIDAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="MatchRole"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Currency" usage="资金账户币种信息" manager="Init" >
+			<fields ref="Currency"/>
+			<hashkeys>
+				<hashkey name="Currency" stableHashKey="yes">
+					<hashitem name="Currency"/>
+					<hashitem name="SettlementGroup"/>					
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+			</foreigns>
+			<hashindex>
+				<defineHashIndex name="CurrencyHashIndex" hashKey="Currency" hashKeySize="98317" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>			
+			<index>
+				<defineIndex name="SettlementGroupIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="SettlementGroup"/>
+				</defineIndex>				
+			</index>
+			<search>
+				<defineSearch name="ByCurrency" hashIndexName="CurrencyHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="Currency"/>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" indexName="SettlementGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>		
+		<table name="Liquidity" usage="流动性设置表" manager="Init">
+			<fields ref="Liquidity"/>
+			<hashkeys>
+				<hashkey name="Liquidity" stableHashKey="yes">
+					<hashitem name="LiquidityGrade"/>
+					<hashitem name="LiquidityGroup"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+			</foreigns>
+			<hashindex>
+				<defineHashIndex name="LiquidityHashIndex" hashKey="Liquidity" hashKeySize="1024" stableIndex="yes"/>
+			</hashindex>			
+			<index>		
+			</index>
+			<search>
+				<defineSearch name="ByLiquidity" hashIndexName="LiquidityHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="LiquidityGrade"/>
+						<paraDefine name="LiquidityGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Account" usage="资金账户" manager="Init" >
+			<fields ref="Account"/>
+			<hashkeys>
+			</hashkeys>
+			<foreigns>
+				<foreign name="Currency" key="Currency,SettlementGroup" factory="Currency" method="ByCurrency" comment="币种"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+			</foreigns>
+			<hashindex>
+			</hashindex>
+			<index>	
+				<defineIndex name="MemberIndex" stableIndex="yes" runLevel="0,s,r,p">
+					<indexKey name="MemberID"/>
+					<indexKey name="AccountID"/>
+					<indexKey name="SettlementGroup"/>
+					<indexKey name="Currency"/>
+				</defineIndex>
+				<defineIndex name="CurrencyIndex" stableIndex="no" runLevel="p">
+					<indexKey name="SettlementGroup"/>
+					<indexKey name="Currency"/>
+					<indexKey name="Balance" isAsc="no"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByAccountIDAndCurrency" indexName="MemberIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="SettlementGroup"/>
+						<paraDefine name="Currency"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByMemberID" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="AccountID" value='""'/>
+						<defaultDefine name="SettlementGroup" value='""'/>
+						<defaultDefine name="Currency" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountID" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="SettlementGroup" value='""'/>
+						<defaultDefine name="Currency" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Currency" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAll" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+					</parameter>
+					<default>
+						<defaultDefine name="MemberID" value='""'/>
+						<defaultDefine name="AccountID" value='""'/>
+						<defaultDefine name="SettlementGroup" value='""'/>
+						<defaultDefine name="Currency" value='""'/>
+					</default>
+				</defineSearch>				
+				<defineSearch name="ByCurrency" searchUnique="no" indexName="CurrencyIndex">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+						<paraDefine name="Currency"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Balance" value="999999999999.0"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MemberPosition" usage="成员总持仓" manager="Init" >
+			<fields ref="MemberPosition"/>
+			<hashkeys>
+				<hashkey name="Instrument" stableHashKey="yes">
+					<hashitem name="AccountID"/>
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index>
+			</index>
+			<hashindex>
+				<defineHashIndex name="InstrumentHashIndex" hashKey="Instrument" hashKeySize="98317" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrument" hashIndexName="InstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Position" usage="交易单元持仓" manager="Init" >
+			<fields ref="Position"/>
+			<hashkeys>
+				<hashkey name="PositionID" stableHashKey="yes">
+					<hashitem name="PositionID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="Account" key='MemberID,AccountID,SettlementGroup,ClearCurrency' inValid="false" factory="Account" method="ByAccountIDAndCurrency" comment="对应的自己账号"/>
+			</foreigns>
+			<index>
+				<defineIndex name="AccountIndex" stableIndex="yes" runLevel="0,r,p">
+					<indexKey name="AccountID"/>
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="TradeUnitID"/>
+					<indexKey name="PosiDirection"/>
+				</defineIndex>
+				<defineIndex name="LiquidPriceLongIndex" stableIndex="no" useCase="pTarget->IsCrossMargin == 0 &amp;&amp; pTarget->Position != 0 &amp;&amp; ! (pTarget->PosiDirection == PD_Short || pTarget->Position < 0)" runLevel="r">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="LiquidPrice" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="LiquidPriceShortIndex" stableIndex="no" useCase="pTarget->IsCrossMargin == 0 &amp;&amp; pTarget->Position != 0 &amp;&amp; (pTarget->PosiDirection == PD_Short || pTarget->Position < 0)" runLevel="r">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="LiquidPrice"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="PositionIDHashIndex" hashKey="PositionID" hashKeySize="1572869" stableIndex="yes" runLevel="0,r,t,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByPositionID" hashIndexName="PositionIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountInstrument" indexName="AccountIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="TradeUnitID" value='""'/>
+						<defaultDefine name="PosiDirection" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByTradeUnitID" indexName="AccountIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TradeUnitID"/>
+						<paraDefine name="PosiDirection"/>
+					</parameter>
+					<default>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="AccountIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="ExchangeID" value='""'/>
+						<defaultDefine name="InstrumentID" value='""'/>
+						<defaultDefine name="TradeUnitID" value='""'/>
+						<defaultDefine name="PosiDirection" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByLiquidPriceLong" indexName="LiquidPriceLongIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="LiquidPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByLiquidPriceShort" indexName="LiquidPriceShortIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="LiquidPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MarketData" usage="行情" manager="Init" >
+			<fields ref="MarketData"/>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+			</foreigns>
+			<hashkeys>
+				<hashkey name="InstrumentIDIndex" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="InstrumentIDHashIndex" hashKey="InstrumentIDIndex" stableIndex="yes" hashKeySize="256" runLevel="0,s,r,p,t"/>
+			</hashindex>			
+			<index>
+				<defineIndex name="ProductGroupIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="ProductGroup"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByInstrumentID" hashIndexName="InstrumentIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>	
+				<defineSearch name="ByProductGroup" indexName="ProductGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ProductGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Order" usage="报单" manager="Init" >
+			<fields ref="Order"/>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes" runLevel="0,s,t,p">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="Position" key='PositionID' factory="Position" method="ByPositionID" comment=
+				"对应的交易单元持仓"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+				<foreign name="TriggerOrder" key="TriggerOrderID" clearkey="TriggerOrderID" factory="TriggerOrder" method="ByOrderID" comment="关联的触发报单"/>
+			</foreigns>
+			<index>
+				<defineIndex name="PositionIDIndex" stableIndex="yes" runLevel="s">
+					<indexKey name="PositionID"/>
+				</defineIndex>			
+				<defineIndex name="LocalIDIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="AccountID"/>
+					<indexKey name="LocalID"/>
+				</defineIndex>
+				<defineIndex name="InstrumentIDIndex" stableIndex="yes" runLevel="p">
+					<indexKey name="AccountID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="OrderID"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" runLevel="0,p" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByLocalID" indexName="LocalIDIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="LocalID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="LocalIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="LocalID" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByPositionID" indexName="PositionIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountIDPrivate" indexName="InstrumentIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InstrumentID" value='""'/>
+						<defaultDefine name="OrderID" value='""'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByInstrumentID" indexName="InstrumentIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="OrderID" value='""'/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="PositionOrder" usage="未平仓报单" manager="Init" >
+			<fields ref="PositionOrder"/>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>	
+			</foreigns>
+			<index>
+				<defineIndex name="InsertTimeIndex" stableIndex="yes">
+					<indexKey name="MemberID"/>
+					<indexKey name="TradeUnitID"/>
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="PosiDirection"/>
+					<indexKey name="InsertTime"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByInsertTime" indexName="InsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="TradeUnitID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="PosiDirection"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InsertTime" value='0'/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="TriggerOrder" usage="报单" manager="Init" >
+			<fields ref="TriggerOrder"/>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" stableIndex="yes" runLevel="0,s,t,p"/>
+			</hashindex>			
+			<foreigns>
+				<foreign name="Order" key="RelatedOrderID" clearkey="RelatedOrderID" factory="Order" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+			</foreigns>
+			<index>
+				<defineIndex name="AccountIDLocalIDIndex" stableIndex="yes">
+					<indexKey name="AccountID"/>
+					<indexKey name="LocalID"/>
+				</defineIndex>
+				<defineIndex name="ActivePositionCloseIndex" stableIndex="no" useCase="pTarget->OffsetFlag!=OF_Open &amp;&amp; pTarget->TriggerStatus==TS_Active">
+					<indexKey name="PositionID"/>
+				</defineIndex>
+				<defineIndex name="BuySLTriggerPriceIndex" useCase="pTarget->TriggerStatus!=TS_None &amp;&amp; !pTarget->SLTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="SLTriggerPrice" isAsc="no"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="SellSLTriggerPriceIndex" useCase="pTarget->TriggerStatus!=TS_None &amp;&amp; !pTarget->SLTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="SLTriggerPrice"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="BuyTPTriggerPriceIndex" useCase="pTarget->TriggerStatus!=TS_None &amp;&amp; !pTarget->TPTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="TPTriggerPrice"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="SellTPTriggerPriceIndex" useCase="pTarget->TriggerStatus!=TS_None &amp;&amp; !pTarget->TPTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="TPTriggerPrice" isAsc="no"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByLocalID" indexName="AccountIDLocalIDIndex">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="LocalID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBuySLTriggerPrice" indexName="BuySLTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="SLTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value='D_Buy' checkDefault="yes"/>			
+						<defaultDefine name="TimeSortNo" value='0'/>
+					</default>
+				</defineSearch>	
+				<defineSearch name="BySellSLTriggerPrice" indexName="SellSLTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="SLTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value='D_Sell' checkDefault="yes"/>
+						<defaultDefine name="TimeSortNo" value='0'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByBuyTPTriggerPrice" indexName="BuyTPTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TPTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value='D_Buy' checkDefault="yes"/>					
+						<defaultDefine name="TimeSortNo" value='0'/>
+					</default>
+				</defineSearch>	
+				<defineSearch name="BySellTPTriggerPrice" indexName="SellTPTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TPTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value='D_Sell' checkDefault="yes"/>				
+						<defaultDefine name="TimeSortNo" value='0'/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="AccountIDLocalIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByActivePositionClose" indexName="ActivePositionCloseIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>		
+		<table name="MarketOrder" usage="分价表" manager="Implied" writeTable="yes">
+			<fields ref="MarketOrder"/>
+			<foreigns>
+			</foreigns>
+			<hashkeys>
+				<hashkey name="PriceHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Price"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="PriceHashIndex" hashKey="PriceHashKey" stableIndex="yes" hashKeySize="100000" runLevel="0,s,p"/>
+			</hashindex>
+			<index>
+				<defineIndex name="BuyMBLIndex" stableIndex="yes" useCase='pTarget->Direction == D_Buy' runLevel="0,p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Price" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="SellMBLIndex" stableIndex="yes" useCase='pTarget->Direction == D_Sell' runLevel="0,p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Price"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByPrice" hashIndexName="PriceHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Price"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBuyMBLData" indexName="BuyMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellMBLData" indexName="SellMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="-999999999"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="TickMarketOrder" usage="Tick聚集分价表" manager="Implied" writeTable="yes">
+			<fields ref="TickMarketOrder"/>
+			<foreigns>
+			</foreigns>
+			<hashkeys>
+				<hashkey name="PriceHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Tick"/>
+					<hashitem name="Price"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="PriceHashIndex" hashKey="PriceHashKey" stableIndex="yes" hashKeySize="100000" runLevel="s,p"/>
+			</hashindex>
+			<index>
+				<defineIndex name="BuyMBLIndex" stableIndex="yes" useCase='pTarget->Direction == D_Buy' runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Tick"/>
+					<indexKey name="Price" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="SellMBLIndex" stableIndex="yes" useCase='pTarget->Direction == D_Sell' runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Tick"/>
+					<indexKey name="Price"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByBuyMBLData" indexName="BuyMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellMBLData" indexName="SellMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="-999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByPrice" hashIndexName="PriceHashIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+						<paraDefine name="Price"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>		
+		<table name="Trade" usage="成交" manager="Down" priority="3" writeTable="no">
+			<fields ref="Trade"/>
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<search>
+			</search>
+		</table>
+		<table name="KLine" usage="K线" manager="Down" priority="3" writeTable="no">
+			<fields ref="KLine"/>
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<search>
+			</search>
+		</table>
+		<table name="PublishKLine" usage="PublishK线" manager="Implied" writeTable="yes">
+			<fields ref="PublishKLine"/>
+			<hashkeys>			
+			</hashkeys>
+			<foreigns>
+			</foreigns>
+			<index>
+				<defineIndex name="BarInsertTimeIndex" stableIndex="yes" runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Bar"/>
+					<indexKey name="InsertTime" isAsc="no"/>
+				</defineIndex>	
+			</index>
+			<hashindex>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrumentBar" indexName="BarInsertTimeIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+						<paraDefine name="InsertTime"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBar" indexName="BarInsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InsertTime" value="99999999999999.0"/>
+					</default>
+				</defineSearch>	
+				<defineSearch name="ByBarInsertTime" indexName="BarInsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+						<paraDefine name="InsertTime" checkParameter="no"/>
+					</parameter>
+					<default>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="LastKLine" usage="最新K线" manager="Init" >
+			<fields ref="LastKLine"/>
+			<hashkeys>
+				<hashkey name="InstrumentBarHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Bar"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<hashindex>
+				<defineHashIndex name="InstrumentBarHashIndex" hashKey="InstrumentBarHashKey" stableIndex="yes" hashKeySize="10240" runLevel="0,s,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrumentBar" hashIndexName="InstrumentBarHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="AccountDetail" usage="资金明细" manager="Down" priority="3" writeTable="no">
+			<fields ref="AccountDetail"/>
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<search>
+			</search>
+		</table>
+		<table name="SettleDetail" usage="结算明细" manager="Down" priority="3">
+			<fields ref="SettleDetail"/>
+			<hashkeys>
+				<hashkey name="InstrumentHashKey" stableHashKey="yes">
+					<hashitem name="SettleDetailID"/>
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="InstrumentHashIndex" hashKey="InstrumentHashKey" stableIndex="yes" hashKeySize="10240"/>
+			</hashindex>	
+			<foreigns>
+			</foreigns>
+			<index>
+			</index>
+			<search>
+				<defineSearch name="ByInstrument" hashIndexName="InstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="SettleDetailID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>	
+		<table name="OrderAction" usage="报单操作" hasTable="no">
+			<fields ref="OrderAction"/>
+			<foreigns>
+				<foreign name="Order" key="OrderID" factory="Order" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="TriggerOrder" key="OrderID" factory="TriggerOrder" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+			</foreigns>
+			<index/>
+			<search/>
+		</table>
+	</tables>
+	<entities>
+	</entities>
+</system>

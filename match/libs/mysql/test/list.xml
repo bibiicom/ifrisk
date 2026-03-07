@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="test" targettype="exe" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2" workdir="." model="">
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>
+	</cppflags>
+	<package dir="../../mysql" version="8.0.42" libpath="."/>
+	<package dir="./"/>
+</project>

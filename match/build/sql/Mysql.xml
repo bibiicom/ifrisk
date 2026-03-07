@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE XTP SYSTEM "">
+<XTP author="TOM" version="1.0" head="XTP" comment="XTP协议中用到的各种包和域">
+	<packages>
+		<package name="DataSyncStart" tid="0x00001001" comment="数据同步开始" usage="tinit">
+			<field name="CurrentTime" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="DataSyncEnd" tid="0x00001002" comment="数据同步结束" usage="tinit">
+			<field name="CurrentTime" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendInsert" tid="0x00001003" comment="插入操作请求" usage="mdbrequest"/>
+		<package name="RecvInsert" tid="0x00001004" comment="插入操作应答" usage="mdbresponse"/>
+		<package name="SendUpdate" tid="0x00001005" comment="更新操作请求" usage="mdbrequest"/>
+		<package name="RecvUpdate" tid="0x00001006" comment="更新操作应答" usage="mdbresponse"/>
+		<package name="SendDelete" tid="0x00001007" comment="删除操作请求" usage="mdbrequest"/>
+		<package name="RecvDelete" tid="0x00001008" comment="删除操作应答" usage="mdbresponse"/>
+		<package name="SendInsUpd" tid="0x00001009" comment="插入没有就更新请求" usage="mdbrequest"/>
+		<package name="RecvInsUpd" tid="0x0000100A" comment="插入没有就更新应答" usage="mdbresponse"/>
+		<package name="SendQryOne" tid="0x0000100B" comment="查询唯一索引记录请求" usage="mdbrequest"/>
+		<package name="RecvQryOne" tid="0x0000100C" comment="查询唯一索引记录应答" usage="mdbresponse"/>
+		<package name="SendClear" tid="0x0000100D" comment="设置字段值清空请求" usage="mdbrequest"/>
+		<package name="RecvClear" tid="0x0000100E" comment="设置字段值清空应答" usage="mdbresponse"/>
+		<package name="SendInit" tid="0x00001010" comment="初始化操作请求" usage="mdbrequest"/>
+		<package name="RecvInit" tid="0x00001011" comment="初始化操作应答" usage="mdbresponse"/>
+	</packages>
+	<fields>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="ServiceConfig" fid="0x1001" comment="业务配置" DBPK="ConfigName,Index1,Index2">
+			<Column name="ConfigName" type="char(32)" label="配置名称" notnull="yes" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="Index1" type="char(32)" label="索引1" default="&quot;default&quot;" notnull="yes" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="Index2" type="char(32)" label="索引2" default="&quot;default&quot;" notnull="yes" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="ConfigValue" type="varchar(64)" label="配置值" notnull="yes" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="Remark" type="varchar(256)" label="备注" notnull="no" originaltype="Content" basetype="VString" length="256" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Currency" fid="0x1108" comment="币种信息" DBPK="Currency,SettlementGroup" sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="SettlementGroup,Currency">
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="Currency" type="char(12)" label="币种" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="Deposit" type="numeric(38,10)" label="入金金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Withdraw" type="numeric(38,10)" label="出金金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Balance" type="numeric(38,10)" label="静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PreBalance" type="numeric(38,10)" label="上次静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="SortNumber" type="numeric(10)" label="排序字段" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="CanReduce" type="numeric(1)" label="是否可以出金" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="IsTrading" type="numeric(1)" label="是否允许相关交易" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="SettleSegment" type="char(20)" label="结算段" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="MoneyTick" type="numeric(38,10)" label="最小单位" default="0.00000001" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ExchangeID" type="char(8)" label="价格参考交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="价格参考标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="LoanUse" type="numeric(38,10)" label="借款使用量" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LoanLimit" type="numeric(26,10)" label="最大可借比例" default="0.8" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanBorrow" type="numeric(26,10)" label="借款利息" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanDeposit" type="numeric(26,10)" label="存款利息" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanBase" type="numeric(26,10)" label="利息起点" default="0.01" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanRate" type="numeric(26,10)" label="利息斜率" default="0.1" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanHighBase" type="numeric(26,10)" label="高利息起点" default="0.9" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LoanHighRate" type="numeric(26,10)" label="高利息斜率" default="1" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="CurrValue" type="numeric(38,10)" label="当前价值" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="HairCut" type="numeric(26,10)" label="抵押比例" default="0.9" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="MaxValue" type="numeric(38,10)" label="最大抵押数额" default="10000" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="MarginRateGroup" type="char(8)" label="保证金组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PrivateEnd" type="numeric(26,10)" label="私有化停止交易线" notnull="" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="MarketData" fid="0x1101" comment="市场行情" DBPK="ExchangeID,InstrumentID" sinkredis="yes" rediskey="ProductGroup" valuetype="hash" hashfield="ExchangeID,InstrumentID" sinkkafka="no" kafkakey="">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="ProductGroup" type="char(8)" label="产品组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="PreClosePrice" type="numeric(28,15)" label="上次收盘" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="PreSettlementPrice" type="numeric(28,15)" label="上次结算价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="PreOpenInterest" type="numeric(38,10)" label="上次持仓量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PrePositionFeeRate" type="numeric(26,10)" label="上次持仓费按比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="收盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="PositionFeeTime" type="numeric(20)" label="收取持仓费用时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="SettlementTime" type="numeric(20)" label="结算时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpperLimitPrice" type="numeric(28,15)" label="最高限价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowerLimitPrice" type="numeric(28,15)" label="最低限价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="UnderlyingPrice" type="numeric(28,15)" label="基础标的价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="MarkedPrice" type="numeric(28,15)" label="标记价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="PositionFeeRate" type="numeric(26,10)" label="预计持仓费按比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="HighestPrice" type="numeric(28,15)" label="当日最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowestPrice" type="numeric(28,15)" label="当日最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LastPrice" type="numeric(28,15)" label="最新价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(36,8)" label="当日数量" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="Turnover" type="numeric(36,8)" label="当日成交金额" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="OpenInterest" type="numeric(38,10)" label="持仓量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="SettlementPrice" type="numeric(28,15)" label="预估结算价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="当日开盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="IsPubMarketData" type="numeric(1)" label="行情发布状态" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="InstrumentStatus" type="char(1)" label="标的交易状态" notnull="yes" originaltype="InstrumentStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="MarkedPriceTotal" type="numeric(36,6)" label="标记价格汇总" notnull="no" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="MarkedPriceWeight" type="numeric(36,6)" label="标记价格权重" notnull="no" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="L25UpperPrice" type="numeric(28,15)" label="25档行情最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="L25LowerPrice" type="numeric(28,15)" label="25档行情最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="L25UpperPrice1" type="numeric(28,15)" label="25档行情最高价1" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="L25LowerPrice1" type="numeric(28,15)" label="25档行情最低价1" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="L25UpperPrice2" type="numeric(28,15)" label="25档行情最高价2" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="L25LowerPrice2" type="numeric(28,15)" label="25档行情最低价2" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BidPrice1" type="numeric(28,15)" label="申买价一" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BidVolume1" type="numeric(38,10)" label="申买量一" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="AskPrice1" type="numeric(28,15)" label="申卖价一" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="AskVolume1" type="numeric(38,10)" label="申卖量一" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="TheoryPrice" type="numeric(28,15)" label="理论价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="HighestPrice24" type="numeric(28,15)" label="24小时最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowestPrice24" type="numeric(28,15)" label="24小时最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume24" type="numeric(36,8)" label="24小时数量" notnull="no" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="Turnover24" type="numeric(36,8)" label="24小时成交金额" notnull="no" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="OpenPrice24" type="numeric(28,15)" label="24小时开盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Frequency" type="numeric(10)" label="每秒更新的次数" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Instrument" fid="0x1102" comment="交易标的" DBPK="ExchangeID,InstrumentID" DbKeys="ExchangeID,ProductGroup" sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="ExchangeID,InstrumentID">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="InstrumentName" type="varchar(64)" label="标的名称" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="ProductGroup" type="char(8)" label="产品组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="UnderlyingID" type="char(26)" label="基础标的代码" notnull="no" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="ProductClass" type="char(1)" label="产品大类" notnull="yes" originaltype="ProductClass" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="ProductType" type="char(1)" label="产品类型" notnull="yes" originaltype="ProductType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="StrikePrice" type="numeric(28,15)" label="执行价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="OptionsType" type="char(1)" label="期权类型" notnull="no" originaltype="OptionsType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="VolumeMultiple" type="numeric(26,10)" label="数量乘数" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="StartTime" type="numeric(20)" label="启动时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="ExpireTime" type="numeric(20)" label="到期时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="IsInverse" type="numeric(1)" label="是否反向标的" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="BaseCurrency" type="char(12)" label="标的基础货币" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="MarginPriceType" type="char(1)" label="保证金价格类型" notnull="yes" originaltype="MarginPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BasisPrice" type="numeric(28,15)" label="挂牌基准价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="MinOrderVolume" type="numeric(38,10)" label="最小下单量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="MinOrderCost" type="numeric(38,10)" label="最小下单额" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="MaxOrderVolume" type="numeric(38,10)" label="最大下单量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PriceTick" type="numeric(28,15)" label="最小变动价位" default="0.00000001" notnull="yes" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="VolumeTick" type="numeric(38,10)" label="最小变动量" default="0.00000001" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ShowVolumeTick" type="numeric(38,10)" label="前端行情显示最小变动量(服务端不用)" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="TradingModel" type="char(1)" label="交易模式" notnull="yes" originaltype="TradingModel" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DayStartTime" type="varchar(128)" label="每日开始交易时间" notnull="no" originaltype="ShortContent" basetype="VString" length="128" precision="0"/>
+			<Column name="SortNumber" type="numeric(10)" label="排序字段" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="Remark" type="varchar(256)" label="备注" notnull="no" originaltype="Content" basetype="VString" length="256" precision="0"/>
+			<Column name="DefaultLeverage" type="numeric(20,8)" label="默认杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="PriceLimitValueMode" type="char(1)" label="取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PriceLimitPrice" type="char(1)" label="限价价格类型" notnull="no" originaltype="LimitPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PriceLimitUpperValue" type="numeric(28,15)" label="上限" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="PriceLimitLowerValue" type="numeric(28,15)" label="下限" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="MarginRateGroup" type="char(8)" label="保证金组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="CFDGroup" type="char(8)" label="差价组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="FeeGroup" type="char(8)" label="手续费组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="TradingRightGroup" type="char(8)" label="权限组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="MaxOpenInterest" type="numeric(38,10)" label="最大持仓量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="FundingRateGroup" type="char(8)" label="资金费用组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MarkedPriceTimes" type="numeric(10)" label="标记价格计算次数(0:最新价;1-n:次数;空:不生成标记价)" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="CurrentTime" short="T" fid="0x1002" comment="当前时间" DBPK="SystemID" sinkkafka="no" kafkakey="">
+			<Column name="SystemID" type="char(8)" label="系统名" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="ZoneDate" type="char(8)" label="本地日期" notnull="yes" originaltype="Date" basetype="String" length="8" precision="0"/>
+			<Column name="ZoneTime" type="char(8)" label="本地时间" notnull="yes" originaltype="Time" basetype="String" length="8" precision="0"/>
+			<Column name="ZoneDays" type="char(8)" label="本地天数" notnull="yes" originaltype="Date" basetype="String" length="8" precision="0"/>
+			<Column name="CurrTime" type="numeric(20)" label="当前时间（秒）" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间（毫秒）" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="TimeZone" type="numeric(10)" label="本地时区" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="LastTradeID" type="char(20)" label="最新最新成交序列号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="LastOrderID" type="char(20)" label="最新订单序列号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="LastAccountDetailID" type="char(20)" label="最新资金明细序列号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="LastTimeSortNo" type="numeric(16)" label="最新排序序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="LastBusinessNo" type="numeric(16)" label="最新事务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="5" pre="perpetual.t_" name="Member" fid="0x1006" comment="成员" DBPK="MemberID" multi="10" multiField="MemberID" multiType="char">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="MemberType" type="char(1)" label="成员类型" notnull="no" originaltype="MemberType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Grade" type="char(8)" label="等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="Priority" type="numeric(10)" label="优先权" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="FeeGrade" type="char(8)" label="手续费等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="MarginRateGrade" type="char(8)" label="保证金等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="TradingRightGrade" type="char(8)" label="权限等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="CFDGrade" type="char(8)" label="差价等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="LiquidityGrade" type="char(8)" label="流动性等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="RiskLevel" type="char(1)" label="风控类型" notnull="yes" originaltype="RiskLevel" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PositionType" type="char(1)" label="持仓类型" notnull="no" originaltype="PositionType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TriggerOrders" type="numeric(10)" label="触发订单个数" default="0" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="OpenOrders" type="numeric(10)" label="未成交订单数" default="0" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="OpenPositions" type="numeric(10)" label="用户持仓个数" default="0" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="MaxLocalID" type="char(20)" label="最大本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SinkType" type="char(1)" label="下游系统同步类型" notnull="no" originaltype="SinkType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="Region" type="char(8)" label="" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="FeeDeduceDisCount" type="numeric(26,10)" label="作为手续费的抵扣优惠比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="FeeDeduceCurrency" type="char(12)" label="作为手续费的抵扣比例" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="CanBorrow" type="numeric(1)" label="是否需要借钱交易" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="UserSession" fid="0x1005" comment="用户会话" DBPK="Token" sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="Token">
+			<Column name="UserID" type="char(42)" label="交易用户代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="Password" type="char(32)" label="密码" notnull="no" originaltype="Password" basetype="String" length="32" precision="0"/>
+			<Column name="UserProductID" type="char(32)" label="用户端产品信息" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="MacAddress" type="char(20)" label="Mac地址" notnull="no" originaltype="MacAddress" basetype="String" length="20" precision="0"/>
+			<Column name="ClientIPAddress" type="char(15)" label="终端IP地址" notnull="no" originaltype="IPAddress" basetype="String" length="15" precision="0"/>
+			<Column name="HDSerialID" type="varchar(64)" label="硬盘序列号" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="AuthCode" type="varchar(128)" label="授权编码" notnull="no" originaltype="ShortContent" basetype="VString" length="128" precision="0"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="Token" type="varchar(128)" label="令牌" notnull="yes" originaltype="ShortContent" basetype="VString" length="128" precision="0"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="APIID" type="char(32)" label="接口端产品信息" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="LoginTime" type="numeric(20)" label="登录时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="ExpireTime" type="numeric(20)" label="失效时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="IPAddress" type="varchar(256)" label="允许登录的IP地址" notnull="no" originaltype="Content" basetype="VString" length="256" precision="0"/>
+			<Column name="MaxLocalID" type="char(20)" label="最大本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SessionNo" type="numeric(10)" label="会话编号" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="AccessLimit" type="numeric(10)" label="每秒访问的次数限制" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="UserType" type="char(1)" label="用户类型" notnull="yes" originaltype="UserType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LimitAccesses" type="numeric(10)" label="该秒已经访问的次数" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="SinkType" type="char(1)" label="下游系统同步类型" notnull="no" originaltype="SinkType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="LastKLine" short="LK" fid="0x1103" comment="最新K线" dbload="no" DBPK="ExchangeID,InstrumentID,Bar">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Bar" type="char(3)" label="K线周期代码(n[m/h/d/o])" notnull="yes" originaltype="Bar" basetype="String" length="3" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="HighestPrice" type="numeric(28,15)" label="最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowestPrice" type="numeric(28,15)" label="最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="收盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(36,8)" label="数量" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="Turnover" type="numeric(36,8)" label="成交金额" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="CFDRate" fid="0x1106" comment="CFD溢价率" DBPK="MemberID,InstrumentID,TriggerOrderType">
+			<Column name="MemberID" type="char(42)" label="成员代码或组" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="TriggerOrderType" type="char(42)" label="报单价格类型" default="&quot;default&quot;" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="RateBegin" type="numeric(26,10)" label="多头起始溢价率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="RateEnd" type="numeric(26,10)" label="多头最大溢价率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CompVolume" type="numeric(26,10)" label="点差比较基准" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CompRate" type="numeric(26,10)" label="点差比较基准率" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="HardRate" type="numeric(26,10)" label="硬顶率" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="TradingRight" fid="0x1201" comment="交易权限" DBPK="MemberID,InstrumentID,Direction">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TradingRight" type="char(1)" label="交易权限" notnull="yes" originaltype="TradingRight" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="MarginRate" fid="0x1202" comment="保证金率" DBPK="MemberID,InstrumentID">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="ValueMode" type="char(1)" label="取值方式" notnull="yes" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="MarginSequenceType" type="char(1)" label="保证金数列" notnull="no" originaltype="SequenceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="RiskSequenceType" type="char(1)" label="风险限额数列" notnull="no" originaltype="SequenceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="LongMarginRatio" type="numeric(26,10)" label="多头起始保证金率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LongMaintMarginRatio" type="numeric(26,10)" label="多头起始维持保证金率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LongMarginStep" type="numeric(26,10)" label="多头保证金率步长" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LongMaintMarginStep" type="numeric(26,10)" label="多头维持保证金率步长" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="LongRiskLimit" type="numeric(38,10)" label="多头起始风险限额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LongRiskStep" type="numeric(38,10)" label="多头风险限额步长" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortMarginRatio" type="numeric(26,10)" label="空头起始保证金率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="ShortMaintMarginRatio" type="numeric(26,10)" label="空头起始维持保证金率" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="ShortMarginStep" type="numeric(26,10)" label="空头保证金率步长" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="ShortMaintMarginStep" type="numeric(26,10)" label="空头维持保证金率步长" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="ShortRiskLimit" type="numeric(38,10)" label="空头起始风险限额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortRiskStep" type="numeric(38,10)" label="空头风险限额步长" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="DefaultLeverage" type="numeric(20,8)" label="默认杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Fee" fid="0x1203" comment="手续费率" DBPK="MemberID,InstrumentID,MatchRole">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="MatchRole" type="char(1)" label="成交角色" notnull="yes" originaltype="MatchRole" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OpenFeeRate" type="numeric(26,10)" label="开仓手续费按比例" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="OpenFeeAmount" type="numeric(26,10)" label="开仓手续费按手数" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CloseFeeRate" type="numeric(26,10)" label="平仓手续费按比例" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CloseFeeAmount" type="numeric(26,10)" label="平仓手续费按手数" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CloseTodayFeeRate" type="numeric(26,10)" label="平今仓手续费按比例" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CloseTodayFeeAmount" type="numeric(26,10)" label="平今仓手续费按手数" notnull="yes" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Remark" type="varchar(64)" label="备注" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Liquidity" fid="0x1204" comment="流动性设置表" DBPK="LiquidityGrade,LiquidityGroup">
+			<Column name="LiquidityGrade" type="char(8)" label="流动性等级" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="LiquidityGroup" type="char(42)" label="标的代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="BasePriceType" type="char(1)" label="基于的价格" notnull="no" originaltype="LiquidityPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="VolumeBegin" type="numeric(38,10)" label="起始量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BuyOpen" type="numeric(26,10)" label="买开流动性比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="BuyClose" type="numeric(26,10)" label="买平流动性比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="SellOpen" type="numeric(26,10)" label="卖开流动性比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="SellClose" type="numeric(26,10)" label="卖平流动性比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="5" pre="perpetual.t_" name="Account" fid="0x1205" comment="账户资金" DBPK="AccountID,Currency,SettlementGroup" DbKeys="MemberID" multi="10" multiField="MemberID" multiType="char" sinkredis="yes" rediskey="SettlementGroup,MemberID" valuetype="hash" hashfield="AccountID,Currency,SettlementGroup" sinkkafka="yes" kafkakey="MemberID">
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="Currency" type="char(12)" label="币种" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="Available" type="numeric(38,10)" label="可用资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Withdrawable" type="numeric(38,10)" label="可取资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PreBalance" type="numeric(38,10)" label="上次静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Balance" type="numeric(38,10)" label="静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PositionCost" type="numeric(38,10)" label="持仓成本" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="UseMargin" type="numeric(38,10)" label="所有占用保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CrossMargin" type="numeric(38,10)" label="全仓保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Deposit" type="numeric(38,10)" label="入金金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Withdraw" type="numeric(38,10)" label="出金金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMoney" type="numeric(38,10)" label="冻结资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenFee" type="numeric(38,10)" label="冻结手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Fee" type="numeric(38,10)" label="手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="MoneyChange" type="numeric(38,10)" label="资金变化" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveAvailable" type="numeric(38,10)" label="保留资金可用" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveLimit" type="numeric(38,10)" label="保留资金限制" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveProfit" type="numeric(38,10)" label="保留资金盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveType" type="char(1)" label="保留资金类型" notnull="yes" originaltype="ReserveType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="ReserveActive" type="numeric(1)" label="保留资金是否活跃" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="TotalCloseProfit" type="numeric(36,6)" label="总平仓盈亏" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalDeposit" type="numeric(36,6)" label="总入金金额" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalWithdraw" type="numeric(36,6)" label="总出金金额" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalFee" type="numeric(36,6)" label="总手续费" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalMoneyChange" type="numeric(36,6)" label="总资金变化" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="AccountType" type="char(8)" label="账户类型" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="MarginRateGrade" type="char(8)" label="保证金等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="TradingRightGrade" type="char(8)" label="权限等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="Frequency" type="numeric(10)" label="每秒更新的次数" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="MaintMargin" type="numeric(38,10)" label="维持保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="UnRealProfit" type="numeric(38,10)" label="未实现盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CFDType" type="char(1)" label="点差接管类型" notnull="no" originaltype="CFDType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="FeeGrade" type="char(8)" label="手续费等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="CFDGrade" type="char(8)" label="差价等级" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="Borrow" type="numeric(38,10)" label="借款周期结算量" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="MaxLocalID" type="char(20)" label="最大本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CurrValue" type="numeric(38,10)" label="当前价值" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CanReduce" type="numeric(1)" label="是否可以出金" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="MemberPosition" fid="0x1209" comment="成员持仓汇总" dbload="no" DBPK="MemberID,AccountID,ExchangeID,InstrumentID">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Position" type="numeric(38,10)" label="总持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="LongFrozen" type="numeric(38,10)" label="多头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortFrozen" type="numeric(38,10)" label="空头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="DefaultLeverage" type="numeric(20,8)" label="默认杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="DefaultCrossMargin" type="numeric(1)" label="默认是否全仓" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="Position" fid="0x1206" comment="标的持仓" DBPK="PositionID" multi="10" multiField="MemberID" multiType="char" sinkredis="yes" rediskey="ProductGroup,MemberID" valuetype="hash" filter="false" hashfield="MemberID,AccountID,TradeUnitID,ExchangeID,InstrumentID,PosiDirection" sinkkafka="yes" kafkakey="MemberID">
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="PositionClass" type="char(1)" label="持仓类型" notnull="no" originaltype="PositionClass" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="yes" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PrePosition" type="numeric(38,10)" label="上次持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="总持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="LongFrozen" type="numeric(38,10)" label="多头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortFrozen" type="numeric(38,10)" label="空头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PreLongFrozen" type="numeric(38,10)" label="昨日多头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PreShortFrozen" type="numeric(38,10)" label="昨日空头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="HighestPosition" type="numeric(38,10)" label="最大持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ClosePosition" type="numeric(38,10)" label="可平持仓" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PositionCost" type="numeric(36,15)" label="持仓成本" notnull="yes" originaltype="Cost" basetype="Float" length="36" precision="15"/>
+			<Column name="CostPrice" type="numeric(28,15)" label="成本价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="UseMargin" type="numeric(38,10)" label="占用保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LongFrozenMargin" type="numeric(38,10)" label="多头冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortFrozenMargin" type="numeric(38,10)" label="空头冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="TotalPositionCost" type="numeric(36,6)" label="开仓成本" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalCloseProfit" type="numeric(36,6)" label="总平仓盈亏" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="平仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TradeFee" type="numeric(38,10)" label="交易费用" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PositionFee" type="numeric(38,10)" label="持仓费用或者股票分红等" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Leverage" type="numeric(20,8)" label="杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓单代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BeginTime" type="numeric(20)" label="持仓不为0的开始时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间(新持仓时间)" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="LastOpenTime" type="numeric(20)" label="最后开仓时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="IsAutoAddMargin" type="numeric(1)" label="是否自动追加保证金" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Frequency" type="numeric(10)" label="每秒更新的次数" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="MaintMargin" type="numeric(38,10)" label="维持保证金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="UnRealProfit" type="numeric(38,10)" label="未实现盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LiquidPrice" type="numeric(28,15)" label="清算价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FirstTradeID" type="char(42)" label="初始成交订单号" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LastTradeID" type="char(42)" label="结束成交订单号" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="no" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveProfit" type="numeric(38,10)" label="保留资金盈亏" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="25" pre="perpetual.t_" name="Order" fid="0x1207" comment="报单" DBPK="OrderID" DbKeys="MemberID,CopyMemberID" multi="10" multiField="OrderID" multiType="char" sinkredis="yes" rediskey="ProductGroup,MemberID" rediskey2="ProductGroup,MemberID,ExchangeID,InstrumentID" valuetype="hash" hashfield="AccountID,OrderID" sinkkafka="yes" kafkakey="MemberID">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="no" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="报单本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OrderPriceType" type="char(1)" label="报单价格类型" notnull="yes" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="报单价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeDisplay" type="numeric(38,10)" label="显示数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeMode" type="char(1)" label="数量取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Cost" type="numeric(38,10)" label="委托额" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderType" type="char(1)" label="订单类型" notnull="yes" originaltype="OrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="GTDTime" type="numeric(20)" label="GTD时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MinVolume" type="numeric(38,10)" label="最小成交量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="yes" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓指定开仓的订单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Leverage" type="numeric(20,8)" label="委托单杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderStatus" type="char(1)" label="报单状态" notnull="yes" originaltype="OrderStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveSource" type="char(1)" label="衍生来源" notnull="yes" originaltype="DeriveSource" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveDetail" type="char(20)" label="衍生明细" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="VolumeTraded" type="numeric(38,10)" label="成交数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeRemain" type="numeric(38,10)" label="剩余数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeCancled" type="numeric(38,10)" label="已经撤单数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="Priority" type="numeric(10)" label="优先权" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="TimeSortNo" type="numeric(16)" label="按时间排队的序号" notnull="yes" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FeeCurrency" type="char(12)" label="手续费币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FrozenMoney" type="numeric(38,10)" label="冻结资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenFee" type="numeric(38,10)" label="冻结手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Fee" type="numeric(38,10)" label="手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Turnover" type="numeric(38,10)" label="成交金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="RelatedOrderID" type="char(20)" label="关联报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="BusinessResult" type="char(32)" label="业务执行结果" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="Tradable" type="numeric(1)" label="是否可以参加交易" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="yes" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TradePrice" type="numeric(28,15)" label="成交均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="平仓成交时的开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TriggerOrderID" type="char(20)" label="触发报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="成交时的持仓量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="UserID" type="char(42)" label="交易用户代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LastPriceByInsert" type="numeric(28,15)" label="插入时的最新价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BidPrice1ByInsert" type="numeric(28,15)" label="插入时的买一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="AskPrice1ByInsert" type="numeric(28,15)" label="插入时的卖一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Available" type="numeric(38,10)" label="可用资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="2" pre="perpetual.t_" name="TriggerOrder" fid="0x120A" comment="条件报单" DBPK="OrderID" DbKeys="MemberID,CopyMemberID" sinkredis="yes" rediskey="ProductGroup,MemberID" rediskey2="ProductGroup,MemberID,ExchangeID,InstrumentID" valuetype="hash" hashfield="AccountID,OrderID" sinkkafka="yes" kafkakey="MemberID">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="no" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="报单本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OrderPriceType" type="char(1)" label="报单价格类型" notnull="yes" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="报单价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeDisplay" type="numeric(38,10)" label="显示数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeMode" type="char(1)" label="数量取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Cost" type="numeric(38,10)" label="委托额" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderType" type="char(1)" label="订单类型" notnull="yes" originaltype="OrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="GTDTime" type="numeric(20)" label="GTD时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MinVolume" type="numeric(38,10)" label="最小成交量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="yes" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓指定开仓的订单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Leverage" type="numeric(20,8)" label="委托单杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="SLPrice" type="numeric(28,15)" label="止损价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPPrice" type="numeric(28,15)" label="止盈价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="RiskBefore" type="numeric(1)" label="是否提前检查风控" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="TriggerOrderType" type="char(1)" label="触发的订单类型" notnull="yes" originaltype="TriggerOrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TriggerDetail" type="char(20)" label="触发类型明细" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="TriggerPriceType" type="char(1)" label="触发价类型" default="&quot;0&quot;" notnull="yes" originaltype="TriggerPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TriggerValue" type="varchar(1024)" label="触发单具体设置信息" notnull="no" originaltype="LongContent" basetype="VString" length="1024" precision="0"/>
+			<Column name="CloseSLPrice" type="numeric(28,15)" label="平仓止损价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseSLTriggerPrice" type="numeric(28,15)" label="平仓止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTPPrice" type="numeric(28,15)" label="平仓止盈价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTPTriggerPrice" type="numeric(28,15)" label="平仓止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseOrderPriceType" type="char(1)" label="报单价格类型" notnull="no" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="平仓价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTriggerPrice" type="numeric(28,15)" label="平仓触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="RelatedOrderID" type="char(20)" label="关联报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ActiveTime" type="numeric(20)" label="激活时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="TriggerTime" type="numeric(20)" label="触发时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="TimeSortNo" type="numeric(16)" label="按时间排队的序号" notnull="yes" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="TriggerStatus" type="char(1)" label="触发报单状态" notnull="yes" originaltype="TriggerStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="no" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="ErrorNo" type="numeric(10)" label="错误代码" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="ErrorMsg" type="varchar(128)" label="错误信息" notnull="no" originaltype="ShortContent" basetype="VString" length="128" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="PositionOrder" fid="0x120B" comment="持仓订单组成" dbload="no" DBPK="OrderID" multi="10" multiField="OrderID" multiType="char" sinkredis="no" rediskey="ProductGroup,MemberID" valuetype="hash" hashfield="AccountID,OrderID">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="no" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="报单本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OrderPriceType" type="char(1)" label="报单价格类型" notnull="yes" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="报单价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeDisplay" type="numeric(38,10)" label="显示数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeMode" type="char(1)" label="数量取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Cost" type="numeric(38,10)" label="委托额" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderType" type="char(1)" label="订单类型" notnull="yes" originaltype="OrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="GTDTime" type="numeric(20)" label="GTD时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MinVolume" type="numeric(38,10)" label="最小成交量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="yes" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓指定开仓的订单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Leverage" type="numeric(20,8)" label="委托单杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderStatus" type="char(1)" label="报单状态" notnull="yes" originaltype="OrderStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveSource" type="char(1)" label="衍生来源" notnull="yes" originaltype="DeriveSource" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveDetail" type="char(20)" label="衍生明细" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="VolumeTraded" type="numeric(38,10)" label="成交数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeRemain" type="numeric(38,10)" label="剩余数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeCancled" type="numeric(38,10)" label="已经撤单数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="Priority" type="numeric(10)" label="优先权" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="TimeSortNo" type="numeric(16)" label="按时间排队的序号" notnull="yes" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FeeCurrency" type="char(12)" label="手续费币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FrozenMoney" type="numeric(38,10)" label="冻结资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenFee" type="numeric(38,10)" label="冻结手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Fee" type="numeric(38,10)" label="手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Turnover" type="numeric(38,10)" label="成交金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="RelatedOrderID" type="char(20)" label="关联报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="BusinessResult" type="char(32)" label="业务执行结果" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="Tradable" type="numeric(1)" label="是否可以参加交易" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="yes" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TradePrice" type="numeric(28,15)" label="成交均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="平仓成交时的开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TriggerOrderID" type="char(20)" label="触发报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="成交时的持仓量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="UserID" type="char(42)" label="交易用户代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LastPriceByInsert" type="numeric(28,15)" label="插入时的最新价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BidPrice1ByInsert" type="numeric(28,15)" label="插入时的买一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="AskPrice1ByInsert" type="numeric(28,15)" label="插入时的卖一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Available" type="numeric(38,10)" label="可用资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="VolumeToClose" type="numeric(38,10)" label="需要平仓的数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeClosed" type="numeric(38,10)" label="已经平仓的数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeOnClose" type="numeric(38,10)" label="正在平仓未成交的数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="100" pre="perpetual.t_D_" name="FinishOrder" fid="0x1301" comment="完成的报单" DBPK="OrderID" DbKeys="AccountID,InstrumentID,MemberID;PositionID" multi="10" multiField="OrderID" multiType="char">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="no" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="报单本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OrderPriceType" type="char(1)" label="报单价格类型" notnull="yes" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="报单价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeDisplay" type="numeric(38,10)" label="显示数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeMode" type="char(1)" label="数量取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Cost" type="numeric(38,10)" label="委托额" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderType" type="char(1)" label="订单类型" notnull="yes" originaltype="OrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="GTDTime" type="numeric(20)" label="GTD时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MinVolume" type="numeric(38,10)" label="最小成交量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="yes" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓指定开仓的订单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Leverage" type="numeric(20,8)" label="委托单杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderStatus" type="char(1)" label="报单状态" notnull="yes" originaltype="OrderStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveSource" type="char(1)" label="衍生来源" notnull="yes" originaltype="DeriveSource" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="DeriveDetail" type="char(20)" label="衍生明细" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="VolumeTraded" type="numeric(38,10)" label="成交数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeRemain" type="numeric(38,10)" label="剩余数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeCancled" type="numeric(38,10)" label="已经撤单数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="Priority" type="numeric(10)" label="优先权" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="TimeSortNo" type="numeric(16)" label="按时间排队的序号" notnull="yes" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FeeCurrency" type="char(12)" label="手续费币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="FrozenMoney" type="numeric(38,10)" label="冻结资金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenFee" type="numeric(38,10)" label="冻结手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Fee" type="numeric(38,10)" label="手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Turnover" type="numeric(38,10)" label="成交金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="RelatedOrderID" type="char(20)" label="关联报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="BusinessResult" type="char(32)" label="业务执行结果" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="Tradable" type="numeric(1)" label="是否可以参加交易" default="1" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="yes" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TradePrice" type="numeric(28,15)" label="成交均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="平仓成交时的开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TriggerOrderID" type="char(20)" label="触发报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="开仓报单成交之后的止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="成交时的持仓量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="UserID" type="char(42)" label="交易用户代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LastPriceByInsert" type="numeric(28,15)" label="插入时的最新价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BidPrice1ByInsert" type="numeric(28,15)" label="插入时的买一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="AskPrice1ByInsert" type="numeric(28,15)" label="插入时的卖一价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Available" type="numeric(38,10)" label="可用资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="110" pre="perpetual.t_D_" name="Trade" fid="0x1302" comment="成交" DBPK="TradeID,Direction" DbKeys="OrderID;PositionID" multi="10" multiField="TradeID" multiType="char" sinkkafka="yes" kafkakey="MemberID" sinklist="yes">
+			<Column name="TradeID" type="char(20)" label="成交代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="成交价格" notnull="yes" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="成交数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="DeriveSource" type="char(1)" label="衍生类型" notnull="yes" originaltype="DeriveSource" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="MatchRole" type="char(1)" label="成交角色" notnull="yes" originaltype="MatchRole" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="Fee" type="numeric(38,10)" label="手续费" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FeeCurrency" type="char(12)" label="手续费币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Turnover" type="numeric(38,10)" label="成交金额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="UseMargin" type="numeric(38,10)" label="占用或者减少的保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Leverage" type="numeric(20,8)" label="杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="OrderPrice" type="numeric(28,15)" label="委托价格" notnull="yes" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="IsSelfTrade" type="numeric(1)" label="是否自成交" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="成交时的持仓量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveProfit" type="numeric(38,10)" label="保留资金盈亏" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveFee" type="numeric(38,10)" label="保留资金手续费" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="TradeRemark" type="char(32)" label="Trade备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="no" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="110" pre="perpetual.t_D_" name="FinishPosition" fid="0x1309" comment="持仓历史" DBPK="PositionID" DbKeys="AccountID,InstrumentID" multi="10" multiField="PositionID" multiType="char">
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="PositionClass" type="char(1)" label="持仓类型" notnull="no" originaltype="PositionClass" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="yes" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PrePosition" type="numeric(38,10)" label="上次持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="Position" type="numeric(38,10)" label="总持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="LongFrozen" type="numeric(38,10)" label="多头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortFrozen" type="numeric(38,10)" label="空头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PreLongFrozen" type="numeric(38,10)" label="昨日多头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PreShortFrozen" type="numeric(38,10)" label="昨日空头冻结" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="HighestPosition" type="numeric(38,10)" label="最大持仓" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="ClosePosition" type="numeric(38,10)" label="可平持仓" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="PositionCost" type="numeric(36,15)" label="持仓成本" notnull="yes" originaltype="Cost" basetype="Float" length="36" precision="15"/>
+			<Column name="CostPrice" type="numeric(28,15)" label="成本价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="UseMargin" type="numeric(38,10)" label="占用保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FrozenMargin" type="numeric(38,10)" label="冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LongFrozenMargin" type="numeric(38,10)" label="多头冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ShortFrozenMargin" type="numeric(38,10)" label="空头冻结保证金" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="CloseProfit" type="numeric(38,10)" label="平仓盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="TotalPositionCost" type="numeric(36,6)" label="开仓成本" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="TotalCloseProfit" type="numeric(36,6)" label="总平仓盈亏" notnull="yes" originaltype="Total" basetype="Float" length="36" precision="6"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="平仓均价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TradeFee" type="numeric(38,10)" label="交易费用" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PositionFee" type="numeric(38,10)" label="持仓费用或者股票分红等" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Leverage" type="numeric(20,8)" label="杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="PriceCurrency" type="char(12)" label="计价币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="ClearCurrency" type="char(12)" label="清算币种" notnull="no" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓单代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="BeginTime" type="numeric(20)" label="持仓不为0的开始时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间(新持仓时间)" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="LastOpenTime" type="numeric(20)" label="最后开仓时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="IsAutoAddMargin" type="numeric(1)" label="是否自动追加保证金" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Frequency" type="numeric(10)" label="每秒更新的次数" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="MaintMargin" type="numeric(38,10)" label="维持保证金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="UnRealProfit" type="numeric(38,10)" label="未实现盈亏" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="LiquidPrice" type="numeric(28,15)" label="清算价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="CopyProfit" type="numeric(38,10)" label="带单盈利分配" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="FirstTradeID" type="char(42)" label="初始成交订单号" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="LastTradeID" type="char(42)" label="结束成交订单号" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="no" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveProfit" type="numeric(38,10)" label="保留资金盈亏" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="120" pre="perpetual.t_D_" name="AccountDetail" fid="0x1303" comment="账户流水" DBPK="AccountDetailID" DbKeys="AccountID,Currency,Source" multi="10" multiField="AccountDetailID" multiType="char" sinkkafka="yes" kafkakey="MemberID">
+			<Column name="AccountDetailID" type="char(20)" label="资金明细号" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="no" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="no" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="yes" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="yes" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="Currency" type="char(12)" label="币种" notnull="yes" originaltype="Currency" basetype="String" length="12" precision="0"/>
+			<Column name="Amount" type="numeric(38,10)" label="发生额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="PreBalance" type="numeric(38,10)" label="上次静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Balance" type="numeric(38,10)" label="静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveAmount" type="numeric(38,10)" label="体验金发生额" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="ReserveBalance" type="numeric(38,10)" label="体验金静态权益" notnull="yes" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="Source" type="char(1)" label="财务流水类型" notnull="yes" originaltype="DefineType" basetype="Char" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="SettleSegment" type="char(20)" label="结算段" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="RelatedID" type="varchar(64)" label="内外对账ID" notnull="no" originaltype="LongName" basetype="VString" length="64" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="KLine" short="K" fid="0x1304" comment="历史K线" DBPK="ExchangeID,InstrumentID,Bar,InsertTime" DbKeys="ExchangeID,InstrumentID,Bar;Bar,InsertTime">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Bar" type="char(3)" label="K线周期代码(n[m/h/d/o])" notnull="yes" originaltype="Bar" basetype="String" length="3" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="HighestPrice" type="numeric(28,15)" label="最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowestPrice" type="numeric(28,15)" label="最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="收盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(36,8)" label="数量" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="Turnover" type="numeric(36,8)" label="成交金额" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="SettleDetail" fid="0x1305" comment="操作流水" DBPK="ExchangeID,InstrumentID,SettleDetailID">
+			<Column name="SettleDetailID" type="char(20)" label="操作明细号" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="成交对本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="no" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="no" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="SettlementGroup" type="char(8)" label="结算组编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="SettleAction" type="char(1)" label="结算操作" notnull="yes" originaltype="SettleActionType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Value" type="numeric(26,10)" label="操作使用值" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Value1" type="numeric(26,10)" label="发生值1" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Value2" type="numeric(26,10)" label="发生值2" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Value3" type="numeric(26,10)" label="发生值3" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="FundingRateGroup" type="char(8)" label="资金费用组" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="SettleSegment" type="char(20)" label="结算段" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="InsertTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="FinishTriggerOrder" fid="0x1306" comment="完成的条件报单" DBPK="OrderID" DbKeys="InstrumentID,MemberID,TriggerStatus">
+			<Column name="MemberID" type="char(42)" label="成员代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TradeUnitID" type="char(20)" label="交易单元代码" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="AccountID" type="char(44)" label="资金账号" notnull="no" originaltype="AccountID" basetype="String" length="44" precision="0"/>
+			<Column name="LocalID" type="char(20)" label="报单本地标识" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="OrderPriceType" type="char(1)" label="报单价格类型" notnull="yes" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="OffsetFlag" type="char(1)" label="开平标志" notnull="yes" originaltype="OffsetFlag" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="报单价格" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeDisplay" type="numeric(38,10)" label="显示数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="VolumeMode" type="char(1)" label="数量取值方式" notnull="no" originaltype="ValueMode" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Cost" type="numeric(38,10)" label="委托额" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="OrderType" type="char(1)" label="订单类型" notnull="yes" originaltype="OrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="GTDTime" type="numeric(20)" label="GTD时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="MinVolume" type="numeric(38,10)" label="最小成交量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="BusinessType" type="char(1)" label="业务类别" notnull="yes" originaltype="BusinessType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="BusinessValue" type="char(32)" label="业务值" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="CloseOrderID" type="char(20)" label="平仓指定开仓的订单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="IsCrossMargin" type="numeric(1)" label="是否全仓" notnull="no" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="Remark" type="char(32)" label="备注" notnull="no" originaltype="Name" basetype="String" length="32" precision="0"/>
+			<Column name="OrderID" type="char(20)" label="报单系统唯一代码" notnull="yes" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="CopyMemberID" type="char(42)" label="带单员代码" notnull="no" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="CopyOrderID" type="char(20)" label="带单员报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="Leverage" type="numeric(20,8)" label="委托单杠杆倍数" notnull="no" originaltype="Leverage" basetype="Float" length="20" precision="8"/>
+			<Column name="CopyProfitRate" type="numeric(26,10)" label="带单分配比例" notnull="no" originaltype="Ratio" basetype="Float" length="26" precision="10"/>
+			<Column name="APPID" type="char(8)" label="应用编号" notnull="no" originaltype="ShortIndexID" basetype="String" length="8" precision="0"/>
+			<Column name="PositionID" type="char(42)" label="持仓代码" notnull="yes" originaltype="LongIndexID" basetype="String" length="42" precision="0"/>
+			<Column name="TriggerPrice" type="numeric(28,15)" label="触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Reserve" type="numeric(38,10)" label="保留资金" notnull="no" originaltype="Money" basetype="Float" length="38" precision="10"/>
+			<Column name="SLPrice" type="numeric(28,15)" label="止损价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="SLTriggerPrice" type="numeric(28,15)" label="止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPPrice" type="numeric(28,15)" label="止盈价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="TPTriggerPrice" type="numeric(28,15)" label="止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="RiskBefore" type="numeric(1)" label="是否提前检查风控" notnull="yes" originaltype="Bool" basetype="RangeInt" length="1" precision="0"/>
+			<Column name="TriggerOrderType" type="char(1)" label="触发的订单类型" notnull="yes" originaltype="TriggerOrderType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TriggerDetail" type="char(20)" label="触发类型明细" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="TriggerPriceType" type="char(1)" label="触发价类型" default="&quot;0&quot;" notnull="yes" originaltype="TriggerPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="TriggerValue" type="varchar(1024)" label="触发单具体设置信息" notnull="no" originaltype="LongContent" basetype="VString" length="1024" precision="0"/>
+			<Column name="CloseSLPrice" type="numeric(28,15)" label="平仓止损价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseSLTriggerPrice" type="numeric(28,15)" label="平仓止损触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTPPrice" type="numeric(28,15)" label="平仓止盈价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTPTriggerPrice" type="numeric(28,15)" label="平仓止盈触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseOrderPriceType" type="char(1)" label="报单价格类型" notnull="no" originaltype="OrderPriceType" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="平仓价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="CloseTriggerPrice" type="numeric(28,15)" label="平仓触发价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="RelatedOrderID" type="char(20)" label="关联报单号" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+			<Column name="ActiveTime" type="numeric(20)" label="激活时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="TriggerTime" type="numeric(20)" label="触发时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="TimeSortNo" type="numeric(16)" label="按时间排队的序号" notnull="yes" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="TriggerStatus" type="char(1)" label="触发报单状态" notnull="yes" originaltype="TriggerStatus" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="PosiDirection" type="char(1)" label="持仓多空方向" notnull="no" originaltype="PosiDirection" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="FrontNo" type="numeric(10)" label="前置编号" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="ErrorNo" type="numeric(10)" label="错误代码" notnull="no" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="ErrorMsg" type="varchar(128)" label="错误信息" notnull="no" originaltype="ShortContent" basetype="VString" length="128" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="yes" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="UpdateTime" type="numeric(20)" label="更新时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="业务序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="CreateTime" type="char(20)" label="创建时间" notnull="no" originaltype="IndexID" basetype="String" length="20" precision="0"/>
+		</fieldDefine>
+		<fieldDefine usage="Table" name="MarketOrder" short="O" fid="0x1307" comment="订单簿变化">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Direction" type="char(1)" label="买卖方向" notnull="yes" originaltype="Direction" basetype="EnumChar" length="1" precision="0"/>
+			<Column name="Price" type="numeric(28,15)" label="价格" notnull="yes" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(38,10)" label="数量" notnull="yes" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+			<Column name="Orders" type="numeric(10)" label="订单数量" notnull="yes" originaltype="Number" basetype="Int" length="10" precision="0"/>
+			<Column name="BusinessNo" type="numeric(16)" label="最后变化序列号" notnull="no" originaltype="LargeNumber" basetype="Long" length="16" precision="0"/>
+			<Column name="TrueVolume" type="numeric(38,10)" label="真实报单数量" notnull="no" originaltype="Volume" basetype="Float" length="38" precision="10"/>
+		</fieldDefine>
+		<fieldDefine usage="Table" name="PublishKLine" short="PK" fid="0x1308" comment="发布K线">
+			<Column name="ExchangeID" type="char(8)" label="交易所代码" notnull="yes" originaltype="ExchangeID" basetype="String" length="8" precision="0"/>
+			<Column name="InstrumentID" type="char(26)" label="标的代码" notnull="yes" originaltype="InstrumentID" basetype="String" length="26" precision="0"/>
+			<Column name="Bar" type="char(3)" label="K线周期代码(n[m/h/d/o])" notnull="yes" originaltype="Bar" basetype="String" length="3" precision="0"/>
+			<Column name="InsertTime" type="numeric(20)" label="插入时间" notnull="no" originaltype="MilliSeconds" basetype="Long" length="20" precision="0"/>
+			<Column name="OpenPrice" type="numeric(28,15)" label="开盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="HighestPrice" type="numeric(28,15)" label="最高价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="LowestPrice" type="numeric(28,15)" label="最低价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="ClosePrice" type="numeric(28,15)" label="收盘价" notnull="no" originaltype="Price" basetype="Float" length="28" precision="15"/>
+			<Column name="Volume" type="numeric(36,8)" label="数量" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+			<Column name="Turnover" type="numeric(36,8)" label="成交金额" notnull="yes" originaltype="Collect" basetype="Float" length="36" precision="8"/>
+		</fieldDefine>
+	</fields>
+</XTP>

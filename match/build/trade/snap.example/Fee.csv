@@ -1,0 +1,7 @@
+"MemberID*","InstrumentID*","MatchRole*","OpenFeeRate","OpenFeeAmount","CloseFeeRate","CloseFeeAmount","CloseTodayFeeRate","CloseTodayFeeAmount","DeliverFeeRate","DeliverFeeAmount","Remark","InsertTime","UpdateTime"
+"default","default","1","0.0002","0.0","0.0002","0.0","0.0002","0.0","0.0002","0.0","","",""
+"default","default","2","0.0002","0.0","0.0002","0.0","0.0002","0.0","0.0002","0.0","","",""
+"default","default","0","0.0002","0.0","0.0002","0.0","0.0002","0.0","0.0002","0.0","","",""
+"mm","default","0","0.0","0.0","0.0","0.0","0.0","0.0","0.0","0.0","","",""
+"mm","default","1","0.0","0.0","0.0","0.0","0.0","0.0","0.0","0.0","","",""
+"mm","default","2","0.0","0.0","0.0","0.0","0.0","0.0","0.0","0.0","","",""

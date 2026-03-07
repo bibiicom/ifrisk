@@ -1,0 +1,69 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././test
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p test_build_dir
+	-mkdir -p ././
+	
+mysql_include_includedir=-I../../mysql/8.0.42/include/.
+mysql_lib_lib=-L../../mysql/8.0.42/./linux_x64 -lmysqlclient 
+mysql_lib_includedir= 
+_obj=test_build_dir/test.cpp.o 
+_includedir= 
+
+all_objs=$(_obj) 
+
+all_libs=$(mysql_lib_lib) 
+INCLUDEDIR= $(mysql_include_includedir)  $(mysql_lib_includedir)  $(_includedir) 
+
+test_build_dir/test.cpp.o: .//test.cpp $(_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .//test.cpp -otest_build_dir/test.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(_obj)
+
+	-$(DEL) $(target)

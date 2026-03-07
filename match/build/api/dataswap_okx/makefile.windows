@@ -1,0 +1,138 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DWINDOWS -DMSVC -DISLIB
+target=.\..\cplusplus\dataswap_okx.dll
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DOUTFOGSERVICE_API_IS_LIB -DLIB_OUTFOGSERVICE_API_EXPORT $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  dataswap_okx_build_dir
+	-mkdir  .\..\cplusplus\
+	
+datastruct_obj=dataswap_okx_build_dir\BigDigit.cpp.obj dataswap_okx_build_dir\CDate.cpp.obj dataswap_okx_build_dir\CErrorEngine.cpp.obj dataswap_okx_build_dir\CSequence.cpp.obj dataswap_okx_build_dir\CSVParser.cpp.obj dataswap_okx_build_dir\CSVToField.cpp.obj dataswap_okx_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\src_base\datastruct\.
+function_obj=dataswap_okx_build_dir\BaseFunction.cpp.obj dataswap_okx_build_dir\Config.cpp.obj dataswap_okx_build_dir\platform.cpp.obj dataswap_okx_build_dir\printinfo.cpp.obj dataswap_okx_build_dir\profile.cpp.obj dataswap_okx_build_dir\utility.cpp.obj dataswap_okx_build_dir\utils.cpp.obj dataswap_okx_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\src_base\function\.
+netstruct_obj=dataswap_okx_build_dir\errorDefine.cpp.obj dataswap_okx_build_dir\TableDefine.cpp.obj 
+netstruct_includedir=-I..\..\..\src_base\netstruct\.
+field_obj=dataswap_okx_build_dir\FieldData.cpp.obj dataswap_okx_build_dir\FieldMap.cpp.obj 
+field_includedir=-I..\..\..\src_base\field\.
+jsoncpp_obj=dataswap_okx_build_dir\json_reader.cpp.obj dataswap_okx_build_dir\json_value.cpp.obj dataswap_okx_build_dir\json_writer.cpp.obj 
+jsoncpp_includedir=-I..\..\..\src_base\jsoncpp\.
+ofserviceapi_include_includedir=-I..\..\..\libs\ofserviceapi\1.0\include\.
+fromjson_obj=dataswap_okx_build_dir\JsonToField.cpp.obj 
+fromjson_includedir=-I..\..\..\src_api\dataswap\fromjson\.
+formdata_obj=dataswap_okx_build_dir\FormToField.cpp.obj 
+formdata_includedir=-I..\..\..\src_api\dataswap\formdata\.
+dataswap_okx_obj=dataswap_okx_build_dir\DataSwap.cpp.obj 
+dataswap_okx_includedir=-I.\.
+
+all_objs=$(datastruct_obj) $(function_obj) $(netstruct_obj) $(field_obj) $(jsoncpp_obj) $(fromjson_obj) $(formdata_obj) $(dataswap_okx_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(netstruct_includedir)  $(field_includedir)  $(jsoncpp_includedir)  $(ofserviceapi_include_includedir)  $(fromjson_includedir)  $(formdata_includedir)  $(dataswap_okx_includedir) 
+
+dataswap_okx_build_dir\BigDigit.cpp.obj: ..\..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\BigDigit.cpp /Fodataswap_okx_build_dir\BigDigit.cpp.obj
+dataswap_okx_build_dir\CDate.cpp.obj: ..\..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CDate.cpp /Fodataswap_okx_build_dir\CDate.cpp.obj
+dataswap_okx_build_dir\CErrorEngine.cpp.obj: ..\..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CErrorEngine.cpp /Fodataswap_okx_build_dir\CErrorEngine.cpp.obj
+dataswap_okx_build_dir\CSequence.cpp.obj: ..\..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSequence.cpp /Fodataswap_okx_build_dir\CSequence.cpp.obj
+dataswap_okx_build_dir\CSVParser.cpp.obj: ..\..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVParser.cpp /Fodataswap_okx_build_dir\CSVParser.cpp.obj
+dataswap_okx_build_dir\CSVToField.cpp.obj: ..\..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVToField.cpp /Fodataswap_okx_build_dir\CSVToField.cpp.obj
+dataswap_okx_build_dir\FieldDescribe.cpp.obj: ..\..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\FieldDescribe.cpp /Fodataswap_okx_build_dir\FieldDescribe.cpp.obj
+dataswap_okx_build_dir\BaseFunction.cpp.obj: ..\..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\BaseFunction.cpp /Fodataswap_okx_build_dir\BaseFunction.cpp.obj
+dataswap_okx_build_dir\Config.cpp.obj: ..\..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\Config.cpp /Fodataswap_okx_build_dir\Config.cpp.obj
+dataswap_okx_build_dir\platform.cpp.obj: ..\..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\platform.cpp /Fodataswap_okx_build_dir\platform.cpp.obj
+dataswap_okx_build_dir\printinfo.cpp.obj: ..\..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\printinfo.cpp /Fodataswap_okx_build_dir\printinfo.cpp.obj
+dataswap_okx_build_dir\profile.cpp.obj: ..\..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\profile.cpp /Fodataswap_okx_build_dir\profile.cpp.obj
+dataswap_okx_build_dir\utility.cpp.obj: ..\..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utility.cpp /Fodataswap_okx_build_dir\utility.cpp.obj
+dataswap_okx_build_dir\utils.cpp.obj: ..\..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utils.cpp /Fodataswap_okx_build_dir\utils.cpp.obj
+dataswap_okx_build_dir\version.cpp.obj: ..\..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\version.cpp /Fodataswap_okx_build_dir\version.cpp.obj
+dataswap_okx_build_dir\errorDefine.cpp.obj: ..\..\..\src_base\netstruct\errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\netstruct\errorDefine.cpp /Fodataswap_okx_build_dir\errorDefine.cpp.obj
+dataswap_okx_build_dir\TableDefine.cpp.obj: ..\..\..\src_base\netstruct\TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\netstruct\TableDefine.cpp /Fodataswap_okx_build_dir\TableDefine.cpp.obj
+dataswap_okx_build_dir\FieldData.cpp.obj: ..\..\..\src_base\field\FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\field\FieldData.cpp /Fodataswap_okx_build_dir\FieldData.cpp.obj
+dataswap_okx_build_dir\FieldMap.cpp.obj: ..\..\..\src_base\field\FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\field\FieldMap.cpp /Fodataswap_okx_build_dir\FieldMap.cpp.obj
+dataswap_okx_build_dir\json_reader.cpp.obj: ..\..\..\src_base\jsoncpp\json_reader.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_reader.cpp /Fodataswap_okx_build_dir\json_reader.cpp.obj
+dataswap_okx_build_dir\json_value.cpp.obj: ..\..\..\src_base\jsoncpp\json_value.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_value.cpp /Fodataswap_okx_build_dir\json_value.cpp.obj
+dataswap_okx_build_dir\json_writer.cpp.obj: ..\..\..\src_base\jsoncpp\json_writer.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_writer.cpp /Fodataswap_okx_build_dir\json_writer.cpp.obj
+dataswap_okx_build_dir\JsonToField.cpp.obj: ..\..\..\src_api\dataswap\fromjson\JsonToField.cpp $(fromjson_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_api\dataswap\fromjson\JsonToField.cpp /Fodataswap_okx_build_dir\JsonToField.cpp.obj
+dataswap_okx_build_dir\FormToField.cpp.obj: ..\..\..\src_api\dataswap\formdata\FormToField.cpp $(formdata_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_api\dataswap\formdata\FormToField.cpp /Fodataswap_okx_build_dir\FormToField.cpp.obj
+dataswap_okx_build_dir\DataSwap.cpp.obj: .\DataSwap.cpp $(dataswap_okx_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\DataSwap.cpp /Fodataswap_okx_build_dir\DataSwap.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -out:$@ -implib:.\..\cplusplus\dataswap_okx.lib $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(jsoncpp_obj)
+	-$(DEL) $(fromjson_obj)
+	-$(DEL) $(formdata_obj)
+	-$(DEL) $(dataswap_okx_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\..\cplusplus\dataswap_okx.lib
+	-$(DEL) .\..\cplusplus\dataswap_okx.pdb

@@ -1,0 +1,16 @@
+!!enter errors!!
+/////////////////////////////////////////////////////////////////////////
+///errorDefine.cpp
+///定义了错误引擎初始化的函数
+/////////////////////////////////////////////////////////////////////////
+
+#include "errorDefine.h"
+
+void defineErrors(CErrorEngine *pEngine)
+{
+!!travel self!!
+	pEngine->registerErrorType(ERROR_!!@id!!,(char *)"!!@prompt!!");
+!!next!!
+}
+
+!!leave!!

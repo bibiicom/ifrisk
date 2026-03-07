@@ -1,0 +1,420 @@
+!!enter system!!
+#include "mdb.h"
+#include <map>
+#include <string>
+using namespace std;
+
+#define MEMORYDB_ID			0
+#define MAX_TABLE_COUNT		300				///引导块中每块放置的内存数据库表或者索引的数量
+
+CMDB::CMDB()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	m_!!@name!!Factory=NULL;
+	!!endif!!
+	!!next!!
+}
+	
+CMDB::~CMDB()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	if (m_!!@name!!Factory!=NULL)
+		delete m_!!@name!!Factory;
+	!!endif!!
+	!!next!!
+}
+	
+int CMDB::isA(char *objectType)
+{
+	if (!strcmp(objectType,"CMDB"))
+		return 1;
+	return CBaseObject::isA(objectType);
+}
+
+const char *CMDB::getType(void)
+{
+	return "CMDB";
+}
+
+int CMDB::init(int memorySize, int blockCount,IMemoryAllocator *pAllocator,bool reuse)
+{
+	if(pAllocator == NULL)
+	{
+		pAllocator = new CNormalMemoryAllocator(memorySize,blockCount);
+		pAllocator->init(reuse);
+	}
+	if(!reuse)
+	{
+		map<string,int> indexMap;
+		pMem=new CFixMem(sizeof(TableStruct),MAX_TABLE_COUNT,pAllocator,false,MEMORYDB_ID);
+		TableStruct* pStru = NULL;
+		
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!	
+		m_!!@name!!Factory=new C!!@name!!Factory(this,pAllocator,&indexMap);
+		if (m_!!@name!!Factory==NULL)
+			return 0;
+		pStru = (TableStruct *)pMem->alloc();
+		strcpy(pStru->tableName,"!!@name!!");
+		pStru->reuseID = m_!!@name!!Factory->getReuseID();
+				
+	!!endif!!
+	!!next!!
+	
+		map<string,int>::iterator it = indexMap.begin();
+		for(;it!=indexMap.end();it++)
+		{
+			pStru = (TableStruct *)pMem->alloc();
+			strcpy(pStru->tableName,it->first.c_str());
+			pStru->reuseID = it->second;
+		}
+	}
+	else
+	{
+		pMem=new CFixMem(sizeof(TableStruct),MAX_TABLE_COUNT,pAllocator,true,MEMORYDB_ID);
+		map<string,int> blockMap;
+		TableStruct* pStru = NULL;
+		for(int i=0;i<pMem->getCount();i++)
+		{
+			pStru = (TableStruct *)pMem->getObject(i);
+			blockMap.insert(map<string,int>::value_type(pStru->tableName,pStru->reuseID));
+		}
+		map<string,int>::iterator it;
+			
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!	
+		it = blockMap.find("!!@name!!");
+		if(it == blockMap.end())
+			m_!!@name!!Factory=new C!!@name!!Factory(this,pAllocator,&blockMap);
+		else
+			m_!!@name!!Factory=new C!!@name!!Factory(this,pAllocator,&blockMap,true,it->second);
+		if (m_!!@name!!Factory==NULL)
+			return 0;
+				
+	!!endif!!
+	!!next!!		
+	}
+	return 1;
+}
+
+int CMDB::load(const char *path)
+{
+	char fname[300];
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	sprintf(fname, "%s!!@name!!.csv", path);
+	if (!m_!!@name!!Factory->readCSV(fname))
+		return 0;
+	!!endif!!
+	!!next!!
+	return 1;
+}
+
+int CMDB::save(const char *path, UF_INT8 nSequenceNo)
+{
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);	
+	PRINT_TO_STD("Begin MDB Save to %s", path);
+	makedir(path);
+	char fname[300];
+	!!travel tables!!
+	!!if !strcmp(@manager,"Init")!!
+	sprintf(fname, "%s!!@name!!.csv", path);
+	if (!m_!!@name!!Factory->writeCSV(fname))
+		return 0;
+	!!endif!!
+	!!next!!
+	
+	FILE* output = mfopen("dumpPhase.log", "wt");
+	fprintf(output, "%.0f", nSequenceNo);
+	fclose(output);	
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB Save is %d ms", dealEnd - dealBegin);
+	PRINT_TO_STD("End MDB Save to %s", path);	
+	return 1;
+}
+
+int CMDB::savePreVersion(const char *path, UF_INT8 nSequenceNo)
+{
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);	
+	PRINT_TO_STD("Begin MDB Save to %s", path);
+	makedir(path);
+	char fname[300];
+	!!travel tables!!
+	!!if !strcmp(@manager,"Init")!!
+	sprintf(fname, "%s!!@name!!.csv", path);
+	if (!m_!!@name!!Factory->writeCSVPreVersion(fname))
+		return 0;
+	!!endif!!
+	!!next!!
+	
+	FILE* output = mfopen("dumpPhase.log", "wt");
+	fprintf(output, "%.0f", nSequenceNo);
+	fclose(output);	
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB Save is %d ms", dealEnd - dealBegin);
+	PRINT_TO_STD("End MDB Save to %s", path);	
+	return 1;
+}
+
+int CMDB::saveAll(const char *path, UF_INT8 nSequenceNo)
+{
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);	
+	PRINT_TO_STD("Begin MDB Save to %s", path);
+	makedir(path);
+	char fname[300];
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	sprintf(fname, "%s!!@name!!.csv", path);
+	if (!m_!!@name!!Factory->writeCSV(fname))
+		return 0;
+		!!endif!!
+	!!next!!
+	FILE* output = mfopen("dumpPhase.log", "wt");
+	fprintf(output, "%.0f", nSequenceNo);
+	fclose(output);	
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB SaveAll is %d ms", dealEnd - dealBegin);
+	PRINT_TO_STD("End MDB SaveAll to %s", path);	
+	return 1;
+}
+
+int CMDB::saveAllPreVersion(const char *path, UF_INT8 nSequenceNo)
+{
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);	
+	PRINT_TO_STD("Begin MDB Save to %s", path);
+	makedir(path);
+	char fname[300];
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	sprintf(fname, "%s!!@name!!.csv", path);
+	if (!m_!!@name!!Factory->writeCSVPreVersion(fname))
+		return 0;
+		!!endif!!
+	!!next!!
+	FILE* output = mfopen("dumpPhase.log", "wt");
+	fprintf(output, "%.0f", nSequenceNo);
+	fclose(output);	
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB SaveAll is %d ms", dealEnd - dealBegin);
+	PRINT_TO_STD("End MDB SaveAll to %s", path);	
+	return 1;
+}
+
+bool CMDB::snap(const char *path, UF_INT8 nSequenceNo)
+{
+	if (m_MDBLastSnap.m_Status != 0)
+	{
+		PRINT_TO_STD("MDBSnap Status is not 0, is %d", m_MDBLastSnap.m_Status);
+		return false;
+	}
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);
+	PRINT_TO_STD("Begin MDB Snap to %s", path);
+	
+	!!travel tables!!
+	!!if !strcmp(@manager,"Init")!!		
+	C!!@name!!* p!!@name!! = m_!!@name!!Factory->getFirst();
+	while (p!!@name!! != NULL)
+	{
+		m_MDBLastSnap.m_!!@name!!.push_back(*p!!@name!!);
+		p!!@name!! = m_!!@name!!Factory->getNext();
+	}
+	!!endif!!
+	!!next!!
+
+	strcpy(m_sLastSnapPath, path);
+	m_MDBLastSnap.m_Status = 1;
+	m_nLastSequenceNo = nSequenceNo;
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB Snap is %d ms", dealEnd - dealBegin);	
+	PRINT_TO_STD("End MDB Snap to %s", path);
+	return true;
+}
+
+bool CMDB::snapAll(const char *path, UF_INT8 nSequenceNo)
+{
+	if (m_MDBLastSnap.m_Status != 0)
+	{
+		PRINT_TO_STD("MDBSnap Status is not 0, is %d", m_MDBLastSnap.m_Status);
+		return false;
+	}
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);
+	PRINT_TO_STD("Begin MDB Snap to %s", path);
+	
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!	
+	C!!@name!!* p!!@name!! = m_!!@name!!Factory->getFirst();
+	while (p!!@name!! != NULL)
+	{
+		m_MDBLastSnap.m_!!@name!!.push_back(*p!!@name!!);
+		p!!@name!! = m_!!@name!!Factory->getNext();
+	}
+	!!endif!!
+	!!next!!
+
+	strcpy(m_sLastSnapPath, path);
+	m_MDBLastSnap.m_Status = 1;
+	m_nLastSequenceNo = nSequenceNo;
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB SnapAll is %d ms", dealEnd - dealBegin);	
+	PRINT_TO_STD("End MDB SnapAll to %s", path);
+	return true;
+}
+
+bool CMDB::canSnap()
+{
+	if (m_MDBLastSnap.m_Status != 0)
+		return false;
+	return true;
+}
+
+bool CMDB::saveSnap()
+{
+	if (m_MDBLastSnap.m_Status != 1)
+		return false;
+		
+	int dealBegin;
+	GET_ACCURATE_MSEC_TIME(dealBegin);	
+	PRINT_TO_STD("Begin MDB SaveSnap to %s", m_sLastSnapPath);
+	makedir(m_sLastSnapPath);
+	char filename[300];
+	FILE *output = NULL;
+	
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+		!!if !strcmp(@manager,"Init")!!
+	sprintf(filename, "%s!!@name!!.csv", m_sLastSnapPath);
+	output = mfopen(filename, "wt");
+	if (output == NULL)
+		return false;
+	CWriteable!!@name!!::writeCSVHead(output);
+	vector<CWriteable!!@name!!>::iterator !!@name!!Iter = m_MDBLastSnap.m_!!@name!!.begin();
+	while (!!@name!!Iter != m_MDBLastSnap.m_!!@name!!.end())
+	{
+		!!@name!!Iter->writeCSV(output);
+		!!@name!!Iter++;
+	}
+	fclose(output);
+		!!else!!
+	if(m_MDBLastSnap.m_!!@name!!.size() > 0)
+	{
+		sprintf(filename, "%s!!@name!!.csv", m_sLastSnapPath);
+		output = mfopen(filename, "wt");
+		if (output == NULL)
+			return false;
+		CWriteable!!@name!!::writeCSVHead(output);
+		vector<CWriteable!!@name!!>::iterator !!@name!!Iter = m_MDBLastSnap.m_!!@name!!.begin();
+		while (!!@name!!Iter != m_MDBLastSnap.m_!!@name!!.end())
+		{
+			!!@name!!Iter->writeCSV(output);
+			!!@name!!Iter++;
+		}
+		fclose(output);
+	}	
+		!!endif!!	
+	!!endif!!
+	!!next!!
+	
+	//最后文件显示写入成功
+	output = mfopen("dumpPhase.log", "wt");
+	fprintf(output, "%.0f", m_nLastSequenceNo);
+	fclose(output);
+	int dealEnd;
+	GET_ACCURATE_MSEC_TIME(dealEnd);
+	PRINT_TO_STD("Time MDB SaveSnap is %d ms", dealEnd - dealBegin);
+	PRINT_TO_STD("End MDB SaveSnap to %s", m_sLastSnapPath);
+	clearSnap();	
+	return true;
+}
+bool CMDB::clearSnap()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!	
+	m_MDBLastSnap.m_!!@name!!.clear();
+	!!endif!!
+	!!next!!
+	
+	memset(m_sLastSnapPath, 0, sizeof(m_sLastSnapPath));
+	m_MDBLastSnap.m_Status = 0;
+	m_nLastSequenceNo = 0.0;
+	return true;
+}
+
+void CMDB::clear()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	m_!!@name!!Factory->clearAll();
+	!!endif!!
+	!!next!!
+}
+
+void CMDB::linkAll()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	!!let tableName=@name!!
+	!!travel foreigns!!
+	m_!!@tableName!!Factory->linkAll!!@name!!();
+	!!next!!
+	!!endif!!
+	!!next!!
+}
+
+void CMDB::checkNull(FILE *pFile) const
+{
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	///完成!!@usage!!!!@comment!!的NULL检查
+	m_!!@name!!Factory->checkNull(pFile);
+		!!endif!!
+	!!next!!
+}
+
+void CMDB::checkLink(FILE *pFile) const
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	!!let tableName=@name!!
+	!!travel foreigns!!
+	m_!!@tableName!!Factory->checkLink!!@name!!(pFile);
+	!!next!!
+	!!endif!!
+	!!next!!
+}
+
+void CMDB::clearLink()
+{
+	!!travel tables!!
+	!!if !strcmp(@hasTable,"yes")!!
+	!!let tableName=@name!!
+	!!travel foreigns!!
+	m_!!@tableName!!Factory->clearLink!!@name!!();
+	!!next!!
+	!!endif!!
+	!!next!!
+}
+
+void CMDB::checkValid(FILE *pFile) const
+{
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	///完成!!@usage!!!!@comment!!的NULL检查
+	m_!!@name!!Factory->checkValid(pFile);
+		!!endif!!
+	!!next!!
+}
+!!leave!!

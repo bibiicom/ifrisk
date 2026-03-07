@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="trade" targettype="exe" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2" workdir="./" model="../../xmls/entity/">
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>
+	</cppflags>
+	<package dir="../../src_base/function"/>
+	<package dir="../../src_base/logger"/>
+	<package dir="../../src_base/crypt"/>
+	<package dir="../../src_base/datastruct"/>
+	<package dir="../../src_base/netstruct"/>
+	<package dir="../../src_base/field"/>
+	<package dir="../../src_base/mdb/mdbbase"/>
+	<package dir="../../src_base/mdb/mdbstruct"/>
+	<package dir="../../src_base/mdb/mdbchange"/>
+
+	<package dir="../../libs/ofserviceapi" version="1.0" libpath=""/>
+	<package dir="../../libs/ofserviceapi/ofapibase"/>
+	
+	<package dir="../../src/service"/>
+	<package dir="../../src/service/serviceQuery"/>
+	<package dir="../../src/service/serviceLogin"/>
+	<package dir="../../src/service/serviceSettlement"/>
+	<package dir="../../src/service/serviceTrade"/>
+	<package dir="../../src/service/serviceTrade/wedge"/>
+	<package dir="../../src/service/serviceTrade/wedge/wedgeMatch"/>
+	<package dir="../../src/service/serviceTrade/wedge/wedgeRisk"/>
+	<package dir="../../src/service/serviceTrade/wedge/wedgeControl"/>
+	<package dir="../../src/trade"/>
+</project>

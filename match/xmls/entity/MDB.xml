@@ -1,0 +1,1759 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE system SYSTEM "">
+<system author="" version="1.0">
+	<tables writeTable="yes" comment="" desc="" isAsc="yes" indexName="noIndex" searchUnique="yes" checkDefault="no" checkParameter="yes" hasTable="yes" manager="root" isPK="no" stableIndex="no" runLevel="0,s" priority="2">
+		<table name="CurrentTime" usage="当前时间" manager="Init">
+			<fields>
+				<field name="SystemID" type="CShortIndexIDType" comment="系统名" notnull="yes" isPK="*"/>
+				<field name="ZoneDate" type="CDateType" comment="本地日期" notnull="yes" isPK=""/>
+				<field name="ZoneTime" type="CTimeType" comment="本地时间" notnull="yes" isPK=""/>
+				<field name="ZoneDays" type="CDateType" comment="本地天数" notnull="yes" isPK=""/>
+				<field name="CurrTime" type="CMilliSecondsType" comment="当前时间（秒）" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间（毫秒）" notnull="no" isPK=""/>
+				<field name="TimeZone" type="CNumberType" comment="本地时区" notnull="yes" isPK=""/>
+				<field name="LastTradeID" type="CIndexIDType" comment="最新最新成交序列号" notnull="no" isPK=""/>
+				<field name="LastOrderID" type="CIndexIDType" comment="最新订单序列号" notnull="no" isPK=""/>
+				<field name="LastAccountDetailID" type="CIndexIDType" comment="最新资金明细序列号" notnull="no" isPK=""/>
+				<field name="LastTimeSortNo" type="CLargeNumberType" comment="最新排序序列号" notnull="no" isPK=""/>
+				<field name="LastBusinessNo" type="CLargeNumberType" comment="最新事务序列号" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<index>
+				<defineIndex name="SystemIDIndex" stableIndex="yes">
+					<indexKey name="SystemID"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="BySystemID" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="SystemID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Member" usage="成员" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK="*"/>
+				<field name="MemberType" type="CMemberTypeType" comment="成员类型" notnull="no" isPK=""/>
+				<field name="Grade" type="CShortIndexIDType" comment="等级" notnull="no" isPK=""/>
+				<field name="Priority" type="CNumberType" comment="优先权" notnull="no" isPK=""/>
+				<field name="FeeGrade" type="CShortIndexIDType" comment="手续费等级" notnull="no" isPK=""/>
+				<field name="MarginRateGrade" type="CShortIndexIDType" comment="保证金等级" notnull="no" isPK=""/>
+				<field name="TradingRightGrade" type="CShortIndexIDType" comment="权限等级" notnull="no" isPK=""/>
+				<field name="CFDGrade" type="CShortIndexIDType" comment="差价等级" notnull="no" isPK=""/>
+				<field name="LiquidityGrade" type="CShortIndexIDType" comment="流动性等级" notnull="no" isPK=""/>
+				<field name="RiskLevel" type="CRiskLevelType" comment="风控类型" notnull="yes" isPK=""/>
+				<field name="PositionType" type="CPositionTypeType" comment="持仓类型" notnull="no" isPK=""/>
+				<field name="TriggerOrders" type="CNumberType" comment="触发订单个数" notnull="no" default="0" isPK=""/>
+				<field name="OpenOrders" type="CNumberType" comment="未成交订单数" notnull="no" default="0" isPK=""/>
+				<field name="OpenPositions" type="CNumberType" comment="用户持仓个数" notnull="no" default="0" isPK=""/>
+				<field name="MaxLocalID" type="CIndexIDType" comment="最大本地标识" notnull="no" isPK=""/>
+				<field name="SinkType" type="CSinkTypeType" comment="下游系统同步类型" notnull="" isPK=""/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="Region" type="CShortIndexIDType" comment="" notnull="no" isPK=""/>
+				<field name="FeeDeduceDisCount" type="CRatioType" comment="作为手续费的抵扣优惠比例" notnull="no" isPK=""/>
+				<field name="FeeDeduceCurrency" type="CCurrencyType" comment="作为手续费的抵扣比例" notnull="no" isPK=""/>
+				<field name="CanBorrow" type="CBoolType" comment="是否需要借钱交易" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="MemberID" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="MemberIDHashIndex" hashKey="MemberID" hashKeySize="1572869" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>
+			<foreigns/>
+			<index/>
+			<search>
+				<defineSearch name="ByMemberID" hashIndexName="MemberIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="ServiceConfig" usage="业务配置" manager="Init">
+			<fields>
+				<field name="ConfigName" type="CNameType" comment="配置名称" notnull="yes" isPK="*"/>
+				<field name="Index1" type="CNameType" comment="索引1" notnull="yes" default="&quot;default&quot;" isPK="*"/>
+				<field name="Index2" type="CNameType" comment="索引2" notnull="yes" default="&quot;default&quot;" isPK="*"/>
+				<field name="ConfigValue" type="CLongNameType" comment="配置值" notnull="yes" isPK=""/>
+				<field name="Remark" type="CContentType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<index>
+				<defineIndex name="ConfigIndex" stableIndex="yes">
+					<indexKey name="ConfigName"/>
+					<indexKey name="Index1"/>
+					<indexKey name="Index2"/>
+				</defineIndex>
+			</index>
+			<hashkeys/>
+			<hashindex/>
+			<search>
+				<defineSearch name="ByConfig" indexName="ConfigIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="ConfigName"/>
+						<paraDefine name="Index1"/>
+						<paraDefine name="Index2"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByIndex1" indexName="ConfigIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ConfigName"/>
+						<paraDefine name="Index1"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Index2" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="UserSession" manager="Init" usage="交易员在线会话">
+			<fields>
+				<field name="UserID" type="CLongIndexIDType" comment="交易用户代码" notnull="" isPK=""/>
+				<field name="Password" type="CPasswordType" comment="密码" notnull="" isPK=""/>
+				<field name="UserProductID" type="CNameType" comment="用户端产品信息" notnull="" isPK=""/>
+				<field name="MacAddress" type="CMacAddressType" comment="Mac地址" notnull="" isPK=""/>
+				<field name="ClientIPAddress" type="CIPAddressType" comment="终端IP地址" notnull="" isPK=""/>
+				<field name="HDSerialID" type="CLongNameType" comment="硬盘序列号" notnull="" isPK=""/>
+				<field name="AuthCode" type="CShortContentType" comment="授权编码" notnull="" isPK=""/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="" isPK=""/>
+				<field name="Token" type="CShortContentType" comment="令牌" notnull="yes" isPK="*"/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="" isPK=""/>
+				<field name="APIID" type="CNameType" comment="接口端产品信息" notnull="" isPK=""/>
+				<field name="LoginTime" type="CMilliSecondsType" comment="登录时间" notnull="" isPK=""/>
+				<field name="ExpireTime" type="CMilliSecondsType" comment="失效时间" notnull="" isPK=""/>
+				<field name="IPAddress" type="CContentType" comment="允许登录的IP地址" notnull="" isPK=""/>
+				<field name="MaxLocalID" type="CIndexIDType" comment="最大本地标识" notnull="" isPK=""/>
+				<field name="SessionNo" type="CNumberType" comment="会话编号" notnull="yes" isPK=""/>
+				<field name="FrontNo" type="CNumberType" comment="前置编号" notnull="yes" isPK=""/>
+				<field name="AccessLimit" type="CNumberType" comment="每秒访问的次数限制" notnull="" isPK=""/>
+				<field name="UserType" type="CUserTypeType" comment="用户类型" notnull="yes" isPK=""/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="no" isPK=""/>
+				<field name="LimitAccesses" type="CNumberType" comment="该秒已经访问的次数" notnull="" isPK=""/>
+				<field name="SinkType" type="CSinkTypeType" comment="下游系统同步类型" notnull="" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<hashkeys>
+				<hashkey name="Token" stableHashKey="no">
+					<hashitem name="Token"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="TokenIndex" hashKey="Token" hashKeySize="102560" stableIndex="no" runLevel="0,s,p,r"/>
+			</hashindex>
+			<index>
+				<defineIndex name="UserIDAndAppIDIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="UserID"/>
+					<indexKey name="APPID"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByToken" hashIndexName="TokenIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="Token"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByUserIDAndAppID" indexName="UserIDAndAppIDIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="UserID"/>
+						<paraDefine name="APPID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Instrument" usage="标的" manager="Init">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentName" type="CLongNameType" comment="标的名称" notnull="no" isPK=""/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK=""/>
+				<field name="ProductGroup" type="CShortIndexIDType" comment="产品组" notnull="no" isPK=""/>
+				<field name="UnderlyingID" type="CInstrumentIDType" comment="基础标的代码" notnull="no" isPK=""/>
+				<field name="ProductClass" type="CProductClassType" comment="产品大类" notnull="yes" isPK=""/>
+				<field name="ProductType" type="CProductTypeType" comment="产品类型" notnull="yes" isPK=""/>
+				<field name="StrikePrice" type="CPriceType" comment="执行价" notnull="no" isPK=""/>
+				<field name="OptionsType" type="COptionsTypeType" comment="期权类型" notnull="no" isPK=""/>
+				<field name="VolumeMultiple" type="CRatioType" comment="数量乘数" notnull="yes" isPK=""/>
+				<field name="StartTime" type="CMilliSecondsType" comment="启动时间" notnull="no" isPK=""/>
+				<field name="ExpireTime" type="CMilliSecondsType" comment="到期时间" notnull="no" isPK=""/>
+				<field name="PriceCurrency" type="CCurrencyType" comment="计价币种" notnull="yes" isPK=""/>
+				<field name="ClearCurrency" type="CCurrencyType" comment="清算币种" notnull="yes" isPK=""/>
+				<field name="IsInverse" type="CBoolType" comment="是否反向标的" notnull="yes" isPK=""/>
+				<field name="BaseCurrency" type="CCurrencyType" comment="标的基础货币" notnull="yes" isPK=""/>
+				<field name="MarginPriceType" type="CMarginPriceTypeType" comment="保证金价格类型" notnull="yes" isPK=""/>
+				<field name="BasisPrice" type="CPriceType" comment="挂牌基准价" notnull="no" isPK=""/>
+				<field name="MinOrderVolume" type="CVolumeType" comment="最小下单量" notnull="no" isPK=""/>
+				<field name="MinOrderCost" type="CVolumeType" comment="最小下单额" notnull="no" isPK=""/>
+				<field name="MaxOrderVolume" type="CVolumeType" comment="最大下单量" notnull="no" isPK=""/>
+				<field name="PriceTick" type="CPriceType" comment="最小变动价位" notnull="yes" default="0.00000001" isPK=""/>
+				<field name="VolumeTick" type="CVolumeType" comment="最小变动量" notnull="yes" default="0.00000001" isPK=""/>
+				<field name="ShowVolumeTick" type="CVolumeType" comment="前端行情显示最小变动量(服务端不用)" notnull="no" isPK=""/>
+				<field name="TradingModel" type="CTradingModelType" comment="交易模式" notnull="yes" isPK=""/>
+				<field name="DayStartTime" type="CShortContentType" comment="每日开始交易时间" notnull="no" isPK=""/>
+				<field name="SortNumber" type="CNumberType" comment="排序字段" notnull="no" isPK=""/>
+				<field name="Remark" type="CContentType" comment="备注" notnull="no" isPK=""/>
+				<field name="DefaultLeverage" type="CLeverageType" comment="默认杠杆倍数" notnull="no" isPK=""/>
+				<field name="PriceLimitValueMode" type="CValueModeType" comment="取值方式" notnull="no" isPK=""/>
+				<field name="PriceLimitPrice" type="CLimitPriceTypeType" comment="限价价格类型" notnull="no" isPK=""/>
+				<field name="PriceLimitUpperValue" type="CPriceType" comment="上限" notnull="no" isPK=""/>
+				<field name="PriceLimitLowerValue" type="CPriceType" comment="下限" notnull="no" isPK=""/>
+				<field name="MarginRateGroup" type="CShortIndexIDType" comment="保证金组" notnull="no" isPK=""/>
+				<field name="CFDGroup" type="CShortIndexIDType" comment="差价组" notnull="no" isPK=""/>
+				<field name="FeeGroup" type="CShortIndexIDType" comment="手续费组" notnull="no" isPK=""/>
+				<field name="TradingRightGroup" type="CShortIndexIDType" comment="权限组" notnull="no" isPK=""/>
+				<field name="MaxOpenInterest" type="CVolumeType" comment="最大持仓量" notnull="no" isPK=""/>
+				<field name="FundingRateGroup" type="CShortIndexIDType" comment="资金费用组" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="MarkedPriceTimes" type="CNumberType" comment="标记价格计算次数(0:最新价;1-n:次数;空:不生成标记价)" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="InstrumentID" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+				<foreign name="ClearCurrency" key="ClearCurrency,SettlementGroup" factory="Currency" method="ByCurrency" comment="对应的清算币种"/>
+				<foreign name="BaseCurrency" key="BaseCurrency,SettlementGroup" factory="Currency" method="ByCurrency" comment="对应的基础币种"/>
+			</foreigns>
+			<index>
+				<defineIndex name="SettlementGroupIndex" stableIndex="no">
+					<indexKey name="SettlementGroup"/>
+				</defineIndex>
+				<defineIndex name="ProductGroupIndex" stableIndex="no" runLevel="0,p">
+					<indexKey name="ProductGroup"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="InstrumentIDHashIndex" hashKey="InstrumentID" hashKeySize="769" stableIndex="yes" runLevel="0,s,t,p,r"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrumentID" hashIndexName="InstrumentIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" indexName="SettlementGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByProductGroup" indexName="ProductGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ProductGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="TradingRight" usage="交易权限" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK="*"/>
+				<field name="TradingRight" type="CTradingRightType" comment="交易权限" notnull="yes" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="MemberIDAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Direction"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberIDAndInstrumentHashIndex" hashKey="MemberIDAndInstrument" hashKeySize="4096" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberIDAndInstrument" hashIndexName="MemberIDAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Direction"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MarginRate" usage="标的保证金率" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="ValueMode" type="CValueModeType" comment="取值方式" notnull="yes" isPK=""/>
+				<field name="MarginSequenceType" type="CSequenceTypeType" comment="保证金数列" notnull="no" isPK=""/>
+				<field name="RiskSequenceType" type="CSequenceTypeType" comment="风险限额数列" notnull="no" isPK=""/>
+				<field name="LongMarginRatio" type="CRatioType" comment="多头起始保证金率" notnull="yes" isPK=""/>
+				<field name="LongMaintMarginRatio" type="CRatioType" comment="多头起始维持保证金率" notnull="yes" isPK=""/>
+				<field name="LongMarginStep" type="CRatioType" comment="多头保证金率步长" notnull="yes" isPK=""/>
+				<field name="LongMaintMarginStep" type="CRatioType" comment="多头维持保证金率步长" notnull="yes" isPK=""/>
+				<field name="LongRiskLimit" type="CMoneyType" comment="多头起始风险限额" notnull="yes" isPK=""/>
+				<field name="LongRiskStep" type="CMoneyType" comment="多头风险限额步长" notnull="yes" isPK=""/>
+				<field name="ShortMarginRatio" type="CRatioType" comment="空头起始保证金率" notnull="yes" isPK=""/>
+				<field name="ShortMaintMarginRatio" type="CRatioType" comment="空头起始维持保证金率" notnull="yes" isPK=""/>
+				<field name="ShortMarginStep" type="CRatioType" comment="空头保证金率步长" notnull="yes" isPK=""/>
+				<field name="ShortMaintMarginStep" type="CRatioType" comment="空头维持保证金率步长" notnull="yes" isPK=""/>
+				<field name="ShortRiskLimit" type="CMoneyType" comment="空头起始风险限额" notnull="yes" isPK=""/>
+				<field name="ShortRiskStep" type="CMoneyType" comment="空头风险限额步长" notnull="yes" isPK=""/>
+				<field name="DefaultLeverage" type="CLeverageType" comment="默认杠杆倍数" notnull="no" isPK=""/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="MemberAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberAndInstrumentHashIndex" hashKey="MemberAndInstrument" hashKeySize="12289" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberAndInstrument" hashIndexName="MemberAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="CFDRate" usage="CFD溢价率" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码或组" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="TriggerOrderType" type="CLongIndexIDType" comment="报单价格类型" notnull="yes" default="&quot;default&quot;" isPK="*"/>
+				<field name="RateBegin" type="CRatioType" comment="多头起始溢价率" notnull="yes" isPK=""/>
+				<field name="RateEnd" type="CRatioType" comment="多头最大溢价率" notnull="yes" isPK=""/>
+				<field name="CompVolume" type="CRatioType" comment="点差比较基准" notnull="yes" isPK=""/>
+				<field name="CompRate" type="CRatioType" comment="点差比较基准率" notnull="no" isPK=""/>
+				<field name="HardRate" type="CRatioType" comment="硬顶率" notnull="no" isPK=""/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="MemberAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="TriggerOrderType"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberAndInstrumentHashIndex" hashKey="MemberAndInstrument" hashKeySize="12289" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberAndInstrument" hashIndexName="MemberAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TriggerOrderType"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Fee" usage="手续费率" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="MatchRole" type="CMatchRoleType" comment="成交角色" notnull="yes" isPK="*"/>
+				<field name="OpenFeeRate" type="CRatioType" comment="开仓手续费按比例" notnull="yes" isPK=""/>
+				<field name="OpenFeeAmount" type="CRatioType" comment="开仓手续费按手数" notnull="yes" isPK=""/>
+				<field name="CloseFeeRate" type="CRatioType" comment="平仓手续费按比例" notnull="yes" isPK=""/>
+				<field name="CloseFeeAmount" type="CRatioType" comment="平仓手续费按手数" notnull="yes" isPK=""/>
+				<field name="CloseTodayFeeRate" type="CRatioType" comment="平今仓手续费按比例" notnull="yes" isPK=""/>
+				<field name="CloseTodayFeeAmount" type="CRatioType" comment="平今仓手续费按手数" notnull="yes" isPK=""/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="MemberIDAndInstrument" stableHashKey="yes">
+					<hashitem name="MemberID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="MatchRole"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="MemberIDAndInstrumentHashIndex" hashKey="MemberIDAndInstrument" stableIndex="yes" hashKeySize="6151" runLevel="0,s,r"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByMemberIDAndInstrument" hashIndexName="MemberIDAndInstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="MatchRole"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Currency" usage="资金账户币种信息" manager="Init">
+			<fields>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK="*"/>
+				<field name="Currency" type="CCurrencyType" comment="币种" notnull="yes" isPK="*"/>
+				<field name="Deposit" type="CMoneyType" comment="入金金额" notnull="yes" isPK=""/>
+				<field name="Withdraw" type="CMoneyType" comment="出金金额" notnull="yes" isPK=""/>
+				<field name="Balance" type="CMoneyType" comment="静态权益" notnull="yes" isPK=""/>
+				<field name="PreBalance" type="CMoneyType" comment="上次静态权益" notnull="yes" isPK=""/>
+				<field name="SortNumber" type="CNumberType" comment="排序字段" notnull="no" isPK=""/>
+				<field name="CanReduce" type="CBoolType" comment="是否可以出金" notnull="yes" default="1" isPK=""/>
+				<field name="IsTrading" type="CBoolType" comment="是否允许相关交易" notnull="yes" default="1" isPK=""/>
+				<field name="SettleSegment" type="CIndexIDType" comment="结算段" notnull="no" isPK=""/>
+				<field name="MoneyTick" type="CMoneyType" comment="最小单位" notnull="yes" default="0.00000001" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="价格参考交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="价格参考标的代码" notnull="yes" isPK=""/>
+				<field name="LoanUse" type="CMoneyType" comment="借款使用量" notnull="yes" isPK=""/>
+				<field name="LoanLimit" type="CRatioType" comment="最大可借比例" notnull="yes" default="0.8" isPK=""/>
+				<field name="LoanBorrow" type="CRatioType" comment="借款利息" notnull="yes" isPK=""/>
+				<field name="LoanDeposit" type="CRatioType" comment="存款利息" notnull="yes" isPK=""/>
+				<field name="LoanBase" type="CRatioType" comment="利息起点" notnull="yes" default="0.01" isPK=""/>
+				<field name="LoanRate" type="CRatioType" comment="利息斜率" notnull="yes" default="0.1" isPK=""/>
+				<field name="LoanHighBase" type="CRatioType" comment="高利息起点" notnull="yes" default="0.9" isPK=""/>
+				<field name="LoanHighRate" type="CRatioType" comment="高利息斜率" notnull="yes" default="1" isPK=""/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="CurrValue" type="CMoneyType" comment="当前价值" notnull="yes" isPK=""/>
+				<field name="HairCut" type="CRatioType" comment="抵押比例" notnull="yes" default="0.9" isPK=""/>
+				<field name="MaxValue" type="CMoneyType" comment="最大抵押数额" notnull="yes" default="10000" isPK=""/>
+				<field name="MarginRateGroup" type="CShortIndexIDType" comment="保证金组" notnull="no" isPK=""/>
+				<field name="PrivateEnd" type="CRatioType" comment="私有化停止交易线" notnull="" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="Currency" stableHashKey="yes">
+					<hashitem name="Currency"/>
+					<hashitem name="SettlementGroup"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+			</foreigns>
+			<hashindex>
+				<defineHashIndex name="CurrencyHashIndex" hashKey="Currency" hashKeySize="98317" stableIndex="yes" runLevel="0,s,r,p"/>
+			</hashindex>
+			<index>
+				<defineIndex name="SettlementGroupIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="SettlementGroup"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByCurrency" hashIndexName="CurrencyHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="Currency"/>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" indexName="SettlementGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Liquidity" usage="流动性设置表" manager="Init">
+			<fields>
+				<field name="LiquidityGrade" type="CShortIndexIDType" comment="流动性等级" notnull="yes" isPK="*"/>
+				<field name="LiquidityGroup" type="CLongIndexIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="BasePriceType" type="CLiquidityPriceTypeType" comment="基于的价格" notnull="no" isPK=""/>
+				<field name="VolumeBegin" type="CVolumeType" comment="起始量" notnull="no" isPK=""/>
+				<field name="BuyOpen" type="CRatioType" comment="买开流动性比例" notnull="no" isPK=""/>
+				<field name="BuyClose" type="CRatioType" comment="买平流动性比例" notnull="no" isPK=""/>
+				<field name="SellOpen" type="CRatioType" comment="卖开流动性比例" notnull="no" isPK=""/>
+				<field name="SellClose" type="CRatioType" comment="卖平流动性比例" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="Liquidity" stableHashKey="yes">
+					<hashitem name="LiquidityGrade"/>
+					<hashitem name="LiquidityGroup"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<hashindex>
+				<defineHashIndex name="LiquidityHashIndex" hashKey="Liquidity" hashKeySize="1024" stableIndex="yes"/>
+			</hashindex>
+			<index/>
+			<search>
+				<defineSearch name="ByLiquidity" hashIndexName="LiquidityHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="LiquidityGrade"/>
+						<paraDefine name="LiquidityGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Account" usage="资金账户" manager="Init">
+			<fields>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK="*"/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK="*"/>
+				<field name="Currency" type="CCurrencyType" comment="币种" notnull="yes" isPK="*"/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK="*"/>
+				<field name="Available" type="CMoneyType" comment="可用资金" notnull="yes" isPK=""/>
+				<field name="Withdrawable" type="CMoneyType" comment="可取资金" notnull="yes" isPK=""/>
+				<field name="PreBalance" type="CMoneyType" comment="上次静态权益" notnull="yes" isPK=""/>
+				<field name="Balance" type="CMoneyType" comment="静态权益" notnull="yes" isPK=""/>
+				<field name="PositionCost" type="CMoneyType" comment="持仓成本" notnull="yes" isPK=""/>
+				<field name="UseMargin" type="CMoneyType" comment="所有占用保证金" notnull="yes" isPK=""/>
+				<field name="CrossMargin" type="CMoneyType" comment="全仓保证金" notnull="yes" isPK=""/>
+				<field name="CloseProfit" type="CMoneyType" comment="平仓盈亏" notnull="yes" isPK=""/>
+				<field name="Deposit" type="CMoneyType" comment="入金金额" notnull="yes" isPK=""/>
+				<field name="Withdraw" type="CMoneyType" comment="出金金额" notnull="yes" isPK=""/>
+				<field name="FrozenMargin" type="CMoneyType" comment="冻结保证金" notnull="yes" isPK=""/>
+				<field name="FrozenMoney" type="CMoneyType" comment="冻结资金" notnull="yes" isPK=""/>
+				<field name="FrozenFee" type="CMoneyType" comment="冻结手续费" notnull="yes" isPK=""/>
+				<field name="Fee" type="CMoneyType" comment="手续费" notnull="yes" isPK=""/>
+				<field name="MoneyChange" type="CMoneyType" comment="资金变化" notnull="yes" isPK=""/>
+				<field name="Reserve" type="CMoneyType" comment="保留资金" notnull="yes" isPK=""/>
+				<field name="ReserveAvailable" type="CMoneyType" comment="保留资金可用" notnull="yes" isPK=""/>
+				<field name="ReserveLimit" type="CMoneyType" comment="保留资金限制" notnull="yes" isPK=""/>
+				<field name="ReserveProfit" type="CMoneyType" comment="保留资金盈亏" notnull="yes" isPK=""/>
+				<field name="ReserveType" type="CReserveTypeType" comment="保留资金类型" notnull="yes" isPK=""/>
+				<field name="ReserveActive" type="CBoolType" comment="保留资金是否活跃" notnull="yes" isPK=""/>
+				<field name="TotalCloseProfit" type="CTotalType" comment="总平仓盈亏" notnull="yes" isPK=""/>
+				<field name="TotalDeposit" type="CTotalType" comment="总入金金额" notnull="yes" isPK=""/>
+				<field name="TotalWithdraw" type="CTotalType" comment="总出金金额" notnull="yes" isPK=""/>
+				<field name="TotalFee" type="CTotalType" comment="总手续费" notnull="yes" isPK=""/>
+				<field name="TotalMoneyChange" type="CTotalType" comment="总资金变化" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="AccountType" type="CShortIndexIDType" comment="账户类型" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="MarginRateGrade" type="CShortIndexIDType" comment="保证金等级" notnull="no" isPK=""/>
+				<field name="TradingRightGrade" type="CShortIndexIDType" comment="权限等级" notnull="no" isPK=""/>
+				<field name="Frequency" type="CNumberType" comment="每秒更新的次数" notnull="no" isPK=""/>
+				<field name="MaintMargin" type="CMoneyType" comment="维持保证金" notnull="yes" isPK=""/>
+				<field name="UnRealProfit" type="CMoneyType" comment="未实现盈亏" notnull="yes" isPK=""/>
+				<field name="CopyProfit" type="CMoneyType" comment="带单盈利分配" notnull="yes" isPK=""/>
+				<field name="CFDType" type="CCFDTypeType" comment="点差接管类型" notnull="no" isPK=""/>
+				<field name="FeeGrade" type="CShortIndexIDType" comment="手续费等级" notnull="no" isPK=""/>
+				<field name="CFDGrade" type="CShortIndexIDType" comment="差价等级" notnull="no" isPK=""/>
+				<field name="Borrow" type="CMoneyType" comment="借款周期结算量" notnull="yes" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="MaxLocalID" type="CIndexIDType" comment="最大本地标识" notnull="" isPK=""/>
+				<field name="CurrValue" type="CMoneyType" comment="当前价值" notnull="yes" isPK=""/>
+				<field name="CanReduce" type="CBoolType" comment="是否可以出金" notnull="yes" default="1" isPK=""/>
+			</fields>
+			<hashkeys/>
+			<foreigns>
+				<foreign name="Currency" key="Currency,SettlementGroup" factory="Currency" method="ByCurrency" comment="币种"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+			</foreigns>
+			<hashindex/>
+			<index>
+				<defineIndex name="MemberIndex" stableIndex="yes" runLevel="0,s,r,p">
+					<indexKey name="MemberID"/>
+					<indexKey name="AccountID"/>
+					<indexKey name="SettlementGroup"/>
+					<indexKey name="Currency"/>
+				</defineIndex>
+				<defineIndex name="CurrencyIndex" stableIndex="no" runLevel="p">
+					<indexKey name="SettlementGroup"/>
+					<indexKey name="Currency"/>
+					<indexKey name="Balance" isAsc="no"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByAccountIDAndCurrency" indexName="MemberIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="SettlementGroup"/>
+						<paraDefine name="Currency"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByMemberID" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="AccountID" value="&quot;&quot;"/>
+						<defaultDefine name="SettlementGroup" value="&quot;&quot;"/>
+						<defaultDefine name="Currency" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountID" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="SettlementGroup" value="&quot;&quot;"/>
+						<defaultDefine name="Currency" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySettlementGroup" searchUnique="no" indexName="MemberIndex">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="SettlementGroup"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Currency" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAll" searchUnique="no" indexName="MemberIndex">
+					<parameter/>
+					<default>
+						<defaultDefine name="MemberID" value="&quot;&quot;"/>
+						<defaultDefine name="AccountID" value="&quot;&quot;"/>
+						<defaultDefine name="SettlementGroup" value="&quot;&quot;"/>
+						<defaultDefine name="Currency" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByCurrency" searchUnique="no" indexName="CurrencyIndex">
+					<parameter>
+						<paraDefine name="SettlementGroup"/>
+						<paraDefine name="Currency"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Balance" value="999999999999.0"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MemberPosition" usage="成员总持仓" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK="*"/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="Position" type="CVolumeType" comment="总持仓" notnull="yes" isPK=""/>
+				<field name="LongFrozen" type="CVolumeType" comment="多头冻结" notnull="yes" isPK=""/>
+				<field name="ShortFrozen" type="CVolumeType" comment="空头冻结" notnull="yes" isPK=""/>
+				<field name="DefaultLeverage" type="CLeverageType" comment="默认杠杆倍数" notnull="no" isPK=""/>
+				<field name="DefaultCrossMargin" type="CBoolType" comment="默认是否全仓" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="Instrument" stableHashKey="yes">
+					<hashitem name="AccountID"/>
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="InstrumentHashIndex" hashKey="Instrument" hashKeySize="98317" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrument" hashIndexName="InstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Position" usage="交易单元持仓" manager="Init">
+			<fields>
+				<field name="PositionID" type="CLongIndexIDType" comment="持仓代码" notnull="yes" isPK="*"/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="TradeUnitID" type="CIndexIDType" comment="交易单元代码" notnull="yes" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="PositionClass" type="CPositionClassType" comment="持仓类型" notnull="no" isPK=""/>
+				<field name="PosiDirection" type="CPosiDirectionType" comment="持仓多空方向" notnull="yes" isPK=""/>
+				<field name="PrePosition" type="CVolumeType" comment="上次持仓" notnull="yes" isPK=""/>
+				<field name="Position" type="CVolumeType" comment="总持仓" notnull="yes" isPK=""/>
+				<field name="LongFrozen" type="CVolumeType" comment="多头冻结" notnull="yes" isPK=""/>
+				<field name="ShortFrozen" type="CVolumeType" comment="空头冻结" notnull="yes" isPK=""/>
+				<field name="PreLongFrozen" type="CVolumeType" comment="昨日多头冻结" notnull="yes" isPK=""/>
+				<field name="PreShortFrozen" type="CVolumeType" comment="昨日空头冻结" notnull="yes" isPK=""/>
+				<field name="HighestPosition" type="CVolumeType" comment="最大持仓" notnull="yes" isPK=""/>
+				<field name="ClosePosition" type="CVolumeType" comment="可平持仓" notnull="no" isPK=""/>
+				<field name="PositionCost" type="CCostType" comment="持仓成本" notnull="yes" isPK=""/>
+				<field name="CostPrice" type="CPriceType" comment="成本价" notnull="no" isPK=""/>
+				<field name="UseMargin" type="CMoneyType" comment="占用保证金" notnull="yes" isPK=""/>
+				<field name="FrozenMargin" type="CMoneyType" comment="冻结保证金" notnull="yes" isPK=""/>
+				<field name="LongFrozenMargin" type="CMoneyType" comment="多头冻结保证金" notnull="yes" isPK=""/>
+				<field name="ShortFrozenMargin" type="CMoneyType" comment="空头冻结保证金" notnull="yes" isPK=""/>
+				<field name="CloseProfit" type="CMoneyType" comment="平仓盈亏" notnull="yes" isPK=""/>
+				<field name="TotalPositionCost" type="CTotalType" comment="开仓成本" notnull="yes" isPK=""/>
+				<field name="TotalCloseProfit" type="CTotalType" comment="总平仓盈亏" notnull="yes" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="开仓均价" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="平仓均价" notnull="no" isPK=""/>
+				<field name="TradeFee" type="CMoneyType" comment="交易费用" notnull="yes" isPK=""/>
+				<field name="PositionFee" type="CMoneyType" comment="持仓费用或者股票分红等" notnull="yes" isPK=""/>
+				<field name="Leverage" type="CLeverageType" comment="杠杆倍数" notnull="no" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK=""/>
+				<field name="PriceCurrency" type="CCurrencyType" comment="计价币种" notnull="no" isPK=""/>
+				<field name="ClearCurrency" type="CCurrencyType" comment="清算币种" notnull="no" isPK=""/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK=""/>
+				<field name="IsCrossMargin" type="CBoolType" comment="是否全仓" notnull="yes" isPK=""/>
+				<field name="CloseOrderID" type="CIndexIDType" comment="平仓单代码" notnull="no" isPK=""/>
+				<field name="SLTriggerPrice" type="CPriceType" comment="止损触发价" notnull="no" isPK=""/>
+				<field name="TPTriggerPrice" type="CPriceType" comment="止盈触发价" notnull="no" isPK=""/>
+				<field name="BeginTime" type="CMilliSecondsType" comment="持仓不为0的开始时间" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间(新持仓时间)" notnull="no" isPK=""/>
+				<field name="LastOpenTime" type="CMilliSecondsType" comment="最后开仓时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="IsAutoAddMargin" type="CBoolType" comment="是否自动追加保证金" notnull="no" isPK=""/>
+				<field name="Frequency" type="CNumberType" comment="每秒更新的次数" notnull="no" isPK=""/>
+				<field name="MaintMargin" type="CMoneyType" comment="维持保证金" notnull="no" isPK=""/>
+				<field name="UnRealProfit" type="CMoneyType" comment="未实现盈亏" notnull="yes" isPK=""/>
+				<field name="LiquidPrice" type="CPriceType" comment="清算价格" notnull="no" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="CopyProfitRate" type="CRatioType" comment="带单分配比例" notnull="no" isPK=""/>
+				<field name="CopyProfit" type="CMoneyType" comment="带单盈利分配" notnull="yes" isPK=""/>
+				<field name="FirstTradeID" type="CLongIndexIDType" comment="初始成交订单号" notnull="no" isPK=""/>
+				<field name="LastTradeID" type="CLongIndexIDType" comment="结束成交订单号" notnull="no" isPK=""/>
+				<field name="BusinessType" type="CBusinessTypeType" comment="业务类别" notnull="no" isPK=""/>
+				<field name="BusinessValue" type="CNameType" comment="业务值" notnull="no" isPK=""/>
+				<field name="Reserve" type="CMoneyType" comment="保留资金" notnull="no" isPK=""/>
+				<field name="ReserveProfit" type="CMoneyType" comment="保留资金盈亏" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="PositionID" stableHashKey="yes">
+					<hashitem name="PositionID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="Account" key="MemberID,AccountID,SettlementGroup,ClearCurrency" inValid="false" factory="Account" method="ByAccountIDAndCurrency" comment="对应的自己账号"/>
+			</foreigns>
+			<index>
+				<defineIndex name="AccountIndex" stableIndex="yes" runLevel="0,r,p">
+					<indexKey name="AccountID"/>
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="TradeUnitID"/>
+					<indexKey name="PosiDirection"/>
+				</defineIndex>
+				<defineIndex name="LiquidPriceLongIndex" stableIndex="no" useCase="pTarget-&gt;IsCrossMargin == 0 &amp;&amp; pTarget-&gt;Position != 0 &amp;&amp; ! (pTarget-&gt;PosiDirection == PD_Short || pTarget-&gt;Position &lt; 0)" runLevel="r">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="LiquidPrice" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="LiquidPriceShortIndex" stableIndex="no" useCase="pTarget-&gt;IsCrossMargin == 0 &amp;&amp; pTarget-&gt;Position != 0 &amp;&amp; (pTarget-&gt;PosiDirection == PD_Short || pTarget-&gt;Position &lt; 0)" runLevel="r">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="LiquidPrice"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="PositionIDHashIndex" hashKey="PositionID" hashKeySize="1572869" stableIndex="yes" runLevel="0,r,t,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByPositionID" hashIndexName="PositionIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountInstrument" indexName="AccountIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="TradeUnitID" value="&quot;&quot;"/>
+						<defaultDefine name="PosiDirection" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByTradeUnitID" indexName="AccountIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TradeUnitID"/>
+						<paraDefine name="PosiDirection"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="AccountIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="ExchangeID" value="&quot;&quot;"/>
+						<defaultDefine name="InstrumentID" value="&quot;&quot;"/>
+						<defaultDefine name="TradeUnitID" value="&quot;&quot;"/>
+						<defaultDefine name="PosiDirection" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByLiquidPriceLong" indexName="LiquidPriceLongIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="LiquidPrice" checkParameter="no"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByLiquidPriceShort" indexName="LiquidPriceShortIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="LiquidPrice" checkParameter="no"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MarketData" usage="行情" manager="Init">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="ProductGroup" type="CShortIndexIDType" comment="产品组" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="yes" isPK=""/>
+				<field name="PreClosePrice" type="CPriceType" comment="上次收盘" notnull="no" isPK=""/>
+				<field name="PreSettlementPrice" type="CPriceType" comment="上次结算价" notnull="no" isPK=""/>
+				<field name="PreOpenInterest" type="CVolumeType" comment="上次持仓量" notnull="yes" isPK=""/>
+				<field name="PrePositionFeeRate" type="CRatioType" comment="上次持仓费按比例" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="收盘价" notnull="no" isPK=""/>
+				<field name="PositionFeeTime" type="CMilliSecondsType" comment="收取持仓费用时间" notnull="no" isPK=""/>
+				<field name="SettlementTime" type="CMilliSecondsType" comment="结算时间" notnull="no" isPK=""/>
+				<field name="UpperLimitPrice" type="CPriceType" comment="最高限价" notnull="no" isPK=""/>
+				<field name="LowerLimitPrice" type="CPriceType" comment="最低限价" notnull="no" isPK=""/>
+				<field name="UnderlyingPrice" type="CPriceType" comment="基础标的价格" notnull="no" isPK=""/>
+				<field name="MarkedPrice" type="CPriceType" comment="标记价格" notnull="no" isPK=""/>
+				<field name="PositionFeeRate" type="CRatioType" comment="预计持仓费按比例" notnull="no" isPK=""/>
+				<field name="HighestPrice" type="CPriceType" comment="当日最高价" notnull="no" isPK=""/>
+				<field name="LowestPrice" type="CPriceType" comment="当日最低价" notnull="no" isPK=""/>
+				<field name="LastPrice" type="CPriceType" comment="最新价" notnull="no" isPK=""/>
+				<field name="Volume" type="CCollectType" comment="当日数量" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CCollectType" comment="当日成交金额" notnull="yes" isPK=""/>
+				<field name="OpenInterest" type="CVolumeType" comment="持仓量" notnull="yes" isPK=""/>
+				<field name="SettlementPrice" type="CPriceType" comment="预估结算价" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="当日开盘价" notnull="no" isPK=""/>
+				<field name="IsPubMarketData" type="CBoolType" comment="行情发布状态" notnull="yes" isPK=""/>
+				<field name="InstrumentStatus" type="CInstrumentStatusType" comment="标的交易状态" notnull="yes" isPK=""/>
+				<field name="Remark" type="CLongNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="MarkedPriceTotal" type="CTotalType" comment="标记价格汇总" notnull="no" isPK=""/>
+				<field name="MarkedPriceWeight" type="CTotalType" comment="标记价格权重" notnull="no" isPK=""/>
+				<field name="L25UpperPrice" type="CPriceType" comment="25档行情最高价" notnull="no" isPK=""/>
+				<field name="L25LowerPrice" type="CPriceType" comment="25档行情最低价" notnull="no" isPK=""/>
+				<field name="L25UpperPrice1" type="CPriceType" comment="25档行情最高价1" notnull="no" isPK=""/>
+				<field name="L25LowerPrice1" type="CPriceType" comment="25档行情最低价1" notnull="no" isPK=""/>
+				<field name="L25UpperPrice2" type="CPriceType" comment="25档行情最高价2" notnull="no" isPK=""/>
+				<field name="L25LowerPrice2" type="CPriceType" comment="25档行情最低价2" notnull="no" isPK=""/>
+				<field name="BidPrice1" type="CPriceType" comment="申买价一" notnull="no" isPK=""/>
+				<field name="BidVolume1" type="CVolumeType" comment="申买量一" notnull="no" isPK=""/>
+				<field name="AskPrice1" type="CPriceType" comment="申卖价一" notnull="no" isPK=""/>
+				<field name="AskVolume1" type="CVolumeType" comment="申卖量一" notnull="no" preversion="AskVolume1" isPK=""/>
+				<field name="TheoryPrice" type="CPriceType" comment="理论价" notnull="no" isPK=""/>
+				<field name="HighestPrice24" type="CPriceType" comment="24小时最高价" notnull="no" isPK=""/>
+				<field name="LowestPrice24" type="CPriceType" comment="24小时最低价" notnull="no" isPK=""/>
+				<field name="Volume24" type="CCollectType" comment="24小时数量" notnull="no" isPK=""/>
+				<field name="Turnover24" type="CCollectType" comment="24小时成交金额" notnull="no" isPK=""/>
+				<field name="OpenPrice24" type="CPriceType" comment="24小时开盘价" notnull="no" isPK=""/>
+				<field name="Frequency" type="CNumberType" comment="每秒更新的次数" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+			</fields>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+			</foreigns>
+			<hashkeys>
+				<hashkey name="InstrumentIDIndex" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="InstrumentIDHashIndex" hashKey="InstrumentIDIndex" stableIndex="yes" hashKeySize="256" runLevel="0,s,r,p,t"/>
+			</hashindex>
+			<index>
+				<defineIndex name="ProductGroupIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="ProductGroup"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByInstrumentID" hashIndexName="InstrumentIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByProductGroup" indexName="ProductGroupIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ProductGroup"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Order" usage="报单" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="TradeUnitID" type="CIndexIDType" comment="交易单元代码" notnull="no" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="no" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="报单本地标识" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="OrderPriceType" type="COrderPriceTypeType" comment="报单价格类型" notnull="yes" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="OffsetFlag" type="COffsetFlagType" comment="开平标志" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="报单价格" notnull="no" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="数量" notnull="no" isPK=""/>
+				<field name="VolumeDisplay" type="CVolumeType" comment="显示数量" notnull="no" isPK=""/>
+				<field name="VolumeMode" type="CValueModeType" comment="数量取值方式" notnull="no" isPK=""/>
+				<field name="Cost" type="CMoneyType" comment="委托额" notnull="no" isPK=""/>
+				<field name="OrderType" type="COrderTypeType" comment="订单类型" notnull="yes" isPK=""/>
+				<field name="GTDTime" type="CMilliSecondsType" comment="GTD时间" notnull="no" isPK=""/>
+				<field name="MinVolume" type="CVolumeType" comment="最小成交量" notnull="no" isPK=""/>
+				<field name="BusinessType" type="CBusinessTypeType" comment="业务类别" notnull="yes" isPK=""/>
+				<field name="BusinessValue" type="CNameType" comment="业务值" notnull="no" isPK=""/>
+				<field name="CloseOrderID" type="CIndexIDType" comment="平仓指定开仓的订单号" notnull="no" isPK=""/>
+				<field name="IsCrossMargin" type="CBoolType" comment="是否全仓" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="OrderID" type="CIndexIDType" comment="报单系统唯一代码" notnull="yes" isPK="*"/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="CopyOrderID" type="CIndexIDType" comment="带单员报单号" notnull="no" isPK=""/>
+				<field name="Leverage" type="CLeverageType" comment="委托单杠杆倍数" notnull="no" isPK=""/>
+				<field name="CopyProfitRate" type="CRatioType" comment="带单分配比例" notnull="no" isPK=""/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="no" isPK=""/>
+				<field name="PositionID" type="CLongIndexIDType" comment="持仓代码" notnull="yes" isPK=""/>
+				<field name="TriggerPrice" type="CPriceType" comment="触发价" notnull="no" isPK=""/>
+				<field name="Reserve" type="CMoneyType" comment="保留资金" notnull="no" isPK=""/>
+				<field name="OrderStatus" type="COrderStatusType" comment="报单状态" notnull="yes" isPK=""/>
+				<field name="DeriveSource" type="CDeriveSourceType" comment="衍生来源" notnull="yes" isPK=""/>
+				<field name="DeriveDetail" type="CIndexIDType" comment="衍生明细" notnull="no" isPK=""/>
+				<field name="VolumeTraded" type="CVolumeType" comment="成交数量" notnull="yes" isPK=""/>
+				<field name="VolumeRemain" type="CVolumeType" comment="剩余数量" notnull="yes" isPK=""/>
+				<field name="VolumeCancled" type="CVolumeType" comment="已经撤单数量" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="Priority" type="CNumberType" comment="优先权" notnull="yes" isPK=""/>
+				<field name="TimeSortNo" type="CLargeNumberType" comment="按时间排队的序号" notnull="yes" isPK=""/>
+				<field name="FrontNo" type="CNumberType" comment="前置编号" notnull="no" isPK=""/>
+				<field name="PriceCurrency" type="CCurrencyType" comment="计价币种" notnull="no" isPK=""/>
+				<field name="FeeCurrency" type="CCurrencyType" comment="手续费币种" notnull="no" isPK=""/>
+				<field name="ClearCurrency" type="CCurrencyType" comment="清算币种" notnull="no" isPK=""/>
+				<field name="FrozenMoney" type="CMoneyType" comment="冻结资金" notnull="yes" isPK=""/>
+				<field name="FrozenFee" type="CMoneyType" comment="冻结手续费" notnull="yes" isPK=""/>
+				<field name="FrozenMargin" type="CMoneyType" comment="冻结保证金" notnull="yes" isPK=""/>
+				<field name="Fee" type="CMoneyType" comment="手续费" notnull="yes" isPK=""/>
+				<field name="CloseProfit" type="CMoneyType" comment="平仓盈亏" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CMoneyType" comment="成交金额" notnull="yes" isPK=""/>
+				<field name="RelatedOrderID" type="CIndexIDType" comment="关联报单号" notnull="no" isPK=""/>
+				<field name="BusinessResult" type="CNameType" comment="业务执行结果" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="Tradable" type="CBoolType" comment="是否可以参加交易" notnull="yes" default="1" isPK=""/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK=""/>
+				<field name="PosiDirection" type="CPosiDirectionType" comment="持仓多空方向" notnull="yes" isPK=""/>
+				<field name="TradePrice" type="CPriceType" comment="成交均价" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="平仓成交时的开仓均价" notnull="no" isPK=""/>
+				<field name="TriggerOrderID" type="CIndexIDType" comment="触发报单号" notnull="no" isPK=""/>
+				<field name="SLTriggerPrice" type="CPriceType" comment="开仓报单成交之后的止损触发价" notnull="no" isPK=""/>
+				<field name="TPTriggerPrice" type="CPriceType" comment="开仓报单成交之后的止盈触发价" notnull="no" isPK=""/>
+				<field name="CopyProfit" type="CMoneyType" comment="带单盈利分配" notnull="yes" isPK=""/>
+				<field name="Position" type="CVolumeType" comment="成交时的持仓量" notnull="no" isPK=""/>
+				<field name="UserID" type="CLongIndexIDType" comment="交易用户代码" notnull="yes" isPK=""/>
+				<field name="LastPriceByInsert" type="CPriceType" comment="插入时的最新价" notnull="no" isPK=""/>
+				<field name="BidPrice1ByInsert" type="CPriceType" comment="插入时的买一价" notnull="no" isPK=""/>
+				<field name="AskPrice1ByInsert" type="CPriceType" comment="插入时的卖一价" notnull="no" isPK=""/>
+				<field name="Available" type="CMoneyType" comment="可用资金" notnull="no" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes" runLevel="0,s,t,p">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="Position" key="PositionID" factory="Position" method="ByPositionID" comment="对应的交易单元持仓"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+				<foreign name="TriggerOrder" key="TriggerOrderID" clearkey="TriggerOrderID" factory="TriggerOrder" method="ByOrderID" comment="关联的触发报单"/>
+			</foreigns>
+			<index>
+				<defineIndex name="PositionIDIndex" stableIndex="yes" runLevel="s">
+					<indexKey name="PositionID"/>
+				</defineIndex>
+				<defineIndex name="LocalIDIndex" stableIndex="yes" runLevel="0,p">
+					<indexKey name="AccountID"/>
+					<indexKey name="LocalID"/>
+				</defineIndex>
+				<defineIndex name="InstrumentIDIndex" stableIndex="yes" runLevel="p">
+					<indexKey name="AccountID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="OrderID"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" runLevel="0,p" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByLocalID" indexName="LocalIDIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="LocalID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="LocalIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="LocalID" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByPositionID" indexName="PositionIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByAccountIDPrivate" indexName="InstrumentIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InstrumentID" value="&quot;&quot;"/>
+						<defaultDefine name="OrderID" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByInstrumentID" indexName="InstrumentIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="OrderID" value="&quot;&quot;"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="PositionOrder" usage="未平仓报单" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="TradeUnitID" type="CIndexIDType" comment="交易单元代码" notnull="no" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="no" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="报单本地标识" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="OrderPriceType" type="COrderPriceTypeType" comment="报单价格类型" notnull="yes" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="OffsetFlag" type="COffsetFlagType" comment="开平标志" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="报单价格" notnull="no" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="数量" notnull="no" isPK=""/>
+				<field name="VolumeDisplay" type="CVolumeType" comment="显示数量" notnull="no" isPK=""/>
+				<field name="VolumeMode" type="CValueModeType" comment="数量取值方式" notnull="no" isPK=""/>
+				<field name="Cost" type="CMoneyType" comment="委托额" notnull="no" isPK=""/>
+				<field name="OrderType" type="COrderTypeType" comment="订单类型" notnull="yes" isPK=""/>
+				<field name="GTDTime" type="CMilliSecondsType" comment="GTD时间" notnull="no" isPK=""/>
+				<field name="MinVolume" type="CVolumeType" comment="最小成交量" notnull="no" isPK=""/>
+				<field name="BusinessType" type="CBusinessTypeType" comment="业务类别" notnull="yes" isPK=""/>
+				<field name="BusinessValue" type="CNameType" comment="业务值" notnull="no" isPK=""/>
+				<field name="CloseOrderID" type="CIndexIDType" comment="平仓指定开仓的订单号" notnull="no" isPK=""/>
+				<field name="IsCrossMargin" type="CBoolType" comment="是否全仓" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="OrderID" type="CIndexIDType" comment="报单系统唯一代码" notnull="yes" isPK="*"/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="CopyOrderID" type="CIndexIDType" comment="带单员报单号" notnull="no" isPK=""/>
+				<field name="Leverage" type="CLeverageType" comment="委托单杠杆倍数" notnull="no" isPK=""/>
+				<field name="CopyProfitRate" type="CRatioType" comment="带单分配比例" notnull="no" isPK=""/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="no" isPK=""/>
+				<field name="PositionID" type="CLongIndexIDType" comment="持仓代码" notnull="yes" isPK=""/>
+				<field name="TriggerPrice" type="CPriceType" comment="触发价" notnull="no" isPK=""/>
+				<field name="Reserve" type="CMoneyType" comment="保留资金" notnull="no" isPK=""/>
+				<field name="OrderStatus" type="COrderStatusType" comment="报单状态" notnull="yes" isPK=""/>
+				<field name="DeriveSource" type="CDeriveSourceType" comment="衍生来源" notnull="yes" isPK=""/>
+				<field name="DeriveDetail" type="CIndexIDType" comment="衍生明细" notnull="no" isPK=""/>
+				<field name="VolumeTraded" type="CVolumeType" comment="成交数量" notnull="yes" isPK=""/>
+				<field name="VolumeRemain" type="CVolumeType" comment="剩余数量" notnull="yes" isPK=""/>
+				<field name="VolumeCancled" type="CVolumeType" comment="已经撤单数量" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="Priority" type="CNumberType" comment="优先权" notnull="yes" isPK=""/>
+				<field name="TimeSortNo" type="CLargeNumberType" comment="按时间排队的序号" notnull="yes" isPK=""/>
+				<field name="FrontNo" type="CNumberType" comment="前置编号" notnull="no" isPK=""/>
+				<field name="PriceCurrency" type="CCurrencyType" comment="计价币种" notnull="no" isPK=""/>
+				<field name="FeeCurrency" type="CCurrencyType" comment="手续费币种" notnull="no" isPK=""/>
+				<field name="ClearCurrency" type="CCurrencyType" comment="清算币种" notnull="no" isPK=""/>
+				<field name="FrozenMoney" type="CMoneyType" comment="冻结资金" notnull="yes" isPK=""/>
+				<field name="FrozenFee" type="CMoneyType" comment="冻结手续费" notnull="yes" isPK=""/>
+				<field name="FrozenMargin" type="CMoneyType" comment="冻结保证金" notnull="yes" isPK=""/>
+				<field name="Fee" type="CMoneyType" comment="手续费" notnull="yes" isPK=""/>
+				<field name="CloseProfit" type="CMoneyType" comment="平仓盈亏" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CMoneyType" comment="成交金额" notnull="yes" isPK=""/>
+				<field name="RelatedOrderID" type="CIndexIDType" comment="关联报单号" notnull="no" isPK=""/>
+				<field name="BusinessResult" type="CNameType" comment="业务执行结果" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="Tradable" type="CBoolType" comment="是否可以参加交易" notnull="yes" default="1" isPK=""/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK=""/>
+				<field name="PosiDirection" type="CPosiDirectionType" comment="持仓多空方向" notnull="yes" isPK=""/>
+				<field name="TradePrice" type="CPriceType" comment="成交均价" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="平仓成交时的开仓均价" notnull="no" isPK=""/>
+				<field name="TriggerOrderID" type="CIndexIDType" comment="触发报单号" notnull="no" isPK=""/>
+				<field name="SLTriggerPrice" type="CPriceType" comment="开仓报单成交之后的止损触发价" notnull="no" isPK=""/>
+				<field name="TPTriggerPrice" type="CPriceType" comment="开仓报单成交之后的止盈触发价" notnull="no" isPK=""/>
+				<field name="CopyProfit" type="CMoneyType" comment="带单盈利分配" notnull="yes" isPK=""/>
+				<field name="Position" type="CVolumeType" comment="成交时的持仓量" notnull="no" isPK=""/>
+				<field name="UserID" type="CLongIndexIDType" comment="交易用户代码" notnull="yes" isPK=""/>
+				<field name="LastPriceByInsert" type="CPriceType" comment="插入时的最新价" notnull="no" isPK=""/>
+				<field name="BidPrice1ByInsert" type="CPriceType" comment="插入时的买一价" notnull="no" isPK=""/>
+				<field name="AskPrice1ByInsert" type="CPriceType" comment="插入时的卖一价" notnull="no" isPK=""/>
+				<field name="Available" type="CMoneyType" comment="可用资金" notnull="no" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+				<field name="VolumeToClose" type="CVolumeType" comment="需要平仓的数量" notnull="yes" isPK=""/>
+				<field name="VolumeClosed" type="CVolumeType" comment="已经平仓的数量" notnull="yes" isPK=""/>
+				<field name="VolumeOnClose" type="CVolumeType" comment="正在平仓未成交的数量" notnull="yes" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index>
+				<defineIndex name="InsertTimeIndex" stableIndex="yes">
+					<indexKey name="MemberID"/>
+					<indexKey name="TradeUnitID"/>
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="PosiDirection"/>
+					<indexKey name="InsertTime"/>
+				</defineIndex>
+			</index>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" stableIndex="yes"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByInsertTime" indexName="InsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="MemberID"/>
+						<paraDefine name="TradeUnitID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="PosiDirection"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InsertTime" value="0"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="TriggerOrder" usage="报单" manager="Init">
+			<fields>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="TradeUnitID" type="CIndexIDType" comment="交易单元代码" notnull="no" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="no" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="报单本地标识" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="OrderPriceType" type="COrderPriceTypeType" comment="报单价格类型" notnull="yes" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="OffsetFlag" type="COffsetFlagType" comment="开平标志" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="报单价格" notnull="no" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="数量" notnull="no" isPK=""/>
+				<field name="VolumeDisplay" type="CVolumeType" comment="显示数量" notnull="no" isPK=""/>
+				<field name="VolumeMode" type="CValueModeType" comment="数量取值方式" notnull="no" isPK=""/>
+				<field name="Cost" type="CMoneyType" comment="委托额" notnull="no" isPK=""/>
+				<field name="OrderType" type="COrderTypeType" comment="订单类型" notnull="yes" isPK=""/>
+				<field name="GTDTime" type="CMilliSecondsType" comment="GTD时间" notnull="no" isPK=""/>
+				<field name="MinVolume" type="CVolumeType" comment="最小成交量" notnull="no" isPK=""/>
+				<field name="BusinessType" type="CBusinessTypeType" comment="业务类别" notnull="yes" isPK=""/>
+				<field name="BusinessValue" type="CNameType" comment="业务值" notnull="no" isPK=""/>
+				<field name="CloseOrderID" type="CIndexIDType" comment="平仓指定开仓的订单号" notnull="no" isPK=""/>
+				<field name="IsCrossMargin" type="CBoolType" comment="是否全仓" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="OrderID" type="CIndexIDType" comment="报单系统唯一代码" notnull="yes" isPK="*"/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="CopyOrderID" type="CIndexIDType" comment="带单员报单号" notnull="no" isPK=""/>
+				<field name="Leverage" type="CLeverageType" comment="委托单杠杆倍数" notnull="no" isPK=""/>
+				<field name="CopyProfitRate" type="CRatioType" comment="带单分配比例" notnull="no" isPK=""/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="no" isPK=""/>
+				<field name="PositionID" type="CLongIndexIDType" comment="持仓代码" notnull="yes" isPK=""/>
+				<field name="TriggerPrice" type="CPriceType" comment="触发价" notnull="no" isPK=""/>
+				<field name="Reserve" type="CMoneyType" comment="保留资金" notnull="no" isPK=""/>
+				<field name="SLPrice" type="CPriceType" comment="止损价" notnull="no" isPK=""/>
+				<field name="SLTriggerPrice" type="CPriceType" comment="止损触发价" notnull="no" isPK=""/>
+				<field name="TPPrice" type="CPriceType" comment="止盈价" notnull="no" isPK=""/>
+				<field name="TPTriggerPrice" type="CPriceType" comment="止盈触发价" notnull="no" isPK=""/>
+				<field name="RiskBefore" type="CBoolType" comment="是否提前检查风控" notnull="yes" isPK=""/>
+				<field name="TriggerOrderType" type="CTriggerOrderTypeType" comment="触发的订单类型" notnull="yes" isPK=""/>
+				<field name="TriggerDetail" type="CIndexIDType" comment="触发类型明细" notnull="no" isPK=""/>
+				<field name="TriggerPriceType" type="CTriggerPriceTypeType" comment="触发价类型" notnull="yes" default="&quot;0&quot;" isPK=""/>
+				<field name="TriggerValue" type="CLongContentType" comment="触发单具体设置信息" notnull="no" isPK=""/>
+				<field name="CloseSLPrice" type="CPriceType" comment="平仓止损价" notnull="no" isPK=""/>
+				<field name="CloseSLTriggerPrice" type="CPriceType" comment="平仓止损触发价" notnull="no" isPK=""/>
+				<field name="CloseTPPrice" type="CPriceType" comment="平仓止盈价" notnull="no" isPK=""/>
+				<field name="CloseTPTriggerPrice" type="CPriceType" comment="平仓止盈触发价" notnull="no" isPK=""/>
+				<field name="CloseOrderPriceType" type="COrderPriceTypeType" comment="报单价格类型" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="平仓价" notnull="no" isPK=""/>
+				<field name="CloseTriggerPrice" type="CPriceType" comment="平仓触发价" notnull="no" isPK=""/>
+				<field name="RelatedOrderID" type="CIndexIDType" comment="关联报单号" notnull="no" isPK=""/>
+				<field name="ActiveTime" type="CMilliSecondsType" comment="激活时间" notnull="no" isPK=""/>
+				<field name="TriggerTime" type="CMilliSecondsType" comment="触发时间" notnull="no" isPK=""/>
+				<field name="TimeSortNo" type="CLargeNumberType" comment="按时间排队的序号" notnull="yes" isPK=""/>
+				<field name="TriggerStatus" type="CTriggerStatusType" comment="触发报单状态" notnull="yes" isPK=""/>
+				<field name="PosiDirection" type="CPosiDirectionType" comment="持仓多空方向" notnull="no" isPK=""/>
+				<field name="FrontNo" type="CNumberType" comment="前置编号" notnull="no" isPK=""/>
+				<field name="ErrorNo" type="CNumberType" comment="错误代码" notnull="no" isPK=""/>
+				<field name="ErrorMsg" type="CShortContentType" comment="错误信息" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="yes" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="OrderID" stableHashKey="yes">
+					<hashitem name="OrderID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="OrderIDHashIndex" hashKey="OrderID" hashKeySize="1572869" stableIndex="yes" runLevel="0,s,t,p"/>
+			</hashindex>
+			<foreigns>
+				<foreign name="Order" key="RelatedOrderID" clearkey="RelatedOrderID" factory="Order" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+				<foreign name="Instrument" key="ExchangeID,InstrumentID" factory="Instrument" method="ByInstrumentID" comment="对应的标的"/>
+				<foreign name="MarketData" key="ExchangeID,InstrumentID" factory="MarketData" method="ByInstrumentID" comment="对应的行情"/>
+			</foreigns>
+			<index>
+				<defineIndex name="AccountIDLocalIDIndex" stableIndex="yes">
+					<indexKey name="AccountID"/>
+					<indexKey name="LocalID"/>
+				</defineIndex>
+				<defineIndex name="ActivePositionCloseIndex" stableIndex="no" useCase="pTarget-&gt;OffsetFlag!=OF_Open &amp;&amp; pTarget-&gt;TriggerStatus==TS_Active">
+					<indexKey name="PositionID"/>
+				</defineIndex>
+				<defineIndex name="BuySLTriggerPriceIndex" useCase="pTarget-&gt;TriggerStatus!=TS_None &amp;&amp; !pTarget-&gt;SLTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="SLTriggerPrice" isAsc="no"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="SellSLTriggerPriceIndex" useCase="pTarget-&gt;TriggerStatus!=TS_None &amp;&amp; !pTarget-&gt;SLTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="SLTriggerPrice"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="BuyTPTriggerPriceIndex" useCase="pTarget-&gt;TriggerStatus!=TS_None &amp;&amp; !pTarget-&gt;TPTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="TPTriggerPrice"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+				<defineIndex name="SellTPTriggerPriceIndex" useCase="pTarget-&gt;TriggerStatus!=TS_None &amp;&amp; !pTarget-&gt;TPTriggerPrice.isNull()" stableIndex="no" runLevel="t">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Direction"/>
+					<indexKey name="TPTriggerPrice" isAsc="no"/>
+					<indexKey name="TimeSortNo"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByOrderID" hashIndexName="OrderIDHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="OrderID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByLocalID" indexName="AccountIDLocalIDIndex">
+					<parameter>
+						<paraDefine name="AccountID"/>
+						<paraDefine name="LocalID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBuySLTriggerPrice" indexName="BuySLTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="SLTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value="D_Buy" checkDefault="yes"/>
+						<defaultDefine name="TimeSortNo" value="0"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellSLTriggerPrice" indexName="SellSLTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="SLTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value="D_Sell" checkDefault="yes"/>
+						<defaultDefine name="TimeSortNo" value="0"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByBuyTPTriggerPrice" indexName="BuyTPTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TPTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value="D_Buy" checkDefault="yes"/>
+						<defaultDefine name="TimeSortNo" value="0"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellTPTriggerPrice" indexName="SellTPTriggerPriceIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="TPTriggerPrice" checkParameter="no"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Direction" value="D_Sell" checkDefault="yes"/>
+						<defaultDefine name="TimeSortNo" value="0"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByAccountID" indexName="AccountIDLocalIDIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="AccountID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByActivePositionClose" indexName="ActivePositionCloseIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="PositionID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="MarketOrder" usage="分价表" manager="Implied" writeTable="yes">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="价格" notnull="yes" isPK="*"/>
+				<field name="Volume" type="CVolumeType" comment="数量" notnull="yes" isPK=""/>
+				<field name="Orders" type="CNumberType" comment="订单数量" notnull="yes" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="最后变化序列号" notnull="" isPK=""/>
+				<field name="TrueVolume" type="CVolumeType" comment="真实报单数量" notnull="" isPK=""/>
+			</fields>
+			<foreigns/>
+			<hashkeys>
+				<hashkey name="PriceHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Price"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="PriceHashIndex" hashKey="PriceHashKey" stableIndex="yes" hashKeySize="100000" runLevel="0,s,p"/>
+			</hashindex>
+			<index>
+				<defineIndex name="BuyMBLIndex" stableIndex="yes" useCase="pTarget-&gt;Direction == D_Buy" runLevel="0,p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Price" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="SellMBLIndex" stableIndex="yes" useCase="pTarget-&gt;Direction == D_Sell" runLevel="0,p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Price"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByPrice" hashIndexName="PriceHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Price"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBuyMBLData" indexName="BuyMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellMBLData" indexName="SellMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="-999999999"/>
+					</default>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="TickMarketOrder" usage="Tick聚集分价表" manager="Implied" writeTable="yes">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="价格" notnull="yes" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="数量" notnull="yes" isPK=""/>
+				<field name="Orders" type="CNumberType" comment="订单数量" notnull="yes" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="最后变化序列号" notnull="" isPK=""/>
+				<field name="TrueVolume" type="CVolumeType" comment="真实报单数量" notnull="" isPK=""/>
+				<field name="Tick" type="CPriceType" comment="最小变动价位" notnull="yes" isPK=""/>
+				<field name="SubIndex" type="CShortContentType" comment="索引" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<hashkeys>
+				<hashkey name="PriceHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Tick"/>
+					<hashitem name="Price"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="PriceHashIndex" hashKey="PriceHashKey" stableIndex="yes" hashKeySize="100000" runLevel="s,p"/>
+			</hashindex>
+			<index>
+				<defineIndex name="BuyMBLIndex" stableIndex="yes" useCase="pTarget-&gt;Direction == D_Buy" runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Tick"/>
+					<indexKey name="Price" isAsc="no"/>
+				</defineIndex>
+				<defineIndex name="SellMBLIndex" stableIndex="yes" useCase="pTarget-&gt;Direction == D_Sell" runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Tick"/>
+					<indexKey name="Price"/>
+				</defineIndex>
+			</index>
+			<search>
+				<defineSearch name="ByBuyMBLData" indexName="BuyMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="BySellMBLData" indexName="SellMBLIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+					</parameter>
+					<default>
+						<defaultDefine name="Price" value="-999999999"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByPrice" hashIndexName="PriceHashIndex" searchUnique="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Tick"/>
+						<paraDefine name="Price"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="Trade" usage="成交" manager="Down" priority="3" writeTable="no">
+			<fields>
+				<field name="TradeID" type="CIndexIDType" comment="成交代码" notnull="yes" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="OrderID" type="CIndexIDType" comment="报单系统唯一代码" notnull="no" isPK=""/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="PositionID" type="CLongIndexIDType" comment="持仓代码" notnull="no" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="OffsetFlag" type="COffsetFlagType" comment="开平标志" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="成交价格" notnull="yes" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="成交数量" notnull="yes" isPK=""/>
+				<field name="DeriveSource" type="CDeriveSourceType" comment="衍生类型" notnull="yes" isPK=""/>
+				<field name="MatchRole" type="CMatchRoleType" comment="成交角色" notnull="yes" isPK=""/>
+				<field name="PriceCurrency" type="CCurrencyType" comment="计价币种" notnull="no" isPK=""/>
+				<field name="ClearCurrency" type="CCurrencyType" comment="清算币种" notnull="no" isPK=""/>
+				<field name="Fee" type="CMoneyType" comment="手续费" notnull="yes" isPK=""/>
+				<field name="FeeCurrency" type="CCurrencyType" comment="手续费币种" notnull="no" isPK=""/>
+				<field name="CloseProfit" type="CMoneyType" comment="平仓盈亏" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CMoneyType" comment="成交金额" notnull="yes" isPK=""/>
+				<field name="UseMargin" type="CMoneyType" comment="占用或者减少的保证金" notnull="yes" isPK=""/>
+				<field name="Leverage" type="CLeverageType" comment="杠杆倍数" notnull="no" isPK=""/>
+				<field name="OrderPrice" type="CPriceType" comment="委托价格" notnull="yes" isPK=""/>
+				<field name="TriggerPrice" type="CPriceType" comment="触发价" notnull="no" isPK=""/>
+				<field name="IsSelfTrade" type="CBoolType" comment="是否自成交" notnull="yes" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="开仓均价" notnull="no" isPK=""/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+				<field name="CopyOrderID" type="CIndexIDType" comment="带单员报单号" notnull="no" isPK=""/>
+				<field name="CopyMemberID" type="CLongIndexIDType" comment="带单员代码" notnull="no" isPK=""/>
+				<field name="CopyProfit" type="CMoneyType" comment="带单盈利分配" notnull="yes" isPK=""/>
+				<field name="Position" type="CVolumeType" comment="成交时的持仓量" notnull="no" isPK=""/>
+				<field name="ReserveProfit" type="CMoneyType" comment="保留资金盈亏" notnull="no" isPK=""/>
+				<field name="ReserveFee" type="CMoneyType" comment="保留资金手续费" notnull="no" isPK=""/>
+				<field name="TradeRemark" type="CNameType" comment="Trade备注" notnull="no" isPK=""/>
+				<field name="BusinessType" type="CBusinessTypeType" comment="业务类别" notnull="no" isPK=""/>
+				<field name="BusinessValue" type="CNameType" comment="业务值" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<index/>
+			<search/>
+		</table>
+		<table name="KLine" usage="K线" manager="Down" priority="3" writeTable="no">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK=""/>
+				<field name="Bar" type="CBarType" comment="K线周期代码(n[m/h/d/o])" notnull="yes" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="开盘价" notnull="no" isPK=""/>
+				<field name="HighestPrice" type="CPriceType" comment="最高价" notnull="no" isPK=""/>
+				<field name="LowestPrice" type="CPriceType" comment="最低价" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="收盘价" notnull="no" isPK=""/>
+				<field name="Volume" type="CCollectType" comment="数量" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CCollectType" comment="成交金额" notnull="yes" isPK=""/>
+			</fields>
+			<foreigns/>
+			<index/>
+			<search/>
+		</table>
+		<table name="PublishKLine" usage="PublishK线" manager="Implied" writeTable="yes">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="Bar" type="CBarType" comment="K线周期代码(n[m/h/d/o])" notnull="yes" isPK="*"/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK="*"/>
+				<field name="OpenPrice" type="CPriceType" comment="开盘价" notnull="no" isPK=""/>
+				<field name="HighestPrice" type="CPriceType" comment="最高价" notnull="no" isPK=""/>
+				<field name="LowestPrice" type="CPriceType" comment="最低价" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="收盘价" notnull="no" isPK=""/>
+				<field name="Volume" type="CCollectType" comment="数量" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CCollectType" comment="成交金额" notnull="yes" isPK=""/>
+			</fields>
+			<hashkeys/>
+			<foreigns/>
+			<index>
+				<defineIndex name="BarInsertTimeIndex" stableIndex="yes" runLevel="p">
+					<indexKey name="ExchangeID"/>
+					<indexKey name="InstrumentID"/>
+					<indexKey name="Bar"/>
+					<indexKey name="InsertTime" isAsc="no"/>
+				</defineIndex>
+			</index>
+			<hashindex/>
+			<search>
+				<defineSearch name="ByInstrumentBar" indexName="BarInsertTimeIndex" searchUnique="yes" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+						<paraDefine name="InsertTime"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+				<defineSearch name="ByBar" indexName="BarInsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+					</parameter>
+					<default>
+						<defaultDefine name="InsertTime" value="99999999999999.0"/>
+					</default>
+				</defineSearch>
+				<defineSearch name="ByBarInsertTime" indexName="BarInsertTimeIndex" searchUnique="no">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+						<paraDefine name="InsertTime" checkParameter="no"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="LastKLine" usage="最新K线" manager="Init">
+			<fields>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="yes" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="yes" isPK="*"/>
+				<field name="Bar" type="CBarType" comment="K线周期代码(n[m/h/d/o])" notnull="yes" isPK="*"/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="no" isPK=""/>
+				<field name="OpenPrice" type="CPriceType" comment="开盘价" notnull="no" isPK=""/>
+				<field name="HighestPrice" type="CPriceType" comment="最高价" notnull="no" isPK=""/>
+				<field name="LowestPrice" type="CPriceType" comment="最低价" notnull="no" isPK=""/>
+				<field name="ClosePrice" type="CPriceType" comment="收盘价" notnull="no" isPK=""/>
+				<field name="Volume" type="CCollectType" comment="数量" notnull="yes" isPK=""/>
+				<field name="Turnover" type="CCollectType" comment="成交金额" notnull="yes" isPK=""/>
+				<field name="UpdateTime" type="CMilliSecondsType" comment="更新时间" notnull="yes" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="InstrumentBarHashKey" stableHashKey="yes">
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+					<hashitem name="Bar"/>
+				</hashkey>
+			</hashkeys>
+			<foreigns/>
+			<index/>
+			<hashindex>
+				<defineHashIndex name="InstrumentBarHashIndex" hashKey="InstrumentBarHashKey" stableIndex="yes" hashKeySize="10240" runLevel="0,s,p"/>
+			</hashindex>
+			<search>
+				<defineSearch name="ByInstrumentBar" hashIndexName="InstrumentBarHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+						<paraDefine name="Bar"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="AccountDetail" usage="资金明细" manager="Down" priority="3" writeTable="no">
+			<fields>
+				<field name="AccountDetailID" type="CIndexIDType" comment="资金明细号" notnull="yes" isPK=""/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="no" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="no" isPK=""/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="yes" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK=""/>
+				<field name="Currency" type="CCurrencyType" comment="币种" notnull="yes" isPK=""/>
+				<field name="Amount" type="CMoneyType" comment="发生额" notnull="yes" isPK=""/>
+				<field name="PreBalance" type="CMoneyType" comment="上次静态权益" notnull="yes" isPK=""/>
+				<field name="Balance" type="CMoneyType" comment="静态权益" notnull="yes" isPK=""/>
+				<field name="ReserveAmount" type="CMoneyType" comment="体验金发生额" notnull="yes" isPK=""/>
+				<field name="ReserveBalance" type="CMoneyType" comment="体验金静态权益" notnull="yes" isPK=""/>
+				<field name="Source" type="CDefineTypeType" comment="财务流水类型" notnull="yes" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="本地标识" notnull="no" isPK=""/>
+				<field name="SettleSegment" type="CIndexIDType" comment="结算段" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+				<field name="RelatedID" type="CLongNameType" comment="内外对账ID" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CMilliSecondsType" comment="插入时间" notnull="yes" isPK=""/>
+				<field name="CreateTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+			</fields>
+			<foreigns/>
+			<index/>
+			<search/>
+		</table>
+		<table name="SettleDetail" usage="结算明细" manager="Down" priority="3">
+			<fields>
+				<field name="SettleDetailID" type="CIndexIDType" comment="操作明细号" notnull="yes" isPK="*"/>
+				<field name="APPID" type="CShortIndexIDType" comment="应用编号" notnull="no" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="成交对本地标识" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="no" isPK="*"/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="no" isPK="*"/>
+				<field name="SettlementGroup" type="CShortIndexIDType" comment="结算组编号" notnull="no" isPK=""/>
+				<field name="SettleAction" type="CSettleActionTypeType" comment="结算操作" notnull="yes" isPK=""/>
+				<field name="Value" type="CRatioType" comment="操作使用值" notnull="no" isPK=""/>
+				<field name="Value1" type="CRatioType" comment="发生值1" notnull="no" isPK=""/>
+				<field name="Value2" type="CRatioType" comment="发生值2" notnull="no" isPK=""/>
+				<field name="Value3" type="CRatioType" comment="发生值3" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+				<field name="FundingRateGroup" type="CShortIndexIDType" comment="资金费用组" notnull="no" isPK=""/>
+				<field name="SettleSegment" type="CIndexIDType" comment="结算段" notnull="no" isPK=""/>
+				<field name="InsertTime" type="CIndexIDType" comment="创建时间" notnull="no" isPK=""/>
+				<field name="BusinessNo" type="CLargeNumberType" comment="业务序列号" notnull="no" isPK=""/>
+			</fields>
+			<hashkeys>
+				<hashkey name="InstrumentHashKey" stableHashKey="yes">
+					<hashitem name="SettleDetailID"/>
+					<hashitem name="ExchangeID"/>
+					<hashitem name="InstrumentID"/>
+				</hashkey>
+			</hashkeys>
+			<hashindex>
+				<defineHashIndex name="InstrumentHashIndex" hashKey="InstrumentHashKey" stableIndex="yes" hashKeySize="10240"/>
+			</hashindex>
+			<foreigns/>
+			<index/>
+			<search>
+				<defineSearch name="ByInstrument" hashIndexName="InstrumentHashIndex" isPK="yes">
+					<parameter>
+						<paraDefine name="SettleDetailID"/>
+						<paraDefine name="ExchangeID"/>
+						<paraDefine name="InstrumentID"/>
+					</parameter>
+					<default/>
+				</defineSearch>
+			</search>
+		</table>
+		<table name="OrderAction" usage="报单操作" hasTable="no">
+			<fields>
+				<field name="OrderID" type="CIndexIDType" comment="报单系统唯一代码" notnull="no" isPK=""/>
+				<field name="OrderLocalID" type="CIndexIDType" comment="报单本地标识" notnull="no" isPK=""/>
+				<field name="ActionFlag" type="CActionFlagType" comment="报单操作标志" notnull="yes" isPK=""/>
+				<field name="LocalID" type="CIndexIDType" comment="操作本地标识" notnull="no" isPK=""/>
+				<field name="MemberID" type="CLongIndexIDType" comment="成员代码" notnull="yes" isPK=""/>
+				<field name="AccountID" type="CAccountIDType" comment="资金账号" notnull="yes" isPK=""/>
+				<field name="Price" type="CPriceType" comment="价格" notnull="no" isPK=""/>
+				<field name="Volume" type="CVolumeType" comment="数量变化" notnull="no" isPK=""/>
+				<field name="Direction" type="CDirectionType" comment="买卖方向" notnull="yes" isPK=""/>
+				<field name="VolumeDisplay" type="CVolumeType" comment="显示数量" notnull="no" isPK=""/>
+				<field name="ProductGroup" type="CShortIndexIDType" comment="产品组" notnull="no" isPK=""/>
+				<field name="ExchangeID" type="CExchangeIDType" comment="交易所代码" notnull="no" isPK=""/>
+				<field name="InstrumentID" type="CInstrumentIDType" comment="标的代码" notnull="no" isPK=""/>
+				<field name="Cost" type="CMoneyType" comment="委托额" notnull="no" isPK=""/>
+				<field name="Remark" type="CNameType" comment="备注" notnull="no" isPK=""/>
+			</fields>
+			<foreigns>
+				<foreign name="Order" key="OrderID" factory="Order" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="TriggerOrder" key="OrderID" factory="TriggerOrder" method="ByOrderID" comment="对应的报单"/>
+				<foreign name="Member" key="MemberID" factory="Member" method="ByMemberID" comment="对应的用户"/>
+			</foreigns>
+			<index/>
+			<search/>
+		</table>
+	</tables>
+	<entities/>
+</system>

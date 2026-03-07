@@ -1,0 +1,206 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=./..//snapcheck
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p snapcheck_build_dir
+	-mkdir -p ./..//
+	
+datastruct_obj=snapcheck_build_dir/BigDigit.cpp.o snapcheck_build_dir/CDate.cpp.o snapcheck_build_dir/CErrorEngine.cpp.o snapcheck_build_dir/CSequence.cpp.o snapcheck_build_dir/CSVParser.cpp.o snapcheck_build_dir/CSVToField.cpp.o snapcheck_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../src_base/datastruct/.
+function_obj=snapcheck_build_dir/BaseFunction.cpp.o snapcheck_build_dir/Config.cpp.o snapcheck_build_dir/platform.cpp.o snapcheck_build_dir/printinfo.cpp.o snapcheck_build_dir/profile.cpp.o snapcheck_build_dir/utility.cpp.o snapcheck_build_dir/utils.cpp.o snapcheck_build_dir/version.cpp.o 
+function_includedir=-I../../../src_base/function/.
+logger_obj=snapcheck_build_dir/CFilelogService.cpp.o snapcheck_build_dir/CLogger.cpp.o snapcheck_build_dir/CProbeLogger.cpp.o snapcheck_build_dir/CSyslogService.cpp.o snapcheck_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../../src_base/logger/.
+crypt_obj=snapcheck_build_dir/cryptUtility.cpp.o snapcheck_build_dir/Des.cpp.o snapcheck_build_dir/hexEncode.cpp.o snapcheck_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../../src_base/crypt/.
+mdbbase_obj=snapcheck_build_dir/mdb.cpp.o snapcheck_build_dir/mdbAction.cpp.o snapcheck_build_dir/mdbIter.cpp.o snapcheck_build_dir/mdbLog.cpp.o snapcheck_build_dir/mdbSearch.cpp.o snapcheck_build_dir/mdbStruct.cpp.o snapcheck_build_dir/mdbTable.cpp.o 
+mdbbase_includedir=-I../../../src_base/mdb/mdbbase/.
+mdbstruct_obj=snapcheck_build_dir/Allocator.cpp.o snapcheck_build_dir/CAVLTree.cpp.o snapcheck_build_dir/CBaseObject.cpp.o snapcheck_build_dir/CDatabaseDataFactory.cpp.o snapcheck_build_dir/CDatabaseResource.cpp.o snapcheck_build_dir/CDoubleHash.cpp.o snapcheck_build_dir/CFixMem.cpp.o snapcheck_build_dir/CHashIndex.cpp.o snapcheck_build_dir/CTransaction.cpp.o 
+mdbstruct_includedir=-I../../../src_base/mdb/mdbstruct/.
+mdbchange_obj=snapcheck_build_dir/AlterService.cpp.o snapcheck_build_dir/AlterServiceInterface.cpp.o snapcheck_build_dir/TableTrigger.cpp.o 
+mdbchange_includedir=-I../../../src_base/mdb/mdbchange/.
+netstruct_obj=snapcheck_build_dir/errorDefine.cpp.o snapcheck_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../../src_base/netstruct/.
+field_obj=snapcheck_build_dir/FieldData.cpp.o snapcheck_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../../src_base/field/.
+ofserviceapi_include_includedir=-I../../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=snapcheck_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../../libs/ofserviceapi/ofapibase/.
+service_obj=snapcheck_build_dir/ServiceShare.cpp.o snapcheck_build_dir/tradingTools.cpp.o 
+service_includedir=-I../../../src/service/.
+snapcheck_obj=snapcheck_build_dir/BaseEngine.cpp.o snapcheck_build_dir/Engine.cpp.o snapcheck_build_dir/SnapCheck.cpp.o snapcheck_build_dir/SnapCheckEngine.cpp.o 
+snapcheck_includedir=-I../../../src/snapcheck/.
+
+all_objs=$(datastruct_obj) $(function_obj) $(logger_obj) $(crypt_obj) $(mdbbase_obj) $(mdbstruct_obj) $(mdbchange_obj) $(netstruct_obj) $(field_obj) $(ofapibase_obj) $(service_obj) $(snapcheck_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(crypt_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(mdbchange_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(service_includedir)  $(snapcheck_includedir) 
+
+snapcheck_build_dir/BigDigit.cpp.o: ../../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/BigDigit.cpp -osnapcheck_build_dir/BigDigit.cpp.o
+snapcheck_build_dir/CDate.cpp.o: ../../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CDate.cpp -osnapcheck_build_dir/CDate.cpp.o
+snapcheck_build_dir/CErrorEngine.cpp.o: ../../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CErrorEngine.cpp -osnapcheck_build_dir/CErrorEngine.cpp.o
+snapcheck_build_dir/CSequence.cpp.o: ../../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSequence.cpp -osnapcheck_build_dir/CSequence.cpp.o
+snapcheck_build_dir/CSVParser.cpp.o: ../../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVParser.cpp -osnapcheck_build_dir/CSVParser.cpp.o
+snapcheck_build_dir/CSVToField.cpp.o: ../../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVToField.cpp -osnapcheck_build_dir/CSVToField.cpp.o
+snapcheck_build_dir/FieldDescribe.cpp.o: ../../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/FieldDescribe.cpp -osnapcheck_build_dir/FieldDescribe.cpp.o
+snapcheck_build_dir/BaseFunction.cpp.o: ../../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/BaseFunction.cpp -osnapcheck_build_dir/BaseFunction.cpp.o
+snapcheck_build_dir/Config.cpp.o: ../../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/Config.cpp -osnapcheck_build_dir/Config.cpp.o
+snapcheck_build_dir/platform.cpp.o: ../../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/platform.cpp -osnapcheck_build_dir/platform.cpp.o
+snapcheck_build_dir/printinfo.cpp.o: ../../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/printinfo.cpp -osnapcheck_build_dir/printinfo.cpp.o
+snapcheck_build_dir/profile.cpp.o: ../../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/profile.cpp -osnapcheck_build_dir/profile.cpp.o
+snapcheck_build_dir/utility.cpp.o: ../../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utility.cpp -osnapcheck_build_dir/utility.cpp.o
+snapcheck_build_dir/utils.cpp.o: ../../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utils.cpp -osnapcheck_build_dir/utils.cpp.o
+snapcheck_build_dir/version.cpp.o: ../../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/version.cpp -osnapcheck_build_dir/version.cpp.o
+snapcheck_build_dir/CFilelogService.cpp.o: ../../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CFilelogService.cpp -osnapcheck_build_dir/CFilelogService.cpp.o
+snapcheck_build_dir/CLogger.cpp.o: ../../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CLogger.cpp -osnapcheck_build_dir/CLogger.cpp.o
+snapcheck_build_dir/CProbeLogger.cpp.o: ../../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CProbeLogger.cpp -osnapcheck_build_dir/CProbeLogger.cpp.o
+snapcheck_build_dir/CSyslogService.cpp.o: ../../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/CSyslogService.cpp -osnapcheck_build_dir/CSyslogService.cpp.o
+snapcheck_build_dir/monitorIndex.cpp.o: ../../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/logger/monitorIndex.cpp -osnapcheck_build_dir/monitorIndex.cpp.o
+snapcheck_build_dir/cryptUtility.cpp.o: ../../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/crypt/cryptUtility.cpp -osnapcheck_build_dir/cryptUtility.cpp.o
+snapcheck_build_dir/Des.cpp.o: ../../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/crypt/Des.cpp -osnapcheck_build_dir/Des.cpp.o
+snapcheck_build_dir/hexEncode.cpp.o: ../../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/crypt/hexEncode.cpp -osnapcheck_build_dir/hexEncode.cpp.o
+snapcheck_build_dir/md5Handler.cpp.o: ../../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/crypt/md5Handler.cpp -osnapcheck_build_dir/md5Handler.cpp.o
+snapcheck_build_dir/mdb.cpp.o: ../../../src_base/mdb/mdbbase/mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdb.cpp -osnapcheck_build_dir/mdb.cpp.o
+snapcheck_build_dir/mdbAction.cpp.o: ../../../src_base/mdb/mdbbase/mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbAction.cpp -osnapcheck_build_dir/mdbAction.cpp.o
+snapcheck_build_dir/mdbIter.cpp.o: ../../../src_base/mdb/mdbbase/mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbIter.cpp -osnapcheck_build_dir/mdbIter.cpp.o
+snapcheck_build_dir/mdbLog.cpp.o: ../../../src_base/mdb/mdbbase/mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbLog.cpp -osnapcheck_build_dir/mdbLog.cpp.o
+snapcheck_build_dir/mdbSearch.cpp.o: ../../../src_base/mdb/mdbbase/mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbSearch.cpp -osnapcheck_build_dir/mdbSearch.cpp.o
+snapcheck_build_dir/mdbStruct.cpp.o: ../../../src_base/mdb/mdbbase/mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbStruct.cpp -osnapcheck_build_dir/mdbStruct.cpp.o
+snapcheck_build_dir/mdbTable.cpp.o: ../../../src_base/mdb/mdbbase/mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbbase/mdbTable.cpp -osnapcheck_build_dir/mdbTable.cpp.o
+snapcheck_build_dir/Allocator.cpp.o: ../../../src_base/mdb/mdbstruct/Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/Allocator.cpp -osnapcheck_build_dir/Allocator.cpp.o
+snapcheck_build_dir/CAVLTree.cpp.o: ../../../src_base/mdb/mdbstruct/CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CAVLTree.cpp -osnapcheck_build_dir/CAVLTree.cpp.o
+snapcheck_build_dir/CBaseObject.cpp.o: ../../../src_base/mdb/mdbstruct/CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CBaseObject.cpp -osnapcheck_build_dir/CBaseObject.cpp.o
+snapcheck_build_dir/CDatabaseDataFactory.cpp.o: ../../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp -osnapcheck_build_dir/CDatabaseDataFactory.cpp.o
+snapcheck_build_dir/CDatabaseResource.cpp.o: ../../../src_base/mdb/mdbstruct/CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CDatabaseResource.cpp -osnapcheck_build_dir/CDatabaseResource.cpp.o
+snapcheck_build_dir/CDoubleHash.cpp.o: ../../../src_base/mdb/mdbstruct/CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CDoubleHash.cpp -osnapcheck_build_dir/CDoubleHash.cpp.o
+snapcheck_build_dir/CFixMem.cpp.o: ../../../src_base/mdb/mdbstruct/CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CFixMem.cpp -osnapcheck_build_dir/CFixMem.cpp.o
+snapcheck_build_dir/CHashIndex.cpp.o: ../../../src_base/mdb/mdbstruct/CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CHashIndex.cpp -osnapcheck_build_dir/CHashIndex.cpp.o
+snapcheck_build_dir/CTransaction.cpp.o: ../../../src_base/mdb/mdbstruct/CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbstruct/CTransaction.cpp -osnapcheck_build_dir/CTransaction.cpp.o
+snapcheck_build_dir/AlterService.cpp.o: ../../../src_base/mdb/mdbchange/AlterService.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbchange/AlterService.cpp -osnapcheck_build_dir/AlterService.cpp.o
+snapcheck_build_dir/AlterServiceInterface.cpp.o: ../../../src_base/mdb/mdbchange/AlterServiceInterface.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbchange/AlterServiceInterface.cpp -osnapcheck_build_dir/AlterServiceInterface.cpp.o
+snapcheck_build_dir/TableTrigger.cpp.o: ../../../src_base/mdb/mdbchange/TableTrigger.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/mdb/mdbchange/TableTrigger.cpp -osnapcheck_build_dir/TableTrigger.cpp.o
+snapcheck_build_dir/errorDefine.cpp.o: ../../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/errorDefine.cpp -osnapcheck_build_dir/errorDefine.cpp.o
+snapcheck_build_dir/TableDefine.cpp.o: ../../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/TableDefine.cpp -osnapcheck_build_dir/TableDefine.cpp.o
+snapcheck_build_dir/FieldData.cpp.o: ../../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldData.cpp -osnapcheck_build_dir/FieldData.cpp.o
+snapcheck_build_dir/FieldMap.cpp.o: ../../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldMap.cpp -osnapcheck_build_dir/FieldMap.cpp.o
+snapcheck_build_dir/OutFogServiceApiWrapper.cpp.o: ../../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -osnapcheck_build_dir/OutFogServiceApiWrapper.cpp.o
+snapcheck_build_dir/ServiceShare.cpp.o: ../../../src/service/ServiceShare.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/service/ServiceShare.cpp -osnapcheck_build_dir/ServiceShare.cpp.o
+snapcheck_build_dir/tradingTools.cpp.o: ../../../src/service/tradingTools.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/service/tradingTools.cpp -osnapcheck_build_dir/tradingTools.cpp.o
+snapcheck_build_dir/BaseEngine.cpp.o: ../../../src/snapcheck/BaseEngine.cpp $(snapcheck_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/snapcheck/BaseEngine.cpp -osnapcheck_build_dir/BaseEngine.cpp.o
+snapcheck_build_dir/Engine.cpp.o: ../../../src/snapcheck/Engine.cpp $(snapcheck_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/snapcheck/Engine.cpp -osnapcheck_build_dir/Engine.cpp.o
+snapcheck_build_dir/SnapCheck.cpp.o: ../../../src/snapcheck/SnapCheck.cpp $(snapcheck_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/snapcheck/SnapCheck.cpp -osnapcheck_build_dir/SnapCheck.cpp.o
+snapcheck_build_dir/SnapCheckEngine.cpp.o: ../../../src/snapcheck/SnapCheckEngine.cpp $(snapcheck_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src/snapcheck/SnapCheckEngine.cpp -osnapcheck_build_dir/SnapCheckEngine.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(mdbchange_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(service_obj)
+	-$(DEL) $(snapcheck_obj)
+
+	-$(DEL) $(target)

@@ -1,0 +1,373 @@
+===========================管理操作（只有后台才能做）===============================
+一、增加用户
+(1) 增加一个新用户
+	curl -d '{"UserID":"8001","DefaultMemberID":"8001","DefaultAccountID":"8001","DefaultTradeUnitID":"8001","UserType":"2","Password":"111111","EncryptType":"0","IsActive":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/User
+	curl -d '{"UserID":"1001","DefaultMemberID":"1001","DefaultAccountID":"1001","DefaultTradeUnitID":"1001","UserType":"2","Password":"111111","EncryptType":"0","IsActive":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/User
+
+	curl -d '{"UserID":"36001294"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/User
+
+(2) 增加账户
+	curl -d '{"SettleGroup":"Swap","AccountID":"8001","Currency":"BTC","MemberID":"8001"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Account
+
+删除账户
+	curl -d '{"SettleGroup":"Swap","AccountID":"8001","Currency":"BTC"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/Account
+
+
+(3) 查询内存中增加用户的情况
+	curl -d '{"UserID":"8001"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOne/User
+(4) 刚刚用户名忘记填写了，只需更新用户名即可
+	curl -d '{"UserID":"8001","UserName":"NewName"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/User
+(5) 获取本系统的Token(需要客户端使用Token直连本系统的时候需要)
+	curl -d '{"UserID":"8001","Password":"111111"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUserLogin
+	
+(6) 增加合约
+	//币币
+	curl -d '{"MarketID":"DigitalCurrency","ExchangeID":"Test","InstrumentID":"BTC/USDT","InstrumentName":"BTC/USDT","SettleGroup":"Spot","ProductID":"Spot1","ProductClass":"4","ProductGroup":"Spot","ProductType":"8","VolumeMultiple":1,"UnderlyingMultiple":1,"PriceCurrency":"USDT","ClearCurrency":"BTC","IsInverse":0,"BaseCurrency":"BTC","BasisPrice":12000,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","DayStartTime":"00:00:00","SortNumber":1,"InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Instrument
+	//合约
+	curl -d '{"MarketID":"DigitalCurrency","ExchangeID":"Test","InstrumentID":"ETHUSD","InstrumentName":"ETHUSD_SWAP","SettleGroup":"Swap","ProductID":"ETH_SWAP_B","ProductClass":"1","ProductGroup":"Swap","ProductType":"2","PositionType":"2","VolumeMultiple":10,"UnderlyingMultiple":1,"PriceCurrency":"USD","ClearCurrency":"ETH","IsInverse":1,"BaseCurrency":"ETH","MarginPriceType":"2","BasisPrice":560,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.05,"MarketTick1":0.1,"MarketTick2":1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","UseYdPosition":0,"DayStartTime":"00:00:00","SortNumber":2,"InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Instrument
+	
+	curl -d '{"MemberID":"default","TradeUnitID":"default","ExchangeID":"Test","InstrumentID":"ETHUSD","ValueMode":"0","LongMarginRatio":0.005,"LongMaintMarginRatio":0.005,"LongMarginStep":0.0,"LongMaintMarginStep":0.0,"LongRiskLimit":0.0,"LongRiskStep":0.0,"ShortMarginRatio":0.005,"ShortMaintMarginRatio":0.005,"ShortMarginStep":0.0,"ShortMaintMarginStep":0.0,"ShortRiskLimit":0.0,"ShortRiskStep":0.0"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/MarginRate
+	
+	curl -d '{"ExchangeID":"Test","InstrumentID":"ETHUSD","ValueMode":"0","RoundingMode":"1","PriceLimitType":"0","BandingPriceType":"3","UpperValue":0.05,"LowerValue":0.05}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/PriceBanding
+	
+
+	curl -d '{"MemberID":"default","TradeUnitID":"default","ExchangeID":"Test","InstrumentID":"default","MatchRole":"0","CloseTodayFeeRate":0.0003}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Fee
+
+(7) 增加特殊客户
+	curl -d '{"MemberID":"521672","BuildPosition":0,"Grade":"X","AccountID":"521672","CheckAccount":1,"Priority":0,"PositionProfitUse":"0","Remark":""}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Member
+	
+(8)启动暂停交易
+	启动交易
+	curl -d '{"ExchangeID":"Test","InstrumentID":"KEY/USDT","InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/MarketData
+	暂停交易
+	curl -d '{"ExchangeID":"Test","InstrumentID":"KEY/USDT","InstrumentStatus":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/MarketData
+	
+	
+二、出入金（如果是体验金的操作每个操作增加 "IsReserve":1）
+2.1 入金：
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":1000,"Currency":"BTC","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+	入金并作为体验金
+	curl -d '{"UserID":"1001","LocalID":"","AccountID":"1001","SettleGroup":"Swap","Amount":20,"Currency":"BTC","ActionType":"1","IsReserve":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.2 出金：先冻结资金，然后再到资金账户里面去增加钱
+	curl -d '{"UserID":"8001","LocalID":"0001","MemberID":"8001","AccountID":"8001","SettleGroup":"Swap","Amount":10,"Currency":"BTC","ActionType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.3 资金账户增加钱成功之后，调用解冻并出金
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":10,"Currency":"BTC","ActionType":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+	#根据之前的订单的LocalID解冻
+	curl -d '{"UserID":"8001","ActionLocalID":"0001","ActionType":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.4 如果资金账户增加钱失败之后，回滚解冻
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":10,"Currency":"BTC","ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+	#根据之前的订单的LocalID回滚
+	curl -d '{"UserID":"8001","ActionLocalID":"0001","ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.5 从账户8001转体验金到账户1001
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":10,"Currency":"BTC","ActionType":"6","OtherAccountID":"1001","OtherSettleGroup":"BTC","IsReserve":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.6 体验金的盈亏分配，将账户8001的体验金的盈利部分转到账户1001
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":10,"Currency":"BTC","ActionType":"7","OtherAccountID":"1001","OtherSettleGroup":"BTC"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+2.7 设置体验金过期
+	curl -d '{"UserID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":0,"Currency":"BTC","ActionType":"9"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+
+三、资金费率操作
+3.1 更新资金费率，一个合约一个合约更新
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","PositionFeeRate":0.0001}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+3.2 资金费率互换，在资金费率全部更新之后，一个和一个合约做
+	curl -d '{"UserID":"1121","SettleAction":"3","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+
+四、结算操作
+4.1 更新结算价，一个合约一个合约更新
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","SettlementPrice":9988.88}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+4.2 更新指数
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","UnderlyingPrice":8000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+	
+
+4.2 结算(按照结算组)，在结算价全部更新之后，一个结算组必须一起结算，但是要注意部分合约结算失败的情况，全部回退重新结算
+4.2.1 结算开始，打镜像，暂停交易
+	curl -d '{"UserID":"1121","SettleAction":"0","ExchangeID":"Test","SettleGroup":"Swap"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+4.2.2 资金费用
+	curl -d '{"UserID":"1121","SettleAction":"3","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+	curl -d '{"UserID":"1121","SettleAction":"3","ExchangeID":"Test","SettleGroup":"Swap"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+4.2.3 结算
+	curl -d '{"UserID":"1121","SettleAction":"1","SettleGroup":"Swap"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+
+五、数据清理
+5.1 清理Order表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Order"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+5.2 清理Position表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Position"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+5.3 清理Account表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Account"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+	
+	curl -d '{"SettleAction":"9","Remark":"MemberPosition"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+
+PS：查询操作可以使用下面的查询，也可以直接使用DB和Redis
+
+===========================常规API操作（客户端可以做）===============================
+六、下单(有Otoken的情况下UserID不需要)
+(1) 买开
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	##通过Otoken方式进行
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}' -H "Otoken:10294c0ca4BriDUdlbXd8eMyHsDIm2fl6qZeV" -X POST   http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(2) 卖开
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"1001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(3) 卖平
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"1","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(4) 买平
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"1001","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"0","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(5) 批量平仓
+	(1)批量平掉用户的合约BTCUSD持仓
+	curl -d '{"UserID":"8001","ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+	(2)批量平掉用户的产品BTC持仓
+	curl -d '{"UserID":"8001","ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1","ExchangeID":"Test","InstrumentID":"BTC"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(3)批量平掉用户的所有持仓
+	curl -d '{"UserID":"8001","ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+(6) 撤单
+	(1)按照OrderID撤单单个订单
+	curl -d '{"UserID":"8001","OrderID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(2)按照OrderLocalID撤单单个订单
+	curl -d '{"UserID":"8001","OrderLocalID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(3)批量撤销合约BTCUSD订单
+	curl -d '{"UserID":"8001","ActionFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+	(4)批量撤销用户的所有订单
+	curl -d '{"UserID":"36001320","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+(7) 条件单-到了价格的止损条件单
+	(1)止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"0","Volume":1,"OffsetFlag":"0","SLPriceType":"0","SLPrice":10010,"SLTriggerPrice":10000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(2)止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"0","Volume":1,"OffsetFlag":"0","TPPriceType":"0","TPPrice":8001,"TPTriggerPrice":8000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(3)止损或止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"0","Volume":1,"OffsetFlag":"0","OrderPriceType":"0","Price":10000,"TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+(8) 仓位上面操作止盈止损单(修改和报入是同一个接口，其会撤销之前的然后重新报入)
+	（1）仓位止盈止损单
+	//两个价格6000买平，到了10000最高买平，总量和持仓始终保持一致，目的就是让持仓平掉，重复发送会替换原有的止盈止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"5","SLTriggerPrice":6000,"TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	（2）仓位止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"5","TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	（3）仓位止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"5","SLTriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+(9) 报单上面操作止盈止损单= 普通开仓单+仓位止盈止损单也可以实现，这里使用新接口，为了做成一个事务
+	（1）下单之后设置止盈止损单
+	//两个价格6000买平，到了10000最高买平，总量和持仓始终保持一致，目的就是让持仓平掉，重复发送会替换原有的止盈止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"1121","TradeUnitID":"default","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0","SLTriggerPrice":6000,"TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+	（2）下单之后设置止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0","TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+	（3）下单之后设置止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0","SLTriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+(10) 取消触发单（00000000002DD为触发单的OrderID
+	curl -d '{"UserID":"8001","OrderID":"000000000001","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+(11) 闪电平仓（撤销所有的平仓单，并平仓掉指定的数量(可不填数量就是全部平仓)按照最优10档平仓）
+	（1）平多仓
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"4","Direction":"1","OffsetFlag":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	（2）平空仓
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"4","Direction":"0","OffsetFlag":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(12) PostOnly订单	
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0","COrderType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	
+(13)金额订单(币币使用)
+	curl -d '{"InstrumentID":"BTC/USDT","ExchangeID":"Test","UserID":"8001","OrderPriceType":"8","VolumeDisplay":100,"Direction":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	
+(14)闪电市价单（下直接成交订单）
+	按金额
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"0","Cost":59000,"TriggerType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	按数量
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"0","Volume":5,"TriggerType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+
+(15)闪电限价单（到达触发价之后直接成交订单）
+	按金额
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"0","Cost":500,"TriggerType":"1","TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	按数量
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","Direction":"1","OffsetFlag":"0","Volume":500,"TriggerType":"1","TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+
+七、调整仓位参数(有Otoken的情况下UserID不需要)
+7.1 调整杠杆倍数 10倍
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","UserID":"8001","PosiDirection":"0","Amount":10,"ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+7.2 增加保证金1000
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","UserID":"8001","PosiDirection":"0","Amount":1000,"ActionType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+7.3 减少保证金500
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","UserID":"8001","PosiDirection":"0","Amount":500,"ActionType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+7.4 切换为逐仓
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","UserID":"8001","PosiDirection":"0","Amount":0,"ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+7.5 切换为全仓
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","UserID":"8001","PosiDirection":"0","Amount":1,"ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+
+八、查询(Redis)(有Otoken的情况下MemberID/TradeUnitID/AccountID不需要)
+(1) 查询合约(Otoken随便传,不验证)
+	http://127.0.0.1:8070/query/v1.0/contract?pageIndex=1&pageSize=5&ProductGroup=Swap
+(2) 查询行情(Otoken随便传,不验证)
+	http://127.0.0.1:8070/query/v1.0/marketdata?pageIndex=1&pageSize=5
+	http://127.0.0.1:8070/query/v1.0/marketdata?ExchangeID=Test&InstrumentID=BTCUSD
+(3) 查询K线先(Otoken随便传,不验证)
+	http://127.0.0.1:8070/query/v1.0/kline?instrumentID=BTCUSD&startDatetime=1600762827&count=800&type=1h
+(4) 查询活跃订单
+	http://127.0.0.1:8070/query/v1.0/order?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(5) 查询已成交订单
+	http://127.0.0.1:8070/query/v1.0/history_order?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/history_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(6) 查询未成交全部撤单订单(不按照合约分类，最多200条)(有Otoken的情况下MemberID不需要)
+	http://127.0.0.1:8070/query/v1.0/canceled_order?pageIndex=1&pageSize=5&MemberID=8001
+(7) 查询成交
+	http://127.0.0.1:8070/query/v1.0/trade?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/trade?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+	http://127.0.0.1:8070/query/v1.0/trade?OrderID=04D33C00F79F
+(8) 查询持仓
+	http://127.0.0.1:8070/query/v1.0/position?MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/position?MemberID=8001&TradeUnitID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(9) 查询资金
+	http://127.0.0.1:8070/query/v1.0/account?MemberID=8001&Currency=BTC&SettleGroup=Swap&AccountID=8001
+	http://127.0.0.1:8070/query/v1.0/account?MemberID=8001&ProductGroup=8001
+	
+(10) 查询资金流水
+	http://127.0.0.1:8070/query/v1.0/account_detail?pageIndex=1&pageSize=5&AccountID=36000390&Currency=BTC&SettleGroup=Swap
+	http://127.0.0.1:8070/query/v1.0/account_detail?pageIndex=1&pageSize=5&AccountID=36000390&Currency=BTC&SettleGroup=Swap&Source=5
+(11) 查询用户
+	http://127.0.0.1:8070/query/v1.0/user?userid=8001
+	curl -H "Otoken:61859ded81bd5886151f2ad29d074328" "http://152.32.172.63:8888/query/v1.0/position?pageIndex=1&pageSize=5&MemberID=36000390&ExchangeID=Test&InstrumentID=BTCUSD"
+(12) 检查Otoken状态
+	curl -H "Otoken:61859ded81bd5886151f2ad29d074328" "http://152.32.172.63:8888/query/v1.0/check_token"
+(13)查询活跃的条件单
+	curl http://127.0.0.1:8070/query/v1.0/trigger_order?pageIndex=1&pageSize=5&MemberID=8001
+	curl http://127.0.0.1:8070/query/v1.0/trigger_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(14)查询已经激活了的条件单
+	curl http://127.0.0.1:8070/query/v1.0/history_trigger_order?pageIndex=1&pageSize=5&MemberID=8001
+	curl http://127.0.0.1:8070/query/v1.0/history_trigger_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+	
+(15)查询行情
+	curl "http://127.0.0.1:8070/query/v1.0/SendQryMarketOrder?ExchangeID=Test&InstrumentID=BTCUSD&Direction=1"
+
+九、WS订阅：建立ws连接之后发送报文
+9.1 订阅/退订成交明细,成交明细需要显示倒数200条,ResumeNo:-200
+	{"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"2","FilterValue":"Test_BTCUSD","ResumeNo":-200}}
+	{"SendTopicAction":{"Action":"2","LocalNo":2}}
+9.2 订阅/退订深度行情 ##TopicID[五档:5;十档:10;25档:25;全档:8]
+	{"SendTopicAction":{"Action":"1","LocalNo":3,"TopicID":"5","FilterValue":"Test_BTCUSD","ResumeNo":-1}}
+	{"SendTopicAction":{"Action":"2","LocalNo":3}}
+9.3 订阅/退订K线行情##FilterValue Test_BTCUSD_[1m|5m|15m|30m|1h|4h|1d|1w|1M|1y]
+	{"SendTopicAction":{"Action":"1","LocalNo":4,"TopicID":"2","FilterValue":"Test_BTCUSD_1","ResumeNo":-1}}
+	{"SendTopicAction":{"Action":"2","LocalNo":4}}
+9.4 退订全部
+	{"SendTopicAction":{"Action":"3"}
+
+========================================风---控=======================================
+#订阅分控流水
+	{"SendUserLogin":{"UserID":"1120","Password":"111111"}} 
+	{"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"9","FilterValue":"","ResumeNo":-1}}
+#查询合约
+	curl -d '{}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryInstrument
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryInstrument
+#查询活跃订单
+	curl -d '{"MemberID":"8001"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOrder
+#撤单
+	curl -d '{"OrderID":"194F68100008","ActionFlag":"1","UserID":"8001"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+#强平
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+#接管
+	curl -d '{"UserID":"1120","InstrumentID":"BTCUSD","ExchangeID":"Test","Price":8000,"Volume":1,"BuyMemberID":"1120","BuyTradeUnitID":"1120","BuyOffsetFlag":"0","SellMemberID":"8001","SellTradeUnitID":"8001","SellOffsetFlag":"1","OTCType":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOTCTradeInsert
+
+========================================做---市=======================================
+#订阅交易流水
+	{"SendUserLogin":{"UserID":"1120","Password":"111111"}} 
+	{"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"3","FilterValue":"1120","ResumeNo":-1}}
+#刷单
+	curl -d '{"UserID":"1120","InstrumentID":"BTCUSD","ExchangeID":"Test","Price":8000,"Volume":1,"BuyMemberID":"1120","BuyTradeUnitID":"1120","BuyOffsetFlag":"0","SellMemberID":"1120","SellTradeUnitID":"1120","SellOffsetFlag":"0","OTCType":"3","TakerDirection":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOTCTradeInsert
+#查询订单
+	curl -d '{"MemberID":"8001","InstrumentID":"BTCUSD","ExchangeID":"Test"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOrder
+#查询资金
+	curl -d '{"MemberID":"8001"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryAccount
+#查询持仓
+	curl -d '{"MemberID":"8001","InstrumentID":"BTCUSD","ExchangeID":"Test"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryPosition
+#下单 可以参考五
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+#批量报单
+	curl -d "[{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}]"  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+
+
+========================================进阶后管=======================================
+(1) 增加成员 8001，需要控制参数如等级、资金账户等时
+	curl -d '{"MemberID":"8001","Grade":"1","BuildPosition":0,"AccountID":"8001","CheckAccount":1,"Priority":0}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Member
+
+(2) 增加交易单元 8001，需要设置交易单元的参数时
+	curl -d '{"MemberID":"8001","TradeUnitID":"8001","AccountID":"8001","TradeUnitType":"1","TradingType":"1","RouteType":"1","Grade":"1","PositionType":"1","Priority":0}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/TradeUnit
+
+(3) 增加业务参数
+	curl -d '{"ConfigName":"SessionExpireTime","Index1":"","Index2":"","ConfigValue":"60","Remark":""}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/ServiceConfig
+	
+(4) 更新业务参数	
+	curl -d '{"ConfigName":"NoTradeFinishTo","Index1":"default","Index2":"default","ConfigValue":"1","Remark":"0:ToRedis;1:ToDB""}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/ServiceConfig
+	
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","ValueMode":"0","RoundingMode":"1","PriceLimitType":"0","BandingPriceType":"3","UpperValue":0.05,"LowerValue":0.05}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/PriceBanding
+	
+	
+	
+(5) 停止系统数据流
+	curl http://127.0.0.1:10000/Stop
+
+(6) 开启系统数据流	
+	curl http://127.0.0.1:10000/Start	
+	
+	
+curl -d '{"UserID":"36000390","LocalID":"","AccountID":"36000390","SettleGroup":"Spot","Amount":10000,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+
+curl -d '{"PositionFlag":"1","ExchangeID":"Test","InstrumentID":"ETHUSD","MemberID":"515381","TradeUnitID":"515381","PosiDirection":"1","TotalPositionCost":0.0269159433}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Position
+
+curl -d '{"PositionFlag":"1","ExchangeID":"Test","InstrumentID":"ETHUSD","MemberID":"515381","TradeUnitID":"515381","PosiDirection":"1","Position":1,"LongFrozen":0,"ShortFrozen":0,"BuyTradeVolume":1,"SellTradeVolume":2,"PositionCost":0.0134786952,"UseMargin":0.00061266795,"SellTradeVolume":2,"SellTradeVolume":2}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Position
+
+
+curl -d '{"PositionFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8527957","TradeUnitID":"8527957","PosiDirection":"0"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/Position
+
+
+
+
+
+curl -d '{"SettleGroup":"SwapU","AccountID":"8573716","Currency":"USDT","MemberID":"8573716","FrozenMargin":0}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Account
+
+
+
+
+curl -d '{"SettleGroup":"Spot","AccountID":"8527957","Currency":"BCH"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/Account
+
+
+curl -d '{"UserID":"521337","LocalID":"","AccountID":"521337","SettleGroup":"Spot","Amount":0,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction	
+
+
+curl -d '{"SettleGroup":"Spot","AccountID":"521337","Currency":"USDT","MemberID":"521337","FrozenMoney":0}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Account
+
+curl -d '{"UserID":"8528409","LocalID":"","AccountID":"8528409","SettleGroup":"Spot","Amount":0,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction	
+
+
+
+
+curl -d '{"UserID":"8528499","LocalID":"","AccountID":"8528499","SettleGroup":"SwapU","Amount":0,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+curl -d '{"UserID":"8561857","LocalID":"","AccountID":"8561857","SettleGroup":"SwapU","Amount":0,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+curl -d '{"UserID":"8565994","LocalID":"","AccountID":"8565994","SettleGroup":"SwapU","Amount":0,"Currency":"USDT","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+
+
+curl -d '{"SettleGroup":"Spot","AccountID":"483334","Currency":"DG","MemberID":"483334","FrozenMoney":0}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Account
+curl -d '{"UserID":"483334","LocalID":"","AccountID":"483334","SettleGroup":"Spot","Amount":0,"Currency":"DG","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+
+
+curl -d '{"ExchangeID":"Test","InstrumentID":"DC/USDT","Volume":1388772.3168}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/MarketData
+
+curl -d '{"ExchangeID":"Test","InstrumentID":"XRPUSD","MemberID":"480682","TradeUnitID":"480682","PositionFlag":"1","PosiDirection":"0","ShortFrozen":0}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Position
+
+curl -d '{}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Position
+curl -d '{}' -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/Account
+curl -d '{}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Order
+
+
+
+curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"default","TradeUnitID":"default"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/PositionLimit
+
+
+curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"446902","TradeUnitID":"446902","PositionFlag":"1","PosiDirection":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOne/Position
+
+curl -d '{"SettleGroup":"Swap","AccountID":"446902","Currency":"BTC"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOne/Account
+
+curl -d '{"OrderID":"0930AF0C6822"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOne/Order
+
+
+curl -d "[{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10001,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10002,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10003,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10004,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10005,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10006,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10007,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10008,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10009,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10010,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10011,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10012,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10013,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10014,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10015,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10016,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10017,"Volume":1,"Direction":"0","OffsetFlag":"0"},{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10018,"Volume":1,"Direction":"0","OffsetFlag":"0"}]"  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+
+curl -d "[{"action":"SendOrderInsert",data:{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}},{action:"SendTriggerOrderInsert",data:{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10001,"Volume":1,"Direction":"0","OffsetFlag":"0"}},{"action":"SendCloseOrderInsert",data:{"InstrumentID":"BTCUSD","ExchangeID":"Test","UserID":"8001","OrderPriceType":"0","Price":10002,"Volume":1,"Direction":"0","OffsetFlag":"0"}}]"  -X POST  http://127.0.0.1:10000/action/v1.0/SendBatch
+
+
+[{"action":"RecvOrderInsert","errorCode":0,"errorMsg":"Success","result":[{"table":"Order","data":{"MemberID":"xuzh","TradeUnitID":"xuzh","AccountID":"xuzh","UserID":"xuzh","LocalID":"","ExchangeID":"Test","InstrumentID":"BTCUSD","OrderPriceType":"0","Direction":"0","OffsetFlag":"0","Price":34886.4,"Volume":1.0,"VolumeDisplay":null,"VolumeMode":"1","Cost":null,"OrderType":"0","TimeCondition":"0","GTDTime":null,"MinVolume":0.0,"BusinessType":"0","BusinessValue":"","CloseOrderID":"","IsCrossMargin":1,"Remark":"","OrderID":"1000141242564462","OrderStatus":"1","DeriveSource":"0","VolumeTraded":1.0,"VolumeRemain":0.0,"VolumeCancled":0.0,"TriggerPrice":0.0,"Tradable":1,"SettleGroup":"Swap","APPID":"","ProductID":"BTC_SWAP_B","ProductGroup":"Swap","MatchGroup":0,"PosiDirection":"0","TradePrice":0.00002866,"OpenPrice":34883.3,"TriggerOrderID":"","SLTriggerPrice":0.0,"TPTriggerPrice":0.0}}]},{"action":"SendTriggerOrderInsert","errorCode":0,"errorMsg":"Success","result":[{"table":"TriggerOrder","data":{"MemberID":"xuzh","TradeUnitID":"xuzh","AccountID":"xuzh","UserID":"xuzh","LocalID":"","ExchangeID":"Test","InstrumentID":"BTCUSD","OrderPriceType":"0","Direction":"0","OffsetFlag":"0","Price":34886.4,"Volume":1.0,"VolumeDisplay":null,"VolumeMode":"1","Cost":null,"OrderType":"0","TimeCondition":"0","GTDTime":null,"MinVolume":0.0,"BusinessType":"0","BusinessValue":"","CloseOrderID":"","IsCrossMargin":1,"Remark":"","OrderID":"1000141242564462","OrderStatus":"1","DeriveSource":"0","VolumeTraded":1.0,"VolumeRemain":0.0,"VolumeCancled":0.0,"VolumeClosed":0.0,"TriggerOrderID":"","SLTriggerPrice":0.0,"TPTriggerPrice":0.0}}]}]
+
+select * from t_D_KLine t where t.instrumentid in ('BTC/USDT','ETH/USDT') and t.PeriodID in ('5m','1h','1d','1w','1o')

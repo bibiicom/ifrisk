@@ -1,0 +1,186 @@
+===========================常规API操作（客户端可以做）===============================
+一、用户注册登录
+(1) 注册用户：
+	curl -d '{"UserID":"1234","MemeberID":"1234","Password":"111111"}'  -X POST http://127.0.0.1:10000/action/v1.0/SendUserRegister
+(2) 用户登录：
+	curl -d '{"UserID":"1234","Password":"111111"}'  -X POST https://127.0.0.1:10000/action/v1.0/SendUserLogin
+(3) 用户登出：
+	curl -d '{"Token":"81dc9bdb52d04dc20036dbd8313ed055"}'  -X POST https://127.0.0.1:10000/action/v1.0/SendUserLogout
+	
+一、下单(有Otoken的情况下UserID不需要)
+(1) 买开
+	http: curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	ws: {"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}}
+	http&token:	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}' -H "Otoken:10294c0ca4BriDUdlbXd8eMyHsDIm2fl6qZeV" -X POST http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(2) 卖开
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	{"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0"}}
+(3) 卖平
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"1","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	{"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"1","OffsetFlag":"1"}}
+(4) 买平
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"0","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	{"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":12000,"Volume":1,"Direction":"0","OffsetFlag":"1"}}
+(5) 批量平仓
+	(1)批量平掉用户的合约BTCUSD持仓
+	curl -d '{"ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+	(2)批量平掉用户的产品BTC持仓
+	curl -d '{"ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1","ExchangeID":"Test","InstrumentID":"BTC"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(3)批量平掉用户的所有持仓
+	curl -d '{"ActionFlag":"1","OrderPriceType":"4","OffsetFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+(6) 撤单
+	(1)按照OrderID撤单单个订单
+	curl -d '{"OrderID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(2)按照LocalID撤单单个订单
+	curl -d '{"LocalID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(3)批量撤销合约BTCUSD订单
+	curl -d '{"ActionFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+	(4)批量撤销用户的所有订单
+	curl -d '{"ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction
+	(4)批量撤销用户的ProductGroup为Swap所有订单
+	curl -d '{"ActionFlag":"1","ProductGroup":"Swap"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderAction	
+(7) 条件单-到了价格的止损条件单
+	(1)止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"0","Volume":1,"OffsetFlag":"0","SLPriceType":"0","SLPrice":10010,"SLTriggerPrice":10000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(2)止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"0","Volume":1,"OffsetFlag":"0","TPPriceType":"0","TPPrice":8001,"TPTriggerPrice":8000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(3)止损或止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"0","Volume":1,"OffsetFlag":"0","OrderPriceType":"0","Price":10000,"TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+(6) 条件单撤单
+	(1)按照OrderID撤单单个订单
+	curl -d '{"OrderID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	(2)按照LocalID撤单单个订单
+	curl -d '{"LocalID":"00000000002DD","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	(3)批量撤销合约BTCUSD订单
+	curl -d '{"ActionFlag":"1","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	(4)批量撤销用户的所有订单
+	curl -d '{"ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	(5)批量撤销用户的ProductGroup为Swap所有订单
+	curl -d '{"ActionFlag":"1","ProductGroup":"Swap"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction		
+	(6)批量撤掉用户的条件单
+	curl -d '{"ActionFlag":"1","TriggerOrderType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction		
+	(7)批量撤掉用户的订单止盈止损
+	curl -d '{"ActionFlag":"1","TriggerOrderType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	
+(8) 仓位上面操作止盈止损单(修改和报入是同一个接口，其会撤销之前的然后重新报入)
+	(1)仓位止盈止损单
+	//两个价格6000买平，到了10000最高买平，总量和持仓始终保持一致，目的就是让持仓平掉，重复发送会替换原有的止盈止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"5","SLTriggerPrice":6000,"TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(2)仓位止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"5","TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(3)仓位止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"5","SLTriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	(4)修改仓位止盈止损
+	curl -d '{"OrderID":"99837263","ActionFlag":"3","SLTriggerPrice":6000,"TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	(5)撤掉仓位止盈止损（全部撤掉，只撤掉一个止盈或者止损参考1）
+	curl -d '{"OrderID":"99837263","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+	
+(9) 报单上面操作止盈止损单= 普通开仓单+止盈止损单也可以实现，这里使用新接口，为了做成一个事务
+	(1)下单之后设置止盈止损单
+	//两个价格6000买平，到了10000最高买平，总量和持仓始终保持一致，目的就是让持仓平掉，重复发送会替换原有的止盈止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","TradeUnitID":"default","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0","SLTriggerPrice":6000,"TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+	(2)下单之后设置止盈单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0","TPTriggerPrice":12000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+	(3)下单之后设置止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"1","OffsetFlag":"0","SLTriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendCloseOrderInsert
+
+(9) 条件单的止盈止损单= 普通触发单+止盈止损单也
+	(1)下单之后设置止盈止损单
+	//两个价格6000买平，到了10000最高买平，总量和持仓始终保持一致，目的就是让持仓平掉，重复发送会替换原有的止盈止损单
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0","TriggerPrice":10000,"CloseSLTriggerPrice":12000,"CloseTPTriggerPrice":9000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	
+(10) 取消触发单（00000000002DD为触发单的OrderID
+	curl -d '{"OrderID":"000000000001","ActionFlag":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderAction
+(11) 闪电平仓（撤销所有的平仓单，并平仓掉指定的数量(可不填数量就是全部平仓)按照最优10档平仓）
+	(1)平多仓
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"4","Direction":"1","OffsetFlag":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+	(2)平空仓
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"4","Direction":"0","OffsetFlag":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(12) PostOnly订单	
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0","COrderType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(13)金额订单(币币使用)
+	curl -d '{"InstrumentID":"BTC/USDT","ExchangeID":"Test","OrderPriceType":"8","VolumeDisplay":100,"Direction":"0"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendOrderInsert
+(14)闪电市价单（下直接成交订单）
+	按金额
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"0","Cost":59000,"TriggerType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	按数量
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"0","Volume":5,"TriggerType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+(15)闪电限价单（到达触发价之后直接成交订单）
+	按金额
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"0","Cost":500,"TriggerType":"1","TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+	按数量
+	curl -d '{"InstrumentID":"BTCUSD","ExchangeID":"Test","Direction":"1","OffsetFlag":"0","Volume":500,"TriggerType":"1","TriggerPrice":6000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendTriggerOrderInsert
+
+二、调整仓位参数(有Otoken的情况下UserID不需要)
+(1) 调整杠杆倍数 10倍
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","PosiDirection":"0","Amount":10,"ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+(2) 增加保证金1000
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","PosiDirection":"0","Amount":1000,"ActionType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+(3) 减少保证金500
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","PosiDirection":"0","Amount":500,"ActionType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+(4) 切换为逐仓
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","PosiDirection":"0","Amount":0,"ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+(5) 切换为全仓
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","MemberID":"8001","TradeUnitID":"8001","PosiDirection":"0","Amount":1,"ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendPositionAction
+(6) 切换为单向持仓模式
+	curl -d '{"MemberID":"8001","PositionType":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMemberAction
+(7) 切换为双向持仓模式
+	curl -d '{"MemberID":"8001","PositionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMemberAction	
+(8) 查询杠杆倍数和默认是全仓还是逐仓
+	curl -d '{"MemberID":"8001","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryLeverage
+
+三、查询(Redis)(有Otoken的情况下MemberID/TradeUnitID/AccountID不需要)
+(1) 查询合约(Otoken随便传,不验证)
+	curl "http://127.0.0.1:8070/query/v1.0/contract?pageIndex=1&pageSize=5&ProductGroup=Swap"
+(2) 查询行情(Otoken随便传,不验证)
+	http://127.0.0.1:8070/query/v1.0/marketdata?pageIndex=1&pageSize=5
+	http://127.0.0.1:8070/query/v1.0/marketdata?ExchangeID=Test&InstrumentID=BTCUSD
+(3) 查询K线先(Otoken随便传,不验证)
+	http://127.0.0.1:8070/query/v1.0/kline?instrumentID=BTCUSD&startDatetime=1600762827&count=800&type=1h
+(4) 查询活跃订单
+	http://127.0.0.1:8070/query/v1.0/order?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(5) 查询已成交订单
+	http://127.0.0.1:8070/query/v1.0/history_order?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/history_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(6) 查询未成交全部撤单订单(不按照合约分类，最多200条)(有Otoken的情况下MemberID不需要)
+	http://127.0.0.1:8070/query/v1.0/canceled_order?pageIndex=1&pageSize=5&MemberID=8001
+(7) 查询成交
+	http://127.0.0.1:8070/query/v1.0/trade?pageIndex=1&pageSize=5&MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/trade?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+	http://127.0.0.1:8070/query/v1.0/trade?OrderID=04D33C00F79F
+(8) 查询持仓
+	http://127.0.0.1:8070/query/v1.0/position?MemberID=8001
+	http://127.0.0.1:8070/query/v1.0/position?MemberID=8001&TradeUnitID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(9) 查询资金
+	http://127.0.0.1:8070/query/v1.0/account?MemberID=8001&Currency=BTC&SettleGroup=Swap&AccountID=8001
+	http://127.0.0.1:8070/query/v1.0/account?MemberID=8001&ProductGroup=8001
+(10) 查询资金流水
+	http://127.0.0.1:8070/query/v1.0/account_detail?pageIndex=1&pageSize=5&AccountID=36000390&Currency=BTC&SettleGroup=Swap
+	http://127.0.0.1:8070/query/v1.0/account_detail?pageIndex=1&pageSize=5&AccountID=36000390&Currency=BTC&SettleGroup=Swap&Source=5
+(11) 查询用户
+	http://127.0.0.1:8070/query/v1.0/user?userid=8001
+	curl -H "Otoken:61859ded81bd5886151f2ad29d074328" "http://152.32.172.63:8888/query/v1.0/position?pageIndex=1&pageSize=5&MemberID=36000390&ExchangeID=Test&InstrumentID=BTCUSD"
+(12) 检查Otoken状态
+	curl -H "Otoken:61859ded81bd5886151f2ad29d074328" "http://152.32.172.63:8888/query/v1.0/check_token"
+(13)查询活跃的条件单
+	curl http://127.0.0.1:8070/query/v1.0/trigger_order?pageIndex=1&pageSize=5&MemberID=8001
+	curl http://127.0.0.1:8070/query/v1.0/trigger_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(14)查询已经激活了的条件单
+	curl http://127.0.0.1:8070/query/v1.0/history_trigger_order?pageIndex=1&pageSize=5&MemberID=8001
+	curl http://127.0.0.1:8070/query/v1.0/history_trigger_order?pageIndex=1&pageSize=5&MemberID=8001&ExchangeID=Test&InstrumentID=BTCUSD
+(15)查询行情
+	curl "http://127.0.0.1:8072/market/v1.0/SendQryMarketOrder?ExchangeID=Test&InstrumentID=BTCUSD&Direction=1"
+
+四、WS订阅：建立ws连接之后发送报文
+9.1 订阅/退订成交明细,成交明细需要显示倒数200条,ResumeNo:-200
+	{"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"2","FilterValue":"Test_BTCUSD","ResumeNo":-200}}
+	{"SendTopicAction":{"Action":"2","LocalNo":2}}
+9.2 订阅/退订深度行情 ##TopicID[五档:5;十档:10;25档:25;全档:8]
+	{"SendTopicAction":{"Action":"1","LocalNo":3,"TopicID":"5","FilterValue":"Test_BTCUSD","ResumeNo":-1}}
+	{"SendTopicAction":{"Action":"2","LocalNo":3}}
+9.3 订阅/退订K线行情##FilterValue Test_BTCUSD_[1m|5m|15m|30m|1h|4h|1d|1w|1M|1y]
+	{"SendTopicAction":{"Action":"1","LocalNo":4,"TopicID":"2","FilterValue":"Test_BTCUSD_1","ResumeNo":-1}}
+	{"SendTopicAction":{"Action":"2","LocalNo":4}}
+9.4 退订全部
+	{"SendTopicAction":{"Action":"3"}

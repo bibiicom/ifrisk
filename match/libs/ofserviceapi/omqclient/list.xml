@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="omqclient" targettype="exe" workdir="../../../build/run/test/tools" hasdebug="no" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2">
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>		
+	</cppflags>
+	<package dir="../../../build/src/function"/>
+	<package dir="../../../build/src/datastruct"/>	
+	<package dir="../../../build/libs/ofserviceapi" version="1.0" libpath="."/>
+	<package dir="../../../build/libs/ofserviceapi/ofapibase"/>
+	<package dir="."/>
+</project>

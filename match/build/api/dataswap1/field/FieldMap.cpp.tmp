@@ -1,0 +1,57 @@
+#include "public.h"
+#include "FieldMap.h"
+
+const char *getPackageName(int tid)
+{
+	switch (tid)
+	{
+!!enter XTP!!	
+	!!travel packages!!
+	case TID_!!@name!!:
+		return "!!@name!!";
+	!!next!!
+!!leave!!
+	}
+	return "unknown";
+}
+
+const char *getShortPackageName(int tid)
+{
+	switch (tid)
+	{
+!!enter XTP!!	
+	!!travel packages!!
+	case TID_!!@name!!:
+		!!if valid_name("short")!!
+		return "!!@short!!";
+		!!else!!
+		return "!!@name!!";
+		!!endif!!
+	!!next!!
+!!leave!!
+	}
+	return "unknown";
+}
+
+TFieldUse FieldUses[]=
+{
+!!enter XTP!!
+!!travel fields!!
+	!!if @pumpid!=0!!,!!endif!!{FID_!!@name!!, &C!!@name!!Field::m_Describe, "!!@name!!", "!!@short!!", "!!@api!!", "!!@comment!!"}
+!!next!!
+!!leave!!
+};
+
+TPackageDefine XTPPackageDefines[]=
+{
+!!enter XTP!!
+	!!travel packages!!
+	!!if @pumpid!=0!!,!!endif!!{TID_!!@name!!, "!!@name!!", "!!@comment!!" }
+	!!next!!
+!!leave!!
+};
+
+CXTPPackageDefineMap g_XTPPackageDefineMap(XTPPackageDefines, sizeof(XTPPackageDefines)/ sizeof(TPackageDefine));
+CXTPPackageDefineNameMap g_XTPPackageDefineNameMap(XTPPackageDefines, sizeof(XTPPackageDefines)/ sizeof(TPackageDefine));
+CFieldUseMap g_FieldUseMap(FieldUses, sizeof(FieldUses)/ sizeof(TFieldUse));
+CFieldNameMap g_FieldNameMap(FieldUses, sizeof(FieldUses) / sizeof(TFieldUse));

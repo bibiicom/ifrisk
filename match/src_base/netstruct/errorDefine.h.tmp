@@ -1,0 +1,21 @@
+!!enter errors!!
+/////////////////////////////////////////////////////////////////////////
+///errorDefine.h
+///定义了各种错误
+/////////////////////////////////////////////////////////////////////////
+
+#ifndef ERRORDEFINE_H
+#define ERRORDEFINE_H
+
+#include "CErrorEngine.h"
+
+!!travel self!!
+#define ERROR_!!@id!! !!@value!!
+!!next!!
+
+///定义所有的错误
+///@param	pEngine	要定义错误的错误引擎
+void defineErrors(CErrorEngine *pEngine);
+
+#endif
+!!leave!!

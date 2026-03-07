@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="GB2312"?>
+<XTP author="TOM" version="1.0" head="XTP" comment="通讯协议中用到的各种包和域">
+	<topics comment="应用层使用的主题，不能小于2(内部使用)">
+		<topic name="Topic_Private_Order" value="3" comment="私有交易主题" usage="FilterValue=MemberID"/>
+		<topic name="Topic_Private_SnapShot" value="12" comment="私有快照主题" usage="FilterValue=MemberID)"/>
+		<topic name="Topic_Market_LastTrade" value="2" comment="最近成交" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_LastKLine" value="11" comment="最近K线(主要是1分钟)推送主题" usage="FilterValue=ExchangeID_InstrumentID_Period"/>
+		<topic name="Topic_Market_KLine" value="4" comment="历史K线主题" usage="FilterValue=ExchangeID_InstrumentID_Period"/>
+		<topic name="Topic_Market_SnapShot" value="5" comment="5档行情快照主题[可通过Numbers降频]" usage="FilterValue=ExchangeID_InstrumentID[_Numbers]"/>
+		<topic name="Topic_Market_Broad" value="6" comment="广播主题,合约变化,时钟心跳等" usage=""/>
+		<topic name="Topic_Market_OverView" value="7" comment="行情概要快照主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_OverView_Delay" value="17" comment="行情概要延时快照主题" usage="FilterValue=ExchangeID_InstrumentID)"/>
+		<topic name="Topic_Market_Depth_All" value="8" comment="全档行情增量主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_Depth_Delay" value="18" comment="全档行情增量延时发送主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_Depth_25" value="25" comment="25档行情增量主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_Depth_50" value="50" comment="50档行情增量主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Market_Depth_100" value="100" comment="100档行情增量主题" usage="FilterValue=ExchangeID_InstrumentID"/>
+		<topic name="Topic_Private_Risk" value="9" comment="风控数据(持仓、资金、行情、时间),分控用户才能订阅" usage=""/>
+		<topic name="Topic_Private_Trade" value="13" comment="私有成交主题" usage="FilterValue=MemberID"/>
+		<topic name="Topic_Private_TriggerOrder" value="14" comment="策略触发程序使用的私有主题" usage="FilterValue=MemberID"/>
+		<topic name="Topic_Private_FinishOrder" value="16" comment="管理后台私有完成订单主题" usage="FilterValue=MemberID"/>
+		<topic name="Topic_Private_Copy_Finish" value="10" comment="跟单完成订单主题" usage="FilterValue=MemberID"/>		
+		<topic name="Topic_Private_UserSession" value="99" comment="用户Session主题" usage=""/>
+	</topics>
+	<macros>
+		<macro name="FINISHORDER" />
+	</macros>
+	<packages>
+		<package name="SendCommand" tid="0x00002001" comment="一般消息请求" pto="all" usage="request">
+			<field name="Command" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvCommand" short="RC" tid="0x00002002" comment="一般消息应答" pto="all" usage="response">
+			<field name="Command" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendInitLink" tid="0x00002003" comment="创建上层连接请求" pto="all" usage="request">
+			<field name="Link" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvInitLink" tid="0x00002004" comment="创建上层连接应答" pto="all" usage="response">
+			<field name="Link" minOccur="1" maxOccur="*"/>
+		</package>		
+		<package name="SendUserLogin" tid="0x00002005" comment="用户登录请求" pto="all" usage="request">
+			<field name="UserLogin" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvUserLogin" tid="0x00002006" comment="用户登录应答" pto="all" usage="response">
+			<field name="UserLogin" minOccur="1" maxOccur="1"/>
+			<field name="UserSession" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendUserLogout" tid="0x00002007" comment="用户退出请求" pto="all" usage="request">
+			<field name="UserLogout" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvUserLogout" tid="0x00002008" comment="用户退出应答" pto="all" usage="response">
+			<field name="UserLogout" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendOrderInsert" tid="0x00002009" comment="报单录入请求" pto="all" usage="request">
+			<field name="OrderInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvOrderInsert" short="ROI" tid="0x0000200A" comment="报单录入应答" pto="all" usage="response">
+			<field name="OrderInsert" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendOrderAction" tid="0x0000200B" comment="报单操作请求" pto="all" usage="request">
+			<field name="OrderAction" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="RecvOrderAction" tid="0x0000200C" comment="报单操作应答" pto="all" usage="response">
+			<field name="OrderAction" minOccur="1" maxOccur="*"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendTriggerOrderInsert" tid="0x0000200D" comment="触发单录入请求" pto="all" usage="request">
+			<field name="TriggerOrderInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvTriggerOrderInsert" tid="0x0000200E" comment="触发单录入应答" pto="all" usage="response">
+			<field name="TriggerOrderInsert" minOccur="1" maxOccur="1"/>
+			<field name="TriggerOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendTriggerOrderAction" tid="0x00002010" comment="触发单操作请求" pto="all" usage="request">
+			<field name="TriggerOrderAction" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="RecvTriggerOrderAction" tid="0x00002011" comment="触发单操作应答" pto="all" usage="response">
+			<field name="TriggerOrderAction" minOccur="1" maxOccur="*"/>
+			<field name="TriggerOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendCloseOrderInsert" tid="0x00002012" comment="止盈止损报单录入请求" pto="all" usage="request">
+			<field name="CloseOrderInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvCloseOrderInsert" tid="0x00002013" comment="止盈止损报单录入应答" pto="all" usage="response">
+			<field name="CloseOrderInsert" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="1"/>
+			<field name="TriggerOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendCloseOrderAction" tid="0x0000201A" comment="止盈止损报单操作请求" pto="all" usage="request">
+			<field name="CloseOrderAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvCloseOrderAction" tid="0x0000201B" comment="止盈止损报单操作应答" pto="all" usage="response">
+			<field name="CloseOrderAction" minOccur="1" maxOccur="1"/>
+			<field name="TriggerOrder" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendQuoteInsert" tid="0x00002014" comment="报价录入请求" pto="all" usage="request">
+			<field name="QuoteInsert" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="RecvQuoteInsert" tid="0x00002015" comment="报价录入应答" pto="all" usage="response">
+			<field name="QuoteInsert" minOccur="1" maxOccur="*"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQuoteAction" tid="0x00002016" comment="报价操作请求" pto="all" usage="request">
+			<field name="QuoteAction" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="RecvQuoteAction" tid="0x00002017" comment="报价操作应答" pto="all" usage="response">
+			<field name="QuoteAction" minOccur="1" maxOccur="*"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendTopicAction" tid="0x00002025" comment="订阅主题请求" pto="all" usage="request">
+			<field name="TopicAction" minOccur="0" maxOccur="*"/>
+		</package>
+		<package name="RecvTopicAction" tid="0x00002026" comment="订阅主题应答" pto="all" usage="response">
+			<field name="TopicAction" minOccur="0" maxOccur="*"/>
+		</package>
+		<package name="SendMarketDataUpdate" tid="0x00002035" comment="设置行情请求" pto="all" usage="request">
+			<field name="MarketDataUpdate" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvMarketDataUpdate" tid="0x00002036" comment="设置行情应答" pto="all" usage="response">
+			<field name="MarketDataUpdate" minOccur="0" maxOccur="1"/>
+			<field name="MarketData" minOccur="0" maxOccur="1"/>
+			<field name="Instrument" minOccur="0" maxOccur="1"/>
+		</package>
+		<package name="SendPositionAction" tid="0x00002037" comment="调整持仓请求" pto="all" usage="request">
+			<field name="PositionAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvPositionAction" tid="0x00002038" comment="调整持仓应答" pto="all" usage="response">
+			<field name="PositionAction" minOccur="1" maxOccur="1"/>
+			<field name="Position" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendAccountAction" tid="0x00002039" comment="用户出入金请求" pto="all" usage="request">
+			<field name="AccountAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvAccountAction" tid="0x0000203A" comment="用户出入金应答" pto="all" usage="response">
+			<field name="AccountAction" minOccur="1" maxOccur="1"/>
+			<field name="Account" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendMemberAction" tid="0x0000203B" comment="成员设置请求" pto="all" usage="request">
+			<field name="MemberAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvMemberAction" tid="0x0000203C" comment="成员设置应答" pto="all" usage="response">
+			<field name="MemberAction" minOccur="1" maxOccur="1"/>
+			<field name="Member" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendRobotOrder" tid="0x00002041" comment="内部做市商申报请求" pto="all" usage="request">
+			<field name="RobotOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvRobotOrder" tid="0x00002042" comment="内部做市商申报应答" pto="all" usage="response">
+			<field name="RobotOrder" minOccur="1" maxOccur="1"/>
+		</package>	
+		<package name="SendOTCTradeInsert" tid="0x00002043" comment="场外成交申报请求" pto="all" usage="request">
+			<field name="OTCTradeInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvOTCTradeInsert" tid="0x00002044" comment="场外成交申报应答" pto="all" usage="response">
+			<field name="OTCTradeInsert" minOccur="1" maxOccur="1"/>
+			<field name="OTCTrade" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendSettlement" tid="0x00002045" comment="资金结算请求" pto="all" usage="request">
+			<field name="Settlement" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvSettlement" tid="0x00002046" comment="资金结算应答" pto="all" usage="response">
+			<field name="Settlement" minOccur="1" maxOccur="1"/>
+			<field name="SettleDetail" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendClearMarket" tid="0x00002047" comment="清理行情数据请求" pto="all" usage="request">
+			<field name="ClearMarket" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvClearMarket" tid="0x00002048" comment="清理行情数据应答" pto="all" usage="response">
+			<field name="ClearMarket" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendClearLastKLine" tid="0x00002049" comment="清理最新K线请求" pto="all" usage="request">
+			<field name="ClearLastKLine" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvClearLastKLine" tid="0x0000204A" comment="清理最新K线应答" pto="all" usage="response">
+			<field name="ClearLastKLine" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendResetLocalID" tid="0x0000204B" comment="重置LocalID请求" pto="all" usage="request">
+			<field name="ResetLocalID" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvResetLocalID" tid="0x0000204C" comment="重置LocalID应答" pto="all" usage="response">
+			<field name="ResetLocalID" minOccur="1" maxOccur="1"/>
+		</package>	
+		<package name="SendOTokenInsert" tid="0x0000204D" comment="OToken录入请求" pto="all" usage="request">
+			<field name="OTokenInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvOTokenInsert" tid="0x0000204E" comment="OToken录入应答" pto="all" usage="response">
+			<field name="OTokenInsert" minOccur="1" maxOccur="1"/>
+			<field name="UserSession" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendOTokenAction" tid="0x0000204F" comment="OToken操作请求" pto="all" usage="request">
+			<field name="OTokenAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvOTokenAction" tid="0x00002050" comment="OToken操作应答" pto="all" usage="response">
+			<field name="OTokenAction" minOccur="1" maxOccur="1"/>
+			<field name="UserSession" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendAPIKeyInsert" tid="0x00002051" comment="APIKEY录入请求" pto="all" usage="request">
+			<field name="APIKeyInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvAPIKeyInsert" tid="0x00002052" comment="APIKEY录入应答" pto="all" usage="response">
+			<field name="APIKeyInsert" minOccur="1" maxOccur="1"/>
+			<field name="APIKey" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendAPIKeyAction" tid="0x00002053" comment="APIKEY操作请求" pto="all" usage="request">
+			<field name="APIKeyAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvAPIKeyAction" tid="0x00002054" comment="APIKEY操作应答" pto="all" usage="response">
+			<field name="APIKeyAction" minOccur="1" maxOccur="1"/>
+			<field name="APIKey" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendPositionMerge" tid="0x00002055" comment="仓位合并操作请求" pto="all" usage="request">
+			<field name="PositionMerge" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvPositionMerge" tid="0x00002056" comment="仓位合并操作应答" pto="all" usage="response">
+			<field name="PositionMerge" minOccur="1" maxOccur="1"/>
+			<field name="Position" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendDeposit" tid="0x00002057" comment="用户入金操作请求" pto="all" usage="request">
+			<field name="Deposit" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvDeposit" tid="0x00002058" comment="用户入金操作应答" pto="all" usage="response">
+			<field name="Deposit" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendWithdraw" tid="0x00002059" comment="用户出金操作请求" pto="all" usage="request">
+			<field name="Withdraw" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvWithdraw" tid="0x0000205A" comment="用户出金操作应答" pto="all" usage="response">
+			<field name="Withdraw" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendTransfer" tid="0x0000205B" comment="用户转账操作请求" pto="all" usage="request">
+			<field name="Transfer" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvTransfer" tid="0x0000205C" comment="用户转账操作应答" pto="all" usage="response">
+			<field name="Transfer" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendUserRegister" tid="0x0000205D" comment="注册用户请求" pto="all" usage="request">
+			<field name="UserSession" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvUserRegister" tid="0x0000205E" comment="注册用户应答" pto="all" usage="response">
+			<field name="UserSession" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendPositionReverse" tid="0x0000205F" comment="反向开仓录入请求" pto="all" usage="request">
+			<field name="PositionReverse" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvPositionReverse" short="RPR" tid="0x00002060" comment="反向开仓录入应答" pto="all" usage="response">
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendCancelOrderInsert" tid="0x00002061" comment="避免自成交报单录入请求" pto="all" usage="request">
+			<field name="OrderInsert" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvCancelOrderInsert" tid="0x00002062" comment="避免自成交报单录入应答" pto="all" usage="response">
+			<field name="OrderInsert" minOccur="1" maxOccur="1"/>
+			<field name="Order" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendPrivateDispatch" tid="0x00002063" comment="私有主题分类请求" pto="all" usage="request">
+			<field name="PrivateDispatch" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvPrivateDispatch" tid="0x00002064" comment="私有主题分类应答" pto="all" usage="response">
+			<field name="PrivateDispatch" minOccur="1" maxOccur="1"/>
+			<field name="Member" minOccur="1" maxOccur="1"/>
+		</package>		
+		<package name="SendPositionLeverage" tid="0x00002065" comment="调整多空杠杠请求" pto="all" usage="request">
+			<field name="PositionAction" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvPositionLeverage" tid="0x00002066" comment="调整多空杠杠应答" pto="all" usage="response">
+			<field name="PositionAction" minOccur="1" maxOccur="1"/>
+			<field name="Position" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendInstrumentUpdate" tid="0x00002067" comment="设置合约请求" pto="all" usage="request">
+			<field name="InstrumentUpdate" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvInstrumentUpdate" tid="0x00002068" comment="设置合约应答" pto="all" usage="response">
+			<field name="InstrumentUpdate" minOccur="0" maxOccur="1"/>
+			<field name="Instrument" minOccur="0" maxOccur="1"/>
+		</package>		
+		<package name="SendChangeCurrency" tid="0x00002069" comment="充币兑换请求" pto="all" usage="request">
+			<field name="ChangeCurrency" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvChangeCurrency" tid="0x0000206A" comment="充币兑换应答" pto="all" usage="response">
+			<field name="Account" minOccur="0" maxOccur="1"/>
+			<field name="Order" minOccur="0" maxOccur="1"/>
+		</package>
+		<package name="SendWalletNonce" tid="0x0000206B" comment="钱包登录获取随机数请求" pto="all" usage="request">
+			<field name="WalletNonce" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvWalletNonce" tid="0x0000206C" comment="钱包登录获取随机数应答" pto="all" usage="response">
+			<field name="WalletNonce" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendWalletLogin" tid="0x0000206D" comment="钱包登录获取随机数请求" pto="all" usage="request">
+			<field name="WalletLogin" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvWalletLogin" tid="0x0000206E" comment="钱包登录获取随机数应答" pto="all" usage="response">
+			<field name="UserSession" minOccur="1" maxOccur="1"/>
+		</package>
+
+		
+		<package name="SendQryAccount" tid="0x00002101" comment="资金查询请求" pto="all" usage="request">
+			<field name="QryAccount" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryAccount" tid="0x00002102" comment="资金查询应答" pto="all" usage="response">
+			<field name="Account" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryOrder" tid="0x00002103" comment="报单查询请求" pto="all" usage="request">
+			<field name="QryOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryOrder" tid="0x00002104" comment="报单查询应答" pto="all" usage="response">
+			<field name="Order" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryMemberPosition" tid="0x00002109" comment="持仓汇总查询请求" pto="all" usage="request">
+			<field name="QryMemberPosition" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryMemberPosition" tid="0x0000210A" comment="持仓汇总查询应答" pto="all" usage="response">
+			<field name="MemberPosition" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryPosition" tid="0x00002111" comment="持仓查询请求" pto="all" usage="request">
+			<field name="QryPosition" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryPosition" tid="0x00002112" comment="持仓查询应答" pto="all" usage="response">
+			<field name="Position" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryInstrument" tid="0x00002113" comment="标的查询请求" pto="all" usage="request">
+			<field name="QryInstrument" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryInstrument" tid="0x00002114" comment="标的查询应答" pto="all" usage="response">
+			<field name="Instrument" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryCurrency" tid="0x00002115" comment="币种查询请求" pto="all" usage="request">
+			<field name="QryCurrency" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryCurrency" tid="0x00002116" comment="币种查询应答" pto="all" usage="response">
+			<field name="Currency" minOccur="1" maxOccur="*"/>
+		</package>		
+		<package name="SendQryMember" tid="0x00002125" comment="成员查询请求" pto="all" usage="request">
+			<field name="QryMember" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryMember" tid="0x00002126" comment="成员查询应答" pto="all" usage="response">
+			<field name="Member" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryMarketOrder" tid="0x00002127" comment="价位查询请求" pto="all" usage="request">
+			<field name="QryMarketOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryMarketOrder" tid="0x00002128" comment="价位查询应答" pto="all" usage="response">
+			<field name="MarketOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryAPIKey" tid="0x00002132" comment="APIKEY查询请求" pto="all" usage="request">
+			<field name="QryAPIKey" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryAPIKey" tid="0x00002133" comment="APIKEY查询应答" pto="all" usage="response">
+			<field name="APIKey" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryMarginRate" tid="0x00002134" comment="保证金率查询请求" pto="all" usage="request">
+			<field name="QryMarginRate" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryMarginRate" tid="0x00002135" comment="保证金率查询应答" pto="all" usage="response">
+			<field name="MarginRate" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryFee" tid="0x00002136" comment="手续费率查询请求" pto="all" usage="request">
+			<field name="QryFee" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryFee" tid="0x00002137" comment="手续费率查询应答" pto="all" usage="response">
+			<field name="Fee" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryTriggerOrder" tid="0x00002140" comment="触发订单查询请求" pto="all" usage="request">
+			<field name="QryTriggerOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryTriggerOrder" tid="0x00002141" comment="触发订单查询应答" pto="all" usage="response">
+			<field name="TriggerOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryLeverage" tid="0x00002142" comment="杠杆倍数查询请求" pto="all" usage="request">
+			<field name="QryLeverage" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryLeverage" tid="0x00002143" comment="杠杆倍数查询应答" pto="all" usage="response">
+			<field name="Leverage" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryMarketData" tid="0x00002144" comment="行情查询请求" pto="all" usage="request">
+			<field name="QryMarketData" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryMarketData" tid="0x00002145" comment="行情查询应答" pto="all" usage="response">
+			<field name="MarketData" minOccur="1" maxOccur="*"/>
+		</package>
+
+		<package name="SendQryTrade" tid="0x00002146" comment="成交查询请求" pto="all" usage="request">
+			<field name="QryTrade" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryTrade" tid="0x00002147" comment="成交查询应答" pto="all" usage="response">
+			<field name="Trade" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryFinishOrder" tid="0x00002148" comment="历史委托查询请求" pto="all" usage="request">
+			<field name="QryFinishOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryFinishOrder" tid="0x00002149" comment="历史委托查询应答" pto="all" usage="response">
+			<field name="FinishOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryFinishTriggerOrder" tid="0x0000214A" comment="历史条件单查询请求" pto="all" usage="request">
+			<field name="QryFinishTriggerOrder" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryFinishTriggerOrder" tid="0x0000214B" comment="历史条件单查询应答" pto="all" usage="response">
+			<field name="FinishTriggerOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryWithLeverage" tid="0x0000214C" comment="指定杠杆倍数查询请求" pto="all" usage="request">
+			<field name="QryWithLeverage" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryWithLeverage" tid="0x0000214D" comment="指定杠杆倍数查询应答" pto="all" usage="response">
+			<field name="Leverage" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryKLine" tid="0x0000214E" comment="K线查询请求" pto="all" usage="request">
+			<field name="QryKLine" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryKLine" tid="0x0000214F" comment="K线查询应答" pto="all" usage="response">
+			<field name="KLineBase" api="KLine" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQryLine" tid="0x00002150" comment="线查询请求" pto="all" usage="request">
+			<field name="QryLine" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryLine" tid="0x00002151" comment="线查询应答" pto="all" usage="response">
+			<field name="Line" minOccur="1" maxOccur="*"/>
+		</package>	
+		<package name="SendQryAccountDetail" tid="0x00002152" comment="资金流水查询请求" pto="all" usage="request">
+			<field name="QryAccountDetail" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvQryAccountDetail" tid="0x00002153" comment="资金流水查询应答" pto="all" usage="response">
+			<field name="AccountDetail" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="SendQrySettleDetail" tid="0x00002154" comment="结算流水查询请求" pto="all" usage="request">
+			<field name="QrySettleDetail" minOccur="1" maxOccur="1"/>
+		</package>	
+		<package name="RecvQrySettleDetail" tid="0x00002155" comment="结算流水查询应答" pto="all" usage="response">
+			<field name="SettleDetail" minOccur="1" maxOccur="*"/>
+		</package>		
+		
+		<package name="SendCheckToken" tid="0x000021FD" comment="检查TOKEN请求" pto="all" usage="request">
+			<field name="CheckToken" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="RecvCheckToken" tid="0x000021FE" comment="检查TOKEN应答" pto="all" usage="response">
+			<field name="CheckToken" minOccur="1" maxOccur="1"/>
+		</package>	
+		<package name="SendBatch" tid="0x000021FF" comment="批量操作请求(HTTP接口专用)" pto="all" usage="request">
+			<field name="CommandHead" minOccur="1" maxOccur="1"/>
+		</package>
+		
+		<package name="PushTimeSync" short="PS" tid="0x00002200" comment="时间同步通知" pto="all" usage="Push">
+			<field name="CurrentTime" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="PushCommand" short="PC" tid="0x00002201" comment="消息通知" pto="all" usage="Push">
+			<field name="Command" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="PushTrade" short="PT" tid="0x00002202" comment="成交通知" pto="all" usage="Push">
+			<field name="Trade" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="PushOrder" short="PO" tid="0x00002203" comment="报单通知" pto="all" usage="Push">
+			<field name="Order" minOccur="1" maxOccur="1"/>
+		</package>			
+		<package name="PushMemberPosition" short="PMP" tid="0x00002207" comment="持仓汇总通知" pto="all" usage="Push">
+			<field name="MemberPosition" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushPosition" short="PP" tid="0x00002208" comment="持仓通知" pto="all" usage="Push">
+			<field name="Position" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushAccount" short="PA" tid="0x00002209" comment="资金通知" pto="all" usage="Push">
+			<field name="Account" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushMarketTrade" short="PMT" tid="0x00002212" comment="市场成交通知" pto="all" usage="Push">
+			<field name="MarketTrade" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushMarketOrder" short="PMO" tid="0x00002213" comment="订单簿变化通知" pto="all" usage="Push">
+			<field name="MarketOrder" minOccur="1" maxOccur="*"/>
+			<field name="TickMarketOrder" minOccur="1" maxOccur="*"/>
+			<field name="CurrentTime" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushKLine" short="PK" tid="0x00002214" comment="K线通知" pto="all" usage="Push">
+			<field name="KLine" minOccur="1" maxOccur="*"/>
+			<field name="LastKLine" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushMarketOverView" short="PO" tid="0x00002215" comment="普通行情通知" pto="all" usage="Push">
+			<field name="MarketOverView" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushDelayMarketOrder" short="PMO" tid="0x00002216" comment="全量延时订单簿变化通知" pto="all" usage="Push">
+			<field name="MarketOrder" minOccur="1" maxOccur="*"/>
+			<field name="CurrentTime" minOccur="1" maxOccur="*"/>
+		</package>		
+		<package name="PushFiveDepthMarketData" short="PM5" tid="0x00002217" comment="五档深度行情通知" pto="all" usage="Push">
+			<field name="FiveDepthMarketData" minOccur="1" maxOccur="*"/>
+		</package>		
+		<package name="PushTenDepthMarketData" short="PMT" tid="0x00002218" comment="十档深度行情通知" pto="all" usage="Push">
+			<field name="TenDepthMarketData" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushOptionsMarketData" short="POM" tid="0x00002219" comment="期权行情通知" pto="all" usage="Push">
+			<field name="OptionsMarketData" minOccur="1" maxOccur="*"/>
+		</package>
+		<!--package name="PushMarketUpdateTime" tid="0x0000221A" comment="行情更新时间" pto="all" usage="Push">
+			<field name="MarketUpdateTime" minOccur="1" maxOccur="*"/>
+		</package-->
+		<package name="PushFee" tid="0x0000221B" short="PF" comment="手续费通知" pto="all" usage="Push">
+			<field name="Fee" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushMarginRate" short="PMR" tid="0x0000221C" comment="保证金率通知" pto="all" usage="Push">
+			<field name="MarginRate" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushMember" short="PM" tid="0x0000221D" comment="成员通知" pto="all" usage="Push">
+			<field name="Member" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushTriggerOrder" short="PTO" tid="0x00002220" comment="触发单通知" pto="all" usage="Push">
+			<field name="TriggerOrder" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushInstrument" short="PI" tid="0x00002221" comment="合约通知" pto="all" usage="Push">
+			<field name="Instrument" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushUserSession" short="PI" tid="0x00002222" comment="用户登陆通知" pto="all" usage="Push">
+			<field name="UserSession" minOccur="1" maxOccur="*"/>
+		</package>
+		<package name="PushCurrency" short="PI" tid="0x00002223" comment="币种通知" pto="all" usage="Push">
+			<field name="Currency" minOccur="1" maxOccur="*"/>
+		</package>
+	</packages>
+	<fields>
+		<fieldDefine name="TopicAction" fid="0x2001" comment="主题订阅操作" ref="Topic" pto="all"/>
+		<fieldDefine name="CommandHead" fid="0x2002" comment="操作信息" ref="CommandHead" pto="all"/>
+		<fieldDefine name="Error" fid="0x2003" comment="响应信息" pto="all" ref="Error"/>
+		<fieldDefine name="CheckToken" fid="0x2004" comment="响应信息" pto="all" ref="CheckToken"/>
+		
+		<fieldDefine name="Command" fid="0x2100" comment="消息" pto="all" ref="Command"/>
+		<fieldDefine name="UserLogin" fid="0x2101" comment="用户登录" pto="all" ref="UserLogin"/>
+		<fieldDefine name="Link" fid="0x2102" comment="向上通道" pto="all" ref="Link"/>
+		<fieldDefine name="UserLogout" short="UO" fid="0x2103" comment="用户登录退出" pto="all" ref="UserLogout"/>
+		<fieldDefine name="UserPasswordUpdate" fid="0x2104" comment="用户口令修改" pto="all" ref="UserPasswordUpdate"/>
+		<fieldDefine name="TriggerOrderInsert" short="TOI" fid="0x2109" comment="输入报单" pto="all" ref="TriggerOrderInsert"/>
+		<fieldDefine name="CloseOrderInsert" short="COI" fid="0x210A" comment="输入止盈止损报单" pto="all" ref="CloseOrderInsert"/>
+		<fieldDefine name="TriggerOrderAction" short="TOA" fid="0x211C" comment="触发单操作" pto="all" ref="TriggerOrderAction"/>
+		<fieldDefine name="OrderInsert" short="OI" fid="0x2110" comment="输入报单" pto="all" ref="InputOrder"/>
+		<fieldDefine name="OrderAction" short="OA" fid="0x2111" comment="报单操作" pto="all" ref="OrderAction"/>
+		<fieldDefine name="QuoteInsert" short="QI" fid="0x2112" comment="输入报价" pto="all" ref="InputQuote"/>
+		<fieldDefine name="QuoteAction" short="QA" fid="0x2113" comment="报价操作" pto="all" ref="QuoteAction"/>
+		<fieldDefine name="OTCTradeInsert" fid="0x2115" comment="输入场外成交对" pto="all" ref="OTCTradeInsert"/>
+		<fieldDefine name="OTCTrade" fid="0x2116" comment="输入场外成交对" pto="all" ref="OTCTrade"/>
+		<fieldDefine name="RobotOrder" fid="0x2117" comment="内部做市商报单" pto="all" ref="InputRobotOrder"/>
+		<fieldDefine name="PositionAction" fid="0x2118" comment="仓位操作" pto="all" ref="PositionAction"/>
+		<fieldDefine name="AccountAction" fid="0x2120" comment="资金账户出入金" pto="all" ref="AccountAction"/>
+		<fieldDefine name="MemberAction" fid="0x2122" comment="资金账户出入金" pto="all" ref="MemberAction"/>
+		<fieldDefine name="MarketOverView" short="M" fid="0x2125" comment="行情概要" pto="all" ref="MarketOverView"/>
+		<fieldDefine name="FiveDepthMarketData" short="M5" fid="0x2126" comment="5档深度行情" pto="all" ref="FiveDepthMarketData"/>
+		<fieldDefine name="TenDepthMarketData" short="MT" fid="0x2127" comment="10档深度行情" pto="all" ref="TenDepthMarketData"/>
+		<fieldDefine name="OptionsMarketData" fid="0x2128" comment="期权行情" pto="all" ref="OptionsMarketData"/>
+		<fieldDefine name="InstrumentUpdate" fid="0x212F" comment="更新合约" pto="all" ref="InstrumentUpdate"/>
+		<fieldDefine name="MarketDataUpdate" fid="0x2130" comment="更新行情" pto="all" ref="MarketDataUpdate"/>
+		<fieldDefine name="MarketTrade" short="T" fid="0x2131" comment="成交明细" pto="all" ref="MarketTrade"/>
+		<fieldDefine name="Settlement" fid="0x2133" comment="资金结算" pto="all" ref="Settlement"/>
+		<fieldDefine name="APIKeyInsert" fid="0x2134" comment="输入APIKey" pto="all" ref="APIKeyInsert"/>		
+		<fieldDefine name="APIKey" fid="0x2135" comment="APIKey" pto="all" ref="APIKey"/>
+		<fieldDefine name="APIKeyAction" fid="0x2136" comment="操作APIKey" pto="all" ref="APIKeyAction"/>
+		<fieldDefine name="ClearMarket" fid="0x2137" comment="清理行情数据" pto="all" ref="ClearMarket"/>
+		<fieldDefine name="ClearLastKLine" fid="0x2138" comment="清理最新K线数据" pto="all" ref="ClearLastKLine"/>
+		<fieldDefine name="OTokenInsert" fid="0x2139" comment="输入OToken" pto="all" ref="OTokenInsert"/>
+		<fieldDefine name="OTokenAction" fid="0x213A" comment="操作OToken" pto="all" ref="OTokenAction"/>
+		<!--fieldDefine name="MarketUpdateTime" fid="0x2132" comment="行情更新时间" pto="all" ref="MarketDataUpdateTime"/-->	
+		<fieldDefine name="ResetLocalID" fid="0x213B" comment="重置LocalID" pto="all" ref="ResetLocalID"/>
+		<fieldDefine name="PositionMerge" fid="0x213C" comment="合并持仓" pto="all" ref="PositionMerge"/>
+		<fieldDefine name="Deposit" fid="0x213D" comment="用户入金" pto="all" ref="Deposit"/>
+		<fieldDefine name="Withdraw" fid="0x213E" comment="用户出金" pto="all" ref="Withdraw"/>
+		<fieldDefine name="Transfer" fid="0x213F" comment="用户转账" pto="all" ref="Transfer"/>
+		<fieldDefine name="CloseOrderAction" fid="0x2141" comment="报单止盈止损操作" pto="all" ref="CloseOrderAction"/>
+		<fieldDefine name="Leverage" fid="0x2142" comment="杠杆倍数" pto="all" ref="Leverage"/>
+		<fieldDefine name="PositionReverse" short="PR" fid="0x2143" comment="反向开仓" pto="all" ref="PositionReverse"/>
+		<fieldDefine name="PrivateDispatch" fid="0x2144" comment="私有主题分类" pto="all" ref="PrivateDispatch"/>
+		<fieldDefine name="TickMarketOrder" short="O" fid="0x2146" comment="TICK订单簿变化" pto="all" ref="TickMarketOrder"/>
+		<fieldDefine name="KLineBase" short="K" fid="0x2147" comment="基础K线" pto="all" ref="KLineBase"/>
+		<fieldDefine name="Line" api="Line" short="L" fid="0x2148" comment="历史行情线" pto="all" ref="Line"/>
+		<fieldDefine name="ChangeCurrency" short="CC" fid="0x2149" comment="充币兑换" pto="all" ref="ChangeCurrency"/>
+		<fieldDefine name="WalletNonce" fid="0x214A" comment="钱包登录随机数" pto="all" ref="WalletNonce"/>
+		<fieldDefine name="WalletLogin" fid="0x214B" comment="钱包登录信息" pto="all" ref="WalletLogin"/>
+		
+		<fieldDefine name="QryOrder" fid="0x2201" comment="报单查询" pto="all" ref="QryOrder"/>
+		<fieldDefine name="QryMemberPosition" fid="0x2206" comment="持仓汇总查询" pto="all" ref="QryMemberPosition"/>
+		<fieldDefine name="QryPosition" fid="0x2207" comment="交易单元持仓查询" pto="all" ref="QryPosition"/>
+		<fieldDefine name="QryAccount" fid="0x2208" comment="交易资金查询" pto="all" ref="QryAccount"/>
+		<fieldDefine name="QryInstrument" fid="0x2209" comment="标的查询" pto="all" ref="QryInstrument"/>
+		<fieldDefine name="QryCurrency" fid="0x2210" comment="标的查询" pto="all" ref="QryCurrency"/>
+		<fieldDefine name="QryMember" fid="0x2212" comment="成员查询" pto="all" ref="QryMember"/>
+		<fieldDefine name="QryMarketOrder" fid="0x2213" comment="标的价位查询" pto="all" ref="QryMarketOrder"/>
+		<fieldDefine name="QryAPIKey" fid="0x2214" comment="查询APIKEY" pto="all" ref="QryAPIKey"/>
+		<fieldDefine name="QryMarginRate" fid="0x2215" comment="查询保证金率" pto="all" ref="QryMarginRate"/>
+		<fieldDefine name="QryFee" fid="0x2215" comment="查询手续费率" pto="all" ref="QryFee"/>
+		<fieldDefine name="QryTriggerOrder" fid="0x2216" comment="查询触发订单" pto="all" ref="QryTriggerOrder"/>
+		<fieldDefine name="QryLeverage" fid="0x2217" comment="查询杠杆倍数" pto="all" ref="QryLeverage"/>
+		<fieldDefine name="QryMarketData" fid="0x2218" comment="查询行情" pto="all" ref="QryMarketData"/>
+		
+		<fieldDefine name="QryTrade" fid="0x2219" comment="查询成交" pto="all" ref="QryTrade"/>
+		<fieldDefine name="QryFinishOrder" fid="0x221A" comment="查询历史委托" pto="all" ref="QryFinishOrder"/>
+		<fieldDefine name="QryFinishTriggerOrder" fid="0x221B" comment="查询历史条件单" pto="all" ref="QryFinishTriggerOrder"/>
+		<fieldDefine name="QryWithLeverage" fid="0x221C" comment="指定杠杠下梯度信息" pto="all" ref="QryWithLeverage"/>
+		<fieldDefine name="QryKLine" fid="0x221D" comment="查询K线" pto="all" ref="QryKLine"/>
+		<fieldDefine name="QryLine" fid="0x221E" comment="查询线" pto="all" ref="QryLine"/>
+		<fieldDefine name="QryAccountDetail" fid="0x2220" comment="查询资金流水" pto="all" ref="QryAccountDetail"/>
+		<fieldDefine name="QrySettleDetail" fid="0x2220" comment="查询结算流水" pto="all" ref="QrySettleDetail"/>
+	</fields>
+	<entities/>
+	<types/>
+</XTP>

@@ -1,0 +1,35 @@
+!!enter UFEntityModel!!
+
+#ifndef _EntityCopy_H
+#define _EntityCopy_H
+
+!!travel self!!
+#ifndef Copy!!@name!!Entity
+#define Copy!!@name!!Entity(target,source){	\
+	!!travel self!!
+		!!if !strcmp(@name,"Ref")!!
+			Copy!!@entity!!Entity(target,source);	\
+		!!else!!
+			(target)->!!@name!!=(source)->!!@name!!;	\
+		!!endif!!
+	!!next!!}
+
+#endif
+
+#ifndef CopyTrue!!@name!!Entity
+#define CopyTrue!!@name!!Entity(target,source){	\
+	!!travel self!!
+		!!if !strcmp(@name,"Ref")!!
+			CopyTrue!!@entity!!Entity(target,source);	\
+		!!else!!
+			if(!(source)->!!@name!!.isNull()) (target)->!!@name!!=(source)->!!@name!!;	\
+		!!endif!!
+	!!next!!}
+
+#endif
+
+!!next!!
+
+#endif
+!!leave!!
+

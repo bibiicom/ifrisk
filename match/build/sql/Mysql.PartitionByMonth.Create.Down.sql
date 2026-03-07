@@ -1,0 +1,367 @@
+ALTER TABLE perpetual.t_D_FinishOrder RENAME TO perpetual.t_D_Temp_FinishOrder;
+ALTER TABLE perpetual.t_D_Trade RENAME TO perpetual.t_D_Temp_Trade;
+ALTER TABLE perpetual.t_D_FinishPosition RENAME TO perpetual.t_D_Temp_FinishPosition;
+ALTER TABLE perpetual.t_D_AccountDetail RENAME TO perpetual.t_D_Temp_AccountDetail;
+ALTER TABLE perpetual.t_D_KLine RENAME TO perpetual.t_D_Temp_KLine;
+ALTER TABLE perpetual.t_D_SettleDetail RENAME TO perpetual.t_D_Temp_SettleDetail;
+ALTER TABLE perpetual.t_D_FinishTriggerOrder RENAME TO perpetual.t_D_Temp_FinishTriggerOrder;
+
+/******************************
+-- create FinishOrder
+--******************************/
+create table perpetual.t_D_FinishOrder
+(
+	MemberID char(42)  COMMENT '成员代码'		
+	,TradeUnitID char(20)  COMMENT '交易单元代码'		
+	,AccountID char(44)  COMMENT '资金账号'		
+	,LocalID char(20)  COMMENT '报单本地标识'		
+	,ExchangeID char(8)  COMMENT '交易所代码'		
+	,InstrumentID char(26)  COMMENT '标的代码'		
+	,OrderPriceType char(1)  COMMENT '报单价格类型(0:限价(手动指定Price值);1:任意价(Price按最高最低限价取值);2:最优价/对手价(Price按对方1档价取值);3:五档价(Price按对方5档价取值);4:十档价(类同上);7:最优Marker价(Price按本方1档价或其+1Tick取值);8:Price按委托额Cost和订单簿情况确定值;9:保底点差价:成交价格Price不会劣于系统设置差价成交;)'		
+	,Direction char(1)  COMMENT '买卖方向(0:买;1:卖;)'		
+	,OffsetFlag char(1)  COMMENT '开平标志(0:开仓;1:平仓;2:强平;3:平今;4:平昨;5:全平;6:指定订单平仓;7:指定成交平仓;8:最大平仓;)'		
+	,Price numeric(28,15)  COMMENT '报单价格'		
+	,Volume numeric(38,10)  COMMENT '数量'		
+	,VolumeDisplay numeric(38,10)  COMMENT '显示数量'		
+	,VolumeMode char(1)  COMMENT '数量取值方式(0:百分比;1:绝对值;)'		
+	,Cost numeric(38,10)  COMMENT '委托额'		
+	,OrderType char(1)  COMMENT '订单类型(0:普通订单;1:(FillAndKill/IOC)立即完成并且剩余撤销;2:(FillOrKill)立即完成全部或者最小订单要求否则全部撤销;3:需要进入订单簿被动成交,否则全部撤销(只做Maker/PostOnly);4:不需要撮合直接成交;)'		
+	,GTDTime numeric(20)  COMMENT 'GTD时间'		
+	,MinVolume numeric(38,10)  COMMENT '最小成交量'		
+	,BusinessType char(1)  COMMENT '业务类别(0:普通;1:申赎;2:行权;3:中立仓申报;4:递延交割申报;5:互换定单;6:质押;7:合并分拆;8:转股;9:回售回购;a:投票;b:融资融券;c:期权执行;d:传递被平仓订单BusinessValue;P:自定义11;Q:自定义10;R:自定义9;S:连续交易;T:自定义7;U:画线委托;V:限价市价;W:条件;X:止盈止损;Y:追踪出场;Z:指标类型;)'		
+	,BusinessValue char(32)  COMMENT '业务值'		
+	,CloseOrderID char(20)  COMMENT '平仓指定开仓的订单号'		
+	,IsCrossMargin numeric(1)  COMMENT '是否全仓'		
+	,Remark char(32)  COMMENT '备注'		
+	,OrderID char(20) NOT NULL COMMENT '报单系统唯一代码'		
+	,CopyMemberID char(42)  COMMENT '带单员代码'		
+	,CopyOrderID char(20)  COMMENT '带单员报单号'		
+	,Leverage numeric(20,8)  COMMENT '委托单杠杆倍数'		
+	,CopyProfitRate numeric(26,10)  COMMENT '带单分配比例'		
+	,APPID char(8)  COMMENT '应用编号'		
+	,PositionID char(42)  COMMENT '持仓代码'		
+	,TriggerPrice numeric(28,15)  COMMENT '触发价'		
+	,Reserve numeric(38,10)  COMMENT '保留资金'		
+	,OrderStatus char(1)  COMMENT '报单状态(0:未设置状态;1:全部成交;2:部分成交未撤单;3:部分成交已撤单;4:未成交未撤单;6:无成交已撤单;)'		
+	,DeriveSource char(1)  COMMENT '衍生来源(0:正常;1:报价衍生;2:期权执行;3:组合衍生;4:场外成交强平衍生;5:场外成交大宗交易衍生;6:场外成交期转现衍生;7:场外成交只刷单衍生;8:触发订单衍生;9:止损触发订单衍生;a:止盈触发订单衍生;b:资金操作衍生;c:仓位合并衍生;d:CFD订单衍生;e:场外成交ADL衍生;f:回购手续费不能是币;)'		
+	,DeriveDetail char(20)  COMMENT '衍生明细'		
+	,VolumeTraded numeric(38,10)  COMMENT '成交数量'		
+	,VolumeRemain numeric(38,10)  COMMENT '剩余数量'		
+	,VolumeCancled numeric(38,10)  COMMENT '已经撤单数量'		
+	,InsertTime numeric(20)  COMMENT '插入时间'		
+	,UpdateTime numeric(20)  COMMENT '更新时间'		
+	,Priority numeric(10)  COMMENT '优先权'		
+	,TimeSortNo numeric(16)  COMMENT '按时间排队的序号'		
+	,FrontNo numeric(10)  COMMENT '前置编号'		
+	,PriceCurrency char(12)  COMMENT '计价币种'		
+	,FeeCurrency char(12)  COMMENT '手续费币种'		
+	,ClearCurrency char(12)  COMMENT '清算币种'		
+	,FrozenMoney numeric(38,10)  COMMENT '冻结资金'		
+	,FrozenFee numeric(38,10)  COMMENT '冻结手续费'		
+	,FrozenMargin numeric(38,10)  COMMENT '冻结保证金'		
+	,Fee numeric(38,10)  COMMENT '手续费'		
+	,CloseProfit numeric(38,10)  COMMENT '平仓盈亏'		
+	,Turnover numeric(38,10)  COMMENT '成交金额'		
+	,RelatedOrderID char(20)  COMMENT '关联报单号'		
+	,BusinessResult char(32)  COMMENT '业务执行结果'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,Tradable numeric(1) default 1  COMMENT '是否可以参加交易'		
+	,SettlementGroup char(8)  COMMENT '结算组编号'		
+	,PosiDirection char(1)  COMMENT '持仓多空方向(0:多头;1:空头;2:净;)'		
+	,TradePrice numeric(28,15)  COMMENT '成交均价'		
+	,OpenPrice numeric(28,15)  COMMENT '平仓成交时的开仓均价'		
+	,TriggerOrderID char(20)  COMMENT '触发报单号'		
+	,SLTriggerPrice numeric(28,15)  COMMENT '开仓报单成交之后的止损触发价'		
+	,TPTriggerPrice numeric(28,15)  COMMENT '开仓报单成交之后的止盈触发价'		
+	,CopyProfit numeric(38,10)  COMMENT '带单盈利分配'		
+	,Position numeric(38,10)  COMMENT '成交时的持仓量'		
+	,UserID char(42)  COMMENT '交易用户代码'		
+	,LastPriceByInsert numeric(28,15)  COMMENT '插入时的最新价'		
+	,BidPrice1ByInsert numeric(28,15)  COMMENT '插入时的买一价'		
+	,AskPrice1ByInsert numeric(28,15)  COMMENT '插入时的卖一价'		
+	,Available numeric(38,10)  COMMENT '可用资金'		
+	,CreateTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本地创建时间'
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (OrderID,CreateTime)
+	,KEY mykey_0 (AccountID,InstrumentID,MemberID,CreateTime)
+	,KEY mykey_1 (PositionID,CreateTime)
+	,KEY CreateTime_index (CreateTime)
+)ENGINE=InnoDB COMMENT='完成的报单'
+PARTITION BY RANGE COLUMNS(CreateTime)
+(PARTITION p202602 VALUES LESS THAN ('2026-03-01') ENGINE = InnoDB);
+
+/******************************
+-- create Trade
+--******************************/
+create table perpetual.t_D_Trade
+(
+	TradeID char(20) NOT NULL COMMENT '成交代码'		
+	,Direction char(1) NOT NULL COMMENT '买卖方向(0:买;1:卖;)'		
+	,OrderID char(20)  COMMENT '报单系统唯一代码'		
+	,MemberID char(42)  COMMENT '成员代码'		
+	,PositionID char(42)  COMMENT '持仓代码'		
+	,AccountID char(44)  COMMENT '资金账号'		
+	,ExchangeID char(8)  COMMENT '交易所代码'		
+	,InstrumentID char(26)  COMMENT '标的代码'		
+	,OffsetFlag char(1)  COMMENT '开平标志(0:开仓;1:平仓;2:强平;3:平今;4:平昨;5:全平;6:指定订单平仓;7:指定成交平仓;8:最大平仓;)'		
+	,Price numeric(28,15)  COMMENT '成交价格'		
+	,Volume numeric(38,10)  COMMENT '成交数量'		
+	,DeriveSource char(1)  COMMENT '衍生类型(0:正常;1:报价衍生;2:期权执行;3:组合衍生;4:场外成交强平衍生;5:场外成交大宗交易衍生;6:场外成交期转现衍生;7:场外成交只刷单衍生;8:触发订单衍生;9:止损触发订单衍生;a:止盈触发订单衍生;b:资金操作衍生;c:仓位合并衍生;d:CFD订单衍生;e:场外成交ADL衍生;f:回购手续费不能是币;)'		
+	,MatchRole char(1)  COMMENT '成交角色(0:不区分;1:主动成交方;2:被动成交方;3:集合竞价;4:交割;5:场外交易;)'		
+	,PriceCurrency char(12)  COMMENT '计价币种'		
+	,ClearCurrency char(12)  COMMENT '清算币种'		
+	,Fee numeric(38,10)  COMMENT '手续费'		
+	,FeeCurrency char(12)  COMMENT '手续费币种'		
+	,CloseProfit numeric(38,10)  COMMENT '平仓盈亏'		
+	,Turnover numeric(38,10)  COMMENT '成交金额'		
+	,UseMargin numeric(38,10)  COMMENT '占用或者减少的保证金'		
+	,Leverage numeric(20,8)  COMMENT '杠杆倍数'		
+	,OrderPrice numeric(28,15)  COMMENT '委托价格'		
+	,TriggerPrice numeric(28,15)  COMMENT '触发价'		
+	,IsSelfTrade numeric(1)  COMMENT '是否自成交'		
+	,Remark char(32)  COMMENT '备注'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,OpenPrice numeric(28,15)  COMMENT '开仓均价'		
+	,APPID char(8)  COMMENT '应用编号'		
+	,InsertTime numeric(20)  COMMENT '插入时间'		
+	,CopyOrderID char(20)  COMMENT '带单员报单号'		
+	,CopyMemberID char(42)  COMMENT '带单员代码'		
+	,CopyProfit numeric(38,10)  COMMENT '带单盈利分配'		
+	,Position numeric(38,10)  COMMENT '成交时的持仓量'		
+	,ReserveProfit numeric(38,10)  COMMENT '保留资金盈亏'		
+	,ReserveFee numeric(38,10)  COMMENT '保留资金手续费'		
+	,TradeRemark char(32)  COMMENT 'Trade备注'		
+	,BusinessType char(1)  COMMENT '业务类别(0:普通;1:申赎;2:行权;3:中立仓申报;4:递延交割申报;5:互换定单;6:质押;7:合并分拆;8:转股;9:回售回购;a:投票;b:融资融券;c:期权执行;d:传递被平仓订单BusinessValue;P:自定义11;Q:自定义10;R:自定义9;S:连续交易;T:自定义7;U:画线委托;V:限价市价;W:条件;X:止盈止损;Y:追踪出场;Z:指标类型;)'		
+	,BusinessValue char(32)  COMMENT '业务值'		
+	,CreateTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本地创建时间'
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (TradeID,Direction,CreateTime)
+	,KEY mykey_0 (OrderID,CreateTime)
+	,KEY mykey_1 (PositionID,CreateTime)
+	,KEY CreateTime_index (CreateTime)
+)ENGINE=InnoDB COMMENT='成交'
+PARTITION BY RANGE COLUMNS(CreateTime)
+(PARTITION p202602 VALUES LESS THAN ('2026-03-01') ENGINE = InnoDB);
+
+/******************************
+-- create FinishPosition
+--******************************/
+create table perpetual.t_D_FinishPosition
+(
+	PositionID char(42) NOT NULL COMMENT '持仓代码'		
+	,MemberID char(42)  COMMENT '成员代码'		
+	,TradeUnitID char(20)  COMMENT '交易单元代码'		
+	,ExchangeID char(8)  COMMENT '交易所代码'		
+	,InstrumentID char(26)  COMMENT '标的代码'		
+	,PositionClass char(1)  COMMENT '持仓类型(0:不设置;1:保证金交易;3:资产;4:持币成本;)'		
+	,PosiDirection char(1)  COMMENT '持仓多空方向(0:多头;1:空头;2:净;)'		
+	,PrePosition numeric(38,10)  COMMENT '上次持仓'		
+	,Position numeric(38,10) NOT NULL COMMENT '总持仓'		
+	,LongFrozen numeric(38,10)  COMMENT '多头冻结'		
+	,ShortFrozen numeric(38,10)  COMMENT '空头冻结'		
+	,PreLongFrozen numeric(38,10)  COMMENT '昨日多头冻结'		
+	,PreShortFrozen numeric(38,10)  COMMENT '昨日空头冻结'		
+	,HighestPosition numeric(38,10)  COMMENT '最大持仓'		
+	,ClosePosition numeric(38,10)  COMMENT '可平持仓'		
+	,PositionCost numeric(36,15)  COMMENT '持仓成本'		
+	,CostPrice numeric(28,15)  COMMENT '成本价'		
+	,UseMargin numeric(38,10)  COMMENT '占用保证金'		
+	,FrozenMargin numeric(38,10)  COMMENT '冻结保证金'		
+	,LongFrozenMargin numeric(38,10)  COMMENT '多头冻结保证金'		
+	,ShortFrozenMargin numeric(38,10)  COMMENT '空头冻结保证金'		
+	,CloseProfit numeric(38,10)  COMMENT '平仓盈亏'		
+	,TotalPositionCost numeric(36,6)  COMMENT '开仓成本'		
+	,TotalCloseProfit numeric(36,6)  COMMENT '总平仓盈亏'		
+	,OpenPrice numeric(28,15)  COMMENT '开仓均价'		
+	,ClosePrice numeric(28,15)  COMMENT '平仓均价'		
+	,TradeFee numeric(38,10)  COMMENT '交易费用'		
+	,PositionFee numeric(38,10)  COMMENT '持仓费用或者股票分红等'		
+	,Leverage numeric(20,8)  COMMENT '杠杆倍数'		
+	,AccountID char(44)  COMMENT '资金账号'		
+	,PriceCurrency char(12)  COMMENT '计价币种'		
+	,ClearCurrency char(12)  COMMENT '清算币种'		
+	,SettlementGroup char(8)  COMMENT '结算组编号'		
+	,IsCrossMargin numeric(1)  COMMENT '是否全仓'		
+	,CloseOrderID char(20)  COMMENT '平仓单代码'		
+	,SLTriggerPrice numeric(28,15)  COMMENT '止损触发价'		
+	,TPTriggerPrice numeric(28,15)  COMMENT '止盈触发价'		
+	,BeginTime numeric(20)  COMMENT '持仓不为0的开始时间'		
+	,InsertTime numeric(20)  COMMENT '插入时间(新持仓时间)'		
+	,LastOpenTime numeric(20)  COMMENT '最后开仓时间'		
+	,UpdateTime numeric(20)  COMMENT '更新时间'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,IsAutoAddMargin numeric(1)  COMMENT '是否自动追加保证金'		
+	,Frequency numeric(10)  COMMENT '每秒更新的次数'		
+	,MaintMargin numeric(38,10)  COMMENT '维持保证金'		
+	,UnRealProfit numeric(38,10)  COMMENT '未实现盈亏'		
+	,LiquidPrice numeric(28,15)  COMMENT '清算价格'		
+	,CopyMemberID char(42)  COMMENT '带单员代码'		
+	,CopyProfitRate numeric(26,10)  COMMENT '带单分配比例'		
+	,CopyProfit numeric(38,10)  COMMENT '带单盈利分配'		
+	,FirstTradeID char(42)  COMMENT '初始成交订单号'		
+	,LastTradeID char(42)  COMMENT '结束成交订单号'		
+	,BusinessType char(1)  COMMENT '业务类别(0:普通;1:申赎;2:行权;3:中立仓申报;4:递延交割申报;5:互换定单;6:质押;7:合并分拆;8:转股;9:回售回购;a:投票;b:融资融券;c:期权执行;d:传递被平仓订单BusinessValue;P:自定义11;Q:自定义10;R:自定义9;S:连续交易;T:自定义7;U:画线委托;V:限价市价;W:条件;X:止盈止损;Y:追踪出场;Z:指标类型;)'		
+	,BusinessValue char(32)  COMMENT '业务值'		
+	,Reserve numeric(38,10)  COMMENT '保留资金'		
+	,ReserveProfit numeric(38,10)  COMMENT '保留资金盈亏'		
+	,Remark char(32)  COMMENT '备注'		
+	,CreateTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本地创建时间'
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (PositionID,CreateTime)
+	,KEY mykey_0 (AccountID,InstrumentID,CreateTime)
+	,KEY CreateTime_index (CreateTime)
+)ENGINE=InnoDB COMMENT='持仓历史'
+PARTITION BY RANGE COLUMNS(CreateTime)
+(PARTITION p202602 VALUES LESS THAN ('2026-03-01') ENGINE = InnoDB);
+
+/******************************
+-- create AccountDetail
+--******************************/
+create table perpetual.t_D_AccountDetail
+(
+	AccountDetailID char(20) NOT NULL COMMENT '资金明细号'		
+	,MemberID char(42)  COMMENT '成员代码'		
+	,ExchangeID char(8)  COMMENT '交易所代码'		
+	,InstrumentID char(26)  COMMENT '标的代码'		
+	,SettlementGroup char(8)  COMMENT '结算组编号'		
+	,AccountID char(44)  COMMENT '资金账号'		
+	,Currency char(12)  COMMENT '币种'		
+	,Amount numeric(38,10)  COMMENT '发生额'		
+	,PreBalance numeric(38,10)  COMMENT '上次静态权益'		
+	,Balance numeric(38,10)  COMMENT '静态权益'		
+	,ReserveAmount numeric(38,10)  COMMENT '体验金发生额'		
+	,ReserveBalance numeric(38,10)  COMMENT '体验金静态权益'		
+	,Source char(1)  COMMENT '财务流水类型'		
+	,Remark char(32)  COMMENT '备注'		
+	,LocalID char(20)  COMMENT '本地标识'		
+	,SettleSegment char(20)  COMMENT '结算段'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,RelatedID varchar(64)  COMMENT '内外对账ID'		
+	,InsertTime numeric(20)  COMMENT '插入时间'		
+	,CreateTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本地创建时间'
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (AccountDetailID,CreateTime)
+	,KEY mykey_0 (AccountID,Currency,Source,CreateTime)
+	,KEY CreateTime_index (CreateTime)
+)ENGINE=InnoDB COMMENT='账户流水'
+PARTITION BY RANGE COLUMNS(CreateTime)
+(PARTITION p202602 VALUES LESS THAN ('2026-03-01') ENGINE = InnoDB);
+
+/******************************
+-- create KLine
+--******************************/
+create table perpetual.t_D_KLine
+(
+	ExchangeID char(8) NOT NULL COMMENT '交易所代码'		
+	,InstrumentID char(26) NOT NULL COMMENT '标的代码'		
+	,Bar char(3) NOT NULL COMMENT 'K线周期代码(n[m/h/d/o])'		
+	,InsertTime numeric(20) NOT NULL COMMENT '插入时间'		
+	,OpenPrice numeric(28,15)  COMMENT '开盘价'		
+	,HighestPrice numeric(28,15)  COMMENT '最高价'		
+	,LowestPrice numeric(28,15)  COMMENT '最低价'		
+	,ClosePrice numeric(28,15)  COMMENT '收盘价'		
+	,Volume numeric(36,8)  COMMENT '数量'		
+	,Turnover numeric(36,8)  COMMENT '成交金额'		
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (ExchangeID,InstrumentID,Bar,InsertTime)
+	,KEY mykey_0 (ExchangeID,InstrumentID,Bar)		
+	,KEY mykey_1 (Bar,InsertTime)		
+	)ENGINE=InnoDB COMMENT='历史K线';
+
+/******************************
+-- create SettleDetail
+--******************************/
+create table perpetual.t_D_SettleDetail
+(
+	SettleDetailID char(20) NOT NULL COMMENT '操作明细号'		
+	,APPID char(8)  COMMENT '应用编号'		
+	,LocalID char(20)  COMMENT '成交对本地标识'		
+	,ExchangeID char(8) NOT NULL COMMENT '交易所代码'		
+	,InstrumentID char(26) NOT NULL COMMENT '标的代码'		
+	,SettlementGroup char(8)  COMMENT '结算组编号'		
+	,SettleAction char(1)  COMMENT '结算操作(0:结算操作开始;1:定期无负债结算;2:到期交割(行权);3:资金费率交换;4:隔夜费划转;5:分摊;6:资金初始化;7:结算操作结束;8:数据检查;9:数据修复;a:平账;b:清理;c:清空没有持仓的产品;d:借贷利息;)'		
+	,Value numeric(26,10)  COMMENT '操作使用值'		
+	,Value1 numeric(26,10)  COMMENT '发生值1'		
+	,Value2 numeric(26,10)  COMMENT '发生值2'		
+	,Value3 numeric(26,10)  COMMENT '发生值3'		
+	,Remark char(32)  COMMENT '备注'		
+	,FundingRateGroup char(8)  COMMENT '资金费用组'		
+	,SettleSegment char(20)  COMMENT '结算段'		
+	,InsertTime char(20)  COMMENT '创建时间'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (ExchangeID,InstrumentID,SettleDetailID)
+	)ENGINE=InnoDB COMMENT='操作流水';
+
+/******************************
+-- create FinishTriggerOrder
+--******************************/
+create table perpetual.t_D_FinishTriggerOrder
+(
+	MemberID char(42)  COMMENT '成员代码'		
+	,TradeUnitID char(20)  COMMENT '交易单元代码'		
+	,AccountID char(44)  COMMENT '资金账号'		
+	,LocalID char(20)  COMMENT '报单本地标识'		
+	,ExchangeID char(8)  COMMENT '交易所代码'		
+	,InstrumentID char(26)  COMMENT '标的代码'		
+	,OrderPriceType char(1)  COMMENT '报单价格类型(0:限价(手动指定Price值);1:任意价(Price按最高最低限价取值);2:最优价/对手价(Price按对方1档价取值);3:五档价(Price按对方5档价取值);4:十档价(类同上);7:最优Marker价(Price按本方1档价或其+1Tick取值);8:Price按委托额Cost和订单簿情况确定值;9:保底点差价:成交价格Price不会劣于系统设置差价成交;)'		
+	,Direction char(1)  COMMENT '买卖方向(0:买;1:卖;)'		
+	,OffsetFlag char(1)  COMMENT '开平标志(0:开仓;1:平仓;2:强平;3:平今;4:平昨;5:全平;6:指定订单平仓;7:指定成交平仓;8:最大平仓;)'		
+	,Price numeric(28,15)  COMMENT '报单价格'		
+	,Volume numeric(38,10)  COMMENT '数量'		
+	,VolumeDisplay numeric(38,10)  COMMENT '显示数量'		
+	,VolumeMode char(1)  COMMENT '数量取值方式(0:百分比;1:绝对值;)'		
+	,Cost numeric(38,10)  COMMENT '委托额'		
+	,OrderType char(1)  COMMENT '订单类型(0:普通订单;1:(FillAndKill/IOC)立即完成并且剩余撤销;2:(FillOrKill)立即完成全部或者最小订单要求否则全部撤销;3:需要进入订单簿被动成交,否则全部撤销(只做Maker/PostOnly);4:不需要撮合直接成交;)'		
+	,GTDTime numeric(20)  COMMENT 'GTD时间'		
+	,MinVolume numeric(38,10)  COMMENT '最小成交量'		
+	,BusinessType char(1)  COMMENT '业务类别(0:普通;1:申赎;2:行权;3:中立仓申报;4:递延交割申报;5:互换定单;6:质押;7:合并分拆;8:转股;9:回售回购;a:投票;b:融资融券;c:期权执行;d:传递被平仓订单BusinessValue;P:自定义11;Q:自定义10;R:自定义9;S:连续交易;T:自定义7;U:画线委托;V:限价市价;W:条件;X:止盈止损;Y:追踪出场;Z:指标类型;)'		
+	,BusinessValue char(32)  COMMENT '业务值'		
+	,CloseOrderID char(20)  COMMENT '平仓指定开仓的订单号'		
+	,IsCrossMargin numeric(1)  COMMENT '是否全仓'		
+	,Remark char(32)  COMMENT '备注'		
+	,OrderID char(20) NOT NULL COMMENT '报单系统唯一代码'		
+	,CopyMemberID char(42)  COMMENT '带单员代码'		
+	,CopyOrderID char(20)  COMMENT '带单员报单号'		
+	,Leverage numeric(20,8)  COMMENT '委托单杠杆倍数'		
+	,CopyProfitRate numeric(26,10)  COMMENT '带单分配比例'		
+	,APPID char(8)  COMMENT '应用编号'		
+	,PositionID char(42)  COMMENT '持仓代码'		
+	,TriggerPrice numeric(28,15)  COMMENT '触发价'		
+	,Reserve numeric(38,10)  COMMENT '保留资金'		
+	,SLPrice numeric(28,15)  COMMENT '止损价'		
+	,SLTriggerPrice numeric(28,15)  COMMENT '止损触发价'		
+	,TPPrice numeric(28,15)  COMMENT '止盈价'		
+	,TPTriggerPrice numeric(28,15)  COMMENT '止盈触发价'		
+	,RiskBefore numeric(1)  COMMENT '是否提前检查风控'		
+	,TriggerOrderType char(1)  COMMENT '触发的订单类型(0:未定义;1:持仓止盈止损;2:订单止盈止损;3:条件单;4:追踪(跟踪)订单;5:其他算法交易;6:指标类型;7:指标类型止盈止损;8:跟单类型;9:划线下单类型;a:其他类型1;b:其他类型2;c:其他类型3;d:其他类型4;e:其他类型5;)'		
+	,TriggerDetail char(20)  COMMENT '触发类型明细'		
+	,TriggerPriceType char(1) default "0"  COMMENT '触发价类型(0:最新价;1:标记价;2:标的指数价;)'		
+	,TriggerValue varchar(1024)  COMMENT '触发单具体设置信息'		
+	,CloseSLPrice numeric(28,15)  COMMENT '平仓止损价'		
+	,CloseSLTriggerPrice numeric(28,15)  COMMENT '平仓止损触发价'		
+	,CloseTPPrice numeric(28,15)  COMMENT '平仓止盈价'		
+	,CloseTPTriggerPrice numeric(28,15)  COMMENT '平仓止盈触发价'		
+	,CloseOrderPriceType char(1)  COMMENT '报单价格类型(0:限价(手动指定Price值);1:任意价(Price按最高最低限价取值);2:最优价/对手价(Price按对方1档价取值);3:五档价(Price按对方5档价取值);4:十档价(类同上);7:最优Marker价(Price按本方1档价或其+1Tick取值);8:Price按委托额Cost和订单簿情况确定值;9:保底点差价:成交价格Price不会劣于系统设置差价成交;)'		
+	,ClosePrice numeric(28,15)  COMMENT '平仓价'		
+	,CloseTriggerPrice numeric(28,15)  COMMENT '平仓触发价'		
+	,RelatedOrderID char(20)  COMMENT '关联报单号'		
+	,ActiveTime numeric(20)  COMMENT '激活时间'		
+	,TriggerTime numeric(20)  COMMENT '触发时间'		
+	,TimeSortNo numeric(16)  COMMENT '按时间排队的序号'		
+	,TriggerStatus char(1)  COMMENT '触发报单状态(0:未设置状态;1:活跃(运行)状态;2:已经触发;3:触发失败;4:撤单;)'		
+	,PosiDirection char(1)  COMMENT '持仓多空方向(0:多头;1:空头;2:净;)'		
+	,FrontNo numeric(10)  COMMENT '前置编号'		
+	,ErrorNo numeric(10)  COMMENT '错误代码'		
+	,ErrorMsg varchar(128)  COMMENT '错误信息'		
+	,InsertTime numeric(20)  COMMENT '插入时间'		
+	,UpdateTime numeric(20)  COMMENT '更新时间'		
+	,BusinessNo numeric(16)  COMMENT '业务序列号'		
+	,CreateTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本地创建时间'
+	,DBTime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '落库时间'
+	,PRIMARY KEY (OrderID,CreateTime)
+	,KEY mykey_0 (InstrumentID,MemberID,TriggerStatus,CreateTime)
+	,KEY CreateTime_index (CreateTime)
+)ENGINE=InnoDB COMMENT='完成的条件报单'
+PARTITION BY RANGE COLUMNS(CreateTime)
+(PARTITION p202602 VALUES LESS THAN ('2026-03-01') ENGINE = InnoDB);

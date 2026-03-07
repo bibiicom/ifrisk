@@ -1,0 +1,271 @@
+
+CPP=g++ -fpic
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=./../../../build/run/test/tools/omqclient
+
+APPEND_CPPFLAGS=-O3 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p omqclient_build_dir
+	-mkdir -p ./../../../build/run/test/tools/
+	
+function_obj=omqclient_build_dir/BaseFunction.cpp.o omqclient_build_dir/Config.cpp.o omqclient_build_dir/platform.cpp.o omqclient_build_dir/printinfo.cpp.o omqclient_build_dir/profile.cpp.o omqclient_build_dir/utility.cpp.o omqclient_build_dir/utils.cpp.o omqclient_build_dir/version.cpp.o 
+function_includedir=-I../../../build/src/function/.
+datastruct_obj=omqclient_build_dir/BigDigit.cpp.o omqclient_build_dir/CDate.cpp.o omqclient_build_dir/CErrorEngine.cpp.o omqclient_build_dir/CSequence.cpp.o omqclient_build_dir/CSVParser.cpp.o omqclient_build_dir/CSVToField.cpp.o omqclient_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../build/src/datastruct/.
+thread_obj=omqclient_build_dir/Semaphore.cpp.o omqclient_build_dir/Thread.cpp.o 
+thread_includedir=-I../../../build/src/thread/.
+logger_obj=omqclient_build_dir/CFilelogService.cpp.o omqclient_build_dir/CLogger.cpp.o omqclient_build_dir/CProbeLogger.cpp.o omqclient_build_dir/CSyslogService.cpp.o omqclient_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../../build/src/logger/.
+network_obj=omqclient_build_dir/Channel.cpp.o omqclient_build_dir/Client.cpp.o omqclient_build_dir/EpollReactor.cpp.o omqclient_build_dir/ListenCtrl.cpp.o omqclient_build_dir/NetworkFactory.cpp.o omqclient_build_dir/PipeEventHandler.cpp.o omqclient_build_dir/SelectReactor.cpp.o omqclient_build_dir/Server.cpp.o omqclient_build_dir/ServiceName.cpp.o omqclient_build_dir/SocketInit.cpp.o 
+network_includedir=-I../../src_network/network/.
+network_tcp_obj=omqclient_build_dir/TcpChannel.cpp.o omqclient_build_dir/TcpClient.cpp.o omqclient_build_dir/TcpNetworkFactory.cpp.o omqclient_build_dir/TcpServer.cpp.o 
+network_tcp_includedir=-I../../src_network/network_tcp/.
+udpnetwork_includedir= 
+multinetwork_includedir= 
+reactor_obj=omqclient_build_dir/EventDispatcher.cpp.o omqclient_build_dir/EventHandler.cpp.o omqclient_build_dir/EventQueue.cpp.o omqclient_build_dir/Reactor.cpp.o omqclient_build_dir/SimpleReactor.cpp.o omqclient_build_dir/TimerHeap.cpp.o 
+reactor_includedir=-I../../src_network/reactor/.
+flow_obj=omqclient_build_dir/CachedFlow.cpp.o omqclient_build_dir/CacheList.cpp.o omqclient_build_dir/FileFlow.cpp.o omqclient_build_dir/FlowReader.cpp.o omqclient_build_dir/IndexFlow.cpp.o omqclient_build_dir/OneTimeFlow.cpp.o omqclient_build_dir/PubFlow.cpp.o 
+flow_includedir=-I../../src_protocol/flow/.
+protocol_obj=omqclient_build_dir/Protocol.cpp.o 
+protocol_includedir=-I../../src_protocol/protocol/.
+protocol_channel_obj=omqclient_build_dir/ChannelPackage.cpp.o omqclient_build_dir/ChannelProtocol.cpp.o omqclient_build_dir/Session.cpp.o omqclient_build_dir/SessionFactory.cpp.o 
+protocol_channel_includedir=-I../../src_protocol/protocol_channel/.
+protocol_nameserver_obj=omqclient_build_dir/NsPackage.cpp.o omqclient_build_dir/NsProtocol.cpp.o omqclient_build_dir/NsSession.cpp.o omqclient_build_dir/NsSessionFactory.cpp.o 
+protocol_nameserver_includedir=-I../../src_protocol/protocol_nameserver/.
+protocol_subscribe_obj=omqclient_build_dir/SCPPackage.cpp.o omqclient_build_dir/SCPPackageDesc.cpp.o omqclient_build_dir/SCPProtocol.cpp.o 
+protocol_subscribe_includedir=-I../../src_protocol/protocol_subscribe/.
+protocol_link_obj=omqclient_build_dir/XMPPackage.cpp.o omqclient_build_dir/XMPProtocol.cpp.o omqclient_build_dir/XMPSession.cpp.o 
+protocol_link_includedir=-I../../src_protocol/protocol_link/.
+protocol_compress_obj=omqclient_build_dir/CompressPackage.cpp.o omqclient_build_dir/CompressProtocol.cpp.o omqclient_build_dir/CompressUtil.cpp.o 
+protocol_compress_includedir=-I../../src_protocol/protocol_compress/.
+protocol_ftd_obj=omqclient_build_dir/FTDCProtocol.cpp.o omqclient_build_dir/FTDCPubEndPoint.cpp.o omqclient_build_dir/FTDCSession.cpp.o omqclient_build_dir/FTDCSubEndPoint.cpp.o omqclient_build_dir/OrderingQ.cpp.o 
+protocol_ftd_includedir=-I../../src_protocol/protocol_ftd/.
+package_ftd_includedir= 
+package_obj=omqclient_build_dir/FieldSet.cpp.o omqclient_build_dir/FTDCPackage.cpp.o omqclient_build_dir/Package.cpp.o omqclient_build_dir/XTPPackage.cpp.o 
+package_includedir=-I../../src_protocol/package/.
+omqclient_obj=omqclient_build_dir/omqclient.cpp.o omqclient_build_dir/SimpleConnect.cpp.o 
+omqclient_includedir=-I./.
+
+all_objs=$(function_obj) $(datastruct_obj) $(thread_obj) $(logger_obj) $(network_obj) $(network_tcp_obj) $(reactor_obj) $(flow_obj) $(protocol_obj) $(protocol_channel_obj) $(protocol_nameserver_obj) $(protocol_subscribe_obj) $(protocol_link_obj) $(protocol_compress_obj) $(protocol_ftd_obj) $(package_obj) $(omqclient_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(datastruct_includedir)  $(thread_includedir)  $(logger_includedir)  $(network_includedir)  $(network_tcp_includedir)  $(udpnetwork_includedir)  $(multinetwork_includedir)  $(reactor_includedir)  $(flow_includedir)  $(protocol_includedir)  $(protocol_channel_includedir)  $(protocol_nameserver_includedir)  $(protocol_subscribe_includedir)  $(protocol_link_includedir)  $(protocol_compress_includedir)  $(protocol_ftd_includedir)  $(package_ftd_includedir)  $(package_includedir)  $(omqclient_includedir) 
+
+omqclient_build_dir/BaseFunction.cpp.o: ../../../build/src/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/BaseFunction.cpp -oomqclient_build_dir/BaseFunction.cpp.o
+omqclient_build_dir/Config.cpp.o: ../../../build/src/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/Config.cpp -oomqclient_build_dir/Config.cpp.o
+omqclient_build_dir/platform.cpp.o: ../../../build/src/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/platform.cpp -oomqclient_build_dir/platform.cpp.o
+omqclient_build_dir/printinfo.cpp.o: ../../../build/src/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/printinfo.cpp -oomqclient_build_dir/printinfo.cpp.o
+omqclient_build_dir/profile.cpp.o: ../../../build/src/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/profile.cpp -oomqclient_build_dir/profile.cpp.o
+omqclient_build_dir/utility.cpp.o: ../../../build/src/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/utility.cpp -oomqclient_build_dir/utility.cpp.o
+omqclient_build_dir/utils.cpp.o: ../../../build/src/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/utils.cpp -oomqclient_build_dir/utils.cpp.o
+omqclient_build_dir/version.cpp.o: ../../../build/src/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/version.cpp -oomqclient_build_dir/version.cpp.o
+omqclient_build_dir/BigDigit.cpp.o: ../../../build/src/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/BigDigit.cpp -oomqclient_build_dir/BigDigit.cpp.o
+omqclient_build_dir/CDate.cpp.o: ../../../build/src/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CDate.cpp -oomqclient_build_dir/CDate.cpp.o
+omqclient_build_dir/CErrorEngine.cpp.o: ../../../build/src/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CErrorEngine.cpp -oomqclient_build_dir/CErrorEngine.cpp.o
+omqclient_build_dir/CSequence.cpp.o: ../../../build/src/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSequence.cpp -oomqclient_build_dir/CSequence.cpp.o
+omqclient_build_dir/CSVParser.cpp.o: ../../../build/src/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSVParser.cpp -oomqclient_build_dir/CSVParser.cpp.o
+omqclient_build_dir/CSVToField.cpp.o: ../../../build/src/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSVToField.cpp -oomqclient_build_dir/CSVToField.cpp.o
+omqclient_build_dir/FieldDescribe.cpp.o: ../../../build/src/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/FieldDescribe.cpp -oomqclient_build_dir/FieldDescribe.cpp.o
+omqclient_build_dir/Semaphore.cpp.o: ../../../build/src/thread/Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/thread/Semaphore.cpp -oomqclient_build_dir/Semaphore.cpp.o
+omqclient_build_dir/Thread.cpp.o: ../../../build/src/thread/Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/thread/Thread.cpp -oomqclient_build_dir/Thread.cpp.o
+omqclient_build_dir/CFilelogService.cpp.o: ../../../build/src/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/logger/CFilelogService.cpp -oomqclient_build_dir/CFilelogService.cpp.o
+omqclient_build_dir/CLogger.cpp.o: ../../../build/src/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/logger/CLogger.cpp -oomqclient_build_dir/CLogger.cpp.o
+omqclient_build_dir/CProbeLogger.cpp.o: ../../../build/src/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/logger/CProbeLogger.cpp -oomqclient_build_dir/CProbeLogger.cpp.o
+omqclient_build_dir/CSyslogService.cpp.o: ../../../build/src/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/logger/CSyslogService.cpp -oomqclient_build_dir/CSyslogService.cpp.o
+omqclient_build_dir/monitorIndex.cpp.o: ../../../build/src/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/logger/monitorIndex.cpp -oomqclient_build_dir/monitorIndex.cpp.o
+omqclient_build_dir/Channel.cpp.o: ../../src_network/network/Channel.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/Channel.cpp -oomqclient_build_dir/Channel.cpp.o
+omqclient_build_dir/Client.cpp.o: ../../src_network/network/Client.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/Client.cpp -oomqclient_build_dir/Client.cpp.o
+omqclient_build_dir/EpollReactor.cpp.o: ../../src_network/network/EpollReactor.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/EpollReactor.cpp -oomqclient_build_dir/EpollReactor.cpp.o
+omqclient_build_dir/ListenCtrl.cpp.o: ../../src_network/network/ListenCtrl.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/ListenCtrl.cpp -oomqclient_build_dir/ListenCtrl.cpp.o
+omqclient_build_dir/NetworkFactory.cpp.o: ../../src_network/network/NetworkFactory.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/NetworkFactory.cpp -oomqclient_build_dir/NetworkFactory.cpp.o
+omqclient_build_dir/PipeEventHandler.cpp.o: ../../src_network/network/PipeEventHandler.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/PipeEventHandler.cpp -oomqclient_build_dir/PipeEventHandler.cpp.o
+omqclient_build_dir/SelectReactor.cpp.o: ../../src_network/network/SelectReactor.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/SelectReactor.cpp -oomqclient_build_dir/SelectReactor.cpp.o
+omqclient_build_dir/Server.cpp.o: ../../src_network/network/Server.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/Server.cpp -oomqclient_build_dir/Server.cpp.o
+omqclient_build_dir/ServiceName.cpp.o: ../../src_network/network/ServiceName.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/ServiceName.cpp -oomqclient_build_dir/ServiceName.cpp.o
+omqclient_build_dir/SocketInit.cpp.o: ../../src_network/network/SocketInit.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network/SocketInit.cpp -oomqclient_build_dir/SocketInit.cpp.o
+omqclient_build_dir/TcpChannel.cpp.o: ../../src_network/network_tcp/TcpChannel.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network_tcp/TcpChannel.cpp -oomqclient_build_dir/TcpChannel.cpp.o
+omqclient_build_dir/TcpClient.cpp.o: ../../src_network/network_tcp/TcpClient.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network_tcp/TcpClient.cpp -oomqclient_build_dir/TcpClient.cpp.o
+omqclient_build_dir/TcpNetworkFactory.cpp.o: ../../src_network/network_tcp/TcpNetworkFactory.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network_tcp/TcpNetworkFactory.cpp -oomqclient_build_dir/TcpNetworkFactory.cpp.o
+omqclient_build_dir/TcpServer.cpp.o: ../../src_network/network_tcp/TcpServer.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/network_tcp/TcpServer.cpp -oomqclient_build_dir/TcpServer.cpp.o
+omqclient_build_dir/EventDispatcher.cpp.o: ../../src_network/reactor/EventDispatcher.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/EventDispatcher.cpp -oomqclient_build_dir/EventDispatcher.cpp.o
+omqclient_build_dir/EventHandler.cpp.o: ../../src_network/reactor/EventHandler.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/EventHandler.cpp -oomqclient_build_dir/EventHandler.cpp.o
+omqclient_build_dir/EventQueue.cpp.o: ../../src_network/reactor/EventQueue.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/EventQueue.cpp -oomqclient_build_dir/EventQueue.cpp.o
+omqclient_build_dir/Reactor.cpp.o: ../../src_network/reactor/Reactor.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/Reactor.cpp -oomqclient_build_dir/Reactor.cpp.o
+omqclient_build_dir/SimpleReactor.cpp.o: ../../src_network/reactor/SimpleReactor.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/SimpleReactor.cpp -oomqclient_build_dir/SimpleReactor.cpp.o
+omqclient_build_dir/TimerHeap.cpp.o: ../../src_network/reactor/TimerHeap.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_network/reactor/TimerHeap.cpp -oomqclient_build_dir/TimerHeap.cpp.o
+omqclient_build_dir/CachedFlow.cpp.o: ../../src_protocol/flow/CachedFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/CachedFlow.cpp -oomqclient_build_dir/CachedFlow.cpp.o
+omqclient_build_dir/CacheList.cpp.o: ../../src_protocol/flow/CacheList.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/CacheList.cpp -oomqclient_build_dir/CacheList.cpp.o
+omqclient_build_dir/FileFlow.cpp.o: ../../src_protocol/flow/FileFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/FileFlow.cpp -oomqclient_build_dir/FileFlow.cpp.o
+omqclient_build_dir/FlowReader.cpp.o: ../../src_protocol/flow/FlowReader.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/FlowReader.cpp -oomqclient_build_dir/FlowReader.cpp.o
+omqclient_build_dir/IndexFlow.cpp.o: ../../src_protocol/flow/IndexFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/IndexFlow.cpp -oomqclient_build_dir/IndexFlow.cpp.o
+omqclient_build_dir/OneTimeFlow.cpp.o: ../../src_protocol/flow/OneTimeFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/OneTimeFlow.cpp -oomqclient_build_dir/OneTimeFlow.cpp.o
+omqclient_build_dir/PubFlow.cpp.o: ../../src_protocol/flow/PubFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/flow/PubFlow.cpp -oomqclient_build_dir/PubFlow.cpp.o
+omqclient_build_dir/Protocol.cpp.o: ../../src_protocol/protocol/Protocol.cpp $(protocol_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol/Protocol.cpp -oomqclient_build_dir/Protocol.cpp.o
+omqclient_build_dir/ChannelPackage.cpp.o: ../../src_protocol/protocol_channel/ChannelPackage.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_channel/ChannelPackage.cpp -oomqclient_build_dir/ChannelPackage.cpp.o
+omqclient_build_dir/ChannelProtocol.cpp.o: ../../src_protocol/protocol_channel/ChannelProtocol.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_channel/ChannelProtocol.cpp -oomqclient_build_dir/ChannelProtocol.cpp.o
+omqclient_build_dir/Session.cpp.o: ../../src_protocol/protocol_channel/Session.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_channel/Session.cpp -oomqclient_build_dir/Session.cpp.o
+omqclient_build_dir/SessionFactory.cpp.o: ../../src_protocol/protocol_channel/SessionFactory.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_channel/SessionFactory.cpp -oomqclient_build_dir/SessionFactory.cpp.o
+omqclient_build_dir/NsPackage.cpp.o: ../../src_protocol/protocol_nameserver/NsPackage.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_nameserver/NsPackage.cpp -oomqclient_build_dir/NsPackage.cpp.o
+omqclient_build_dir/NsProtocol.cpp.o: ../../src_protocol/protocol_nameserver/NsProtocol.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_nameserver/NsProtocol.cpp -oomqclient_build_dir/NsProtocol.cpp.o
+omqclient_build_dir/NsSession.cpp.o: ../../src_protocol/protocol_nameserver/NsSession.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_nameserver/NsSession.cpp -oomqclient_build_dir/NsSession.cpp.o
+omqclient_build_dir/NsSessionFactory.cpp.o: ../../src_protocol/protocol_nameserver/NsSessionFactory.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_nameserver/NsSessionFactory.cpp -oomqclient_build_dir/NsSessionFactory.cpp.o
+omqclient_build_dir/SCPPackage.cpp.o: ../../src_protocol/protocol_subscribe/SCPPackage.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_subscribe/SCPPackage.cpp -oomqclient_build_dir/SCPPackage.cpp.o
+omqclient_build_dir/SCPPackageDesc.cpp.o: ../../src_protocol/protocol_subscribe/SCPPackageDesc.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_subscribe/SCPPackageDesc.cpp -oomqclient_build_dir/SCPPackageDesc.cpp.o
+omqclient_build_dir/SCPProtocol.cpp.o: ../../src_protocol/protocol_subscribe/SCPProtocol.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_subscribe/SCPProtocol.cpp -oomqclient_build_dir/SCPProtocol.cpp.o
+omqclient_build_dir/XMPPackage.cpp.o: ../../src_protocol/protocol_link/XMPPackage.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_link/XMPPackage.cpp -oomqclient_build_dir/XMPPackage.cpp.o
+omqclient_build_dir/XMPProtocol.cpp.o: ../../src_protocol/protocol_link/XMPProtocol.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_link/XMPProtocol.cpp -oomqclient_build_dir/XMPProtocol.cpp.o
+omqclient_build_dir/XMPSession.cpp.o: ../../src_protocol/protocol_link/XMPSession.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_link/XMPSession.cpp -oomqclient_build_dir/XMPSession.cpp.o
+omqclient_build_dir/CompressPackage.cpp.o: ../../src_protocol/protocol_compress/CompressPackage.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_compress/CompressPackage.cpp -oomqclient_build_dir/CompressPackage.cpp.o
+omqclient_build_dir/CompressProtocol.cpp.o: ../../src_protocol/protocol_compress/CompressProtocol.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_compress/CompressProtocol.cpp -oomqclient_build_dir/CompressProtocol.cpp.o
+omqclient_build_dir/CompressUtil.cpp.o: ../../src_protocol/protocol_compress/CompressUtil.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_compress/CompressUtil.cpp -oomqclient_build_dir/CompressUtil.cpp.o
+omqclient_build_dir/FTDCProtocol.cpp.o: ../../src_protocol/protocol_ftd/FTDCProtocol.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_ftd/FTDCProtocol.cpp -oomqclient_build_dir/FTDCProtocol.cpp.o
+omqclient_build_dir/FTDCPubEndPoint.cpp.o: ../../src_protocol/protocol_ftd/FTDCPubEndPoint.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_ftd/FTDCPubEndPoint.cpp -oomqclient_build_dir/FTDCPubEndPoint.cpp.o
+omqclient_build_dir/FTDCSession.cpp.o: ../../src_protocol/protocol_ftd/FTDCSession.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_ftd/FTDCSession.cpp -oomqclient_build_dir/FTDCSession.cpp.o
+omqclient_build_dir/FTDCSubEndPoint.cpp.o: ../../src_protocol/protocol_ftd/FTDCSubEndPoint.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_ftd/FTDCSubEndPoint.cpp -oomqclient_build_dir/FTDCSubEndPoint.cpp.o
+omqclient_build_dir/OrderingQ.cpp.o: ../../src_protocol/protocol_ftd/OrderingQ.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/protocol_ftd/OrderingQ.cpp -oomqclient_build_dir/OrderingQ.cpp.o
+omqclient_build_dir/FieldSet.cpp.o: ../../src_protocol/package/FieldSet.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/package/FieldSet.cpp -oomqclient_build_dir/FieldSet.cpp.o
+omqclient_build_dir/FTDCPackage.cpp.o: ../../src_protocol/package/FTDCPackage.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/package/FTDCPackage.cpp -oomqclient_build_dir/FTDCPackage.cpp.o
+omqclient_build_dir/Package.cpp.o: ../../src_protocol/package/Package.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/package/Package.cpp -oomqclient_build_dir/Package.cpp.o
+omqclient_build_dir/XTPPackage.cpp.o: ../../src_protocol/package/XTPPackage.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_protocol/package/XTPPackage.cpp -oomqclient_build_dir/XTPPackage.cpp.o
+omqclient_build_dir/omqclient.cpp.o: ./omqclient.cpp $(omqclient_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ./omqclient.cpp -oomqclient_build_dir/omqclient.cpp.o
+omqclient_build_dir/SimpleConnect.cpp.o: ./SimpleConnect.cpp $(omqclient_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ./SimpleConnect.cpp -oomqclient_build_dir/SimpleConnect.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(network_obj)
+	-$(DEL) $(network_tcp_obj)
+	-$(DEL) $(reactor_obj)
+	-$(DEL) $(flow_obj)
+	-$(DEL) $(protocol_obj)
+	-$(DEL) $(protocol_channel_obj)
+	-$(DEL) $(protocol_nameserver_obj)
+	-$(DEL) $(protocol_subscribe_obj)
+	-$(DEL) $(protocol_link_obj)
+	-$(DEL) $(protocol_compress_obj)
+	-$(DEL) $(protocol_ftd_obj)
+	-$(DEL) $(package_obj)
+	-$(DEL) $(omqclient_obj)
+
+	-$(DEL) $(target)

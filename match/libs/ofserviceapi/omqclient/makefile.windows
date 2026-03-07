@@ -1,0 +1,272 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DWINDOWS -DMSVC
+target=.\..\..\..\build\run\test\tools\omqclient.exe
+
+APPEND_CPPFLAGS=-nologo -EHsc -MT -O2 -GF -FD
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  omqclient_build_dir
+	-mkdir  .\..\..\..\build\run\test\tools\
+	
+function_obj=omqclient_build_dir\BaseFunction.cpp.obj omqclient_build_dir\Config.cpp.obj omqclient_build_dir\platform.cpp.obj omqclient_build_dir\printinfo.cpp.obj omqclient_build_dir\profile.cpp.obj omqclient_build_dir\utility.cpp.obj omqclient_build_dir\utils.cpp.obj omqclient_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\build\src\function\.
+datastruct_obj=omqclient_build_dir\BigDigit.cpp.obj omqclient_build_dir\CDate.cpp.obj omqclient_build_dir\CErrorEngine.cpp.obj omqclient_build_dir\CSequence.cpp.obj omqclient_build_dir\CSVParser.cpp.obj omqclient_build_dir\CSVToField.cpp.obj omqclient_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\build\src\datastruct\.
+thread_obj=omqclient_build_dir\Semaphore.cpp.obj omqclient_build_dir\Thread.cpp.obj 
+thread_includedir=-I..\..\..\build\src\thread\.
+logger_obj=omqclient_build_dir\CFilelogService.cpp.obj omqclient_build_dir\CLogger.cpp.obj omqclient_build_dir\CProbeLogger.cpp.obj omqclient_build_dir\CSyslogService.cpp.obj omqclient_build_dir\monitorIndex.cpp.obj 
+logger_includedir=-I..\..\..\build\src\logger\.
+network_obj=omqclient_build_dir\Channel.cpp.obj omqclient_build_dir\Client.cpp.obj omqclient_build_dir\EpollReactor.cpp.obj omqclient_build_dir\ListenCtrl.cpp.obj omqclient_build_dir\NetworkFactory.cpp.obj omqclient_build_dir\PipeEventHandler.cpp.obj omqclient_build_dir\SelectReactor.cpp.obj omqclient_build_dir\Server.cpp.obj omqclient_build_dir\ServiceName.cpp.obj omqclient_build_dir\SocketInit.cpp.obj 
+network_includedir=-I..\..\src_network\network\.
+network_tcp_obj=omqclient_build_dir\TcpChannel.cpp.obj omqclient_build_dir\TcpClient.cpp.obj omqclient_build_dir\TcpNetworkFactory.cpp.obj omqclient_build_dir\TcpServer.cpp.obj 
+network_tcp_includedir=-I..\..\src_network\network_tcp\.
+udpnetwork_includedir= 
+multinetwork_includedir= 
+reactor_obj=omqclient_build_dir\EventDispatcher.cpp.obj omqclient_build_dir\EventHandler.cpp.obj omqclient_build_dir\EventQueue.cpp.obj omqclient_build_dir\Reactor.cpp.obj omqclient_build_dir\SimpleReactor.cpp.obj omqclient_build_dir\TimerHeap.cpp.obj 
+reactor_includedir=-I..\..\src_network\reactor\.
+flow_obj=omqclient_build_dir\CachedFlow.cpp.obj omqclient_build_dir\CacheList.cpp.obj omqclient_build_dir\FileFlow.cpp.obj omqclient_build_dir\FlowReader.cpp.obj omqclient_build_dir\IndexFlow.cpp.obj omqclient_build_dir\OneTimeFlow.cpp.obj omqclient_build_dir\PubFlow.cpp.obj 
+flow_includedir=-I..\..\src_protocol\flow\.
+protocol_obj=omqclient_build_dir\Protocol.cpp.obj 
+protocol_includedir=-I..\..\src_protocol\protocol\.
+protocol_channel_obj=omqclient_build_dir\ChannelPackage.cpp.obj omqclient_build_dir\ChannelProtocol.cpp.obj omqclient_build_dir\Session.cpp.obj omqclient_build_dir\SessionFactory.cpp.obj 
+protocol_channel_includedir=-I..\..\src_protocol\protocol_channel\.
+protocol_nameserver_obj=omqclient_build_dir\NsPackage.cpp.obj omqclient_build_dir\NsProtocol.cpp.obj omqclient_build_dir\NsSession.cpp.obj omqclient_build_dir\NsSessionFactory.cpp.obj 
+protocol_nameserver_includedir=-I..\..\src_protocol\protocol_nameserver\.
+protocol_subscribe_obj=omqclient_build_dir\SCPPackage.cpp.obj omqclient_build_dir\SCPPackageDesc.cpp.obj omqclient_build_dir\SCPProtocol.cpp.obj 
+protocol_subscribe_includedir=-I..\..\src_protocol\protocol_subscribe\.
+protocol_link_obj=omqclient_build_dir\XMPPackage.cpp.obj omqclient_build_dir\XMPProtocol.cpp.obj omqclient_build_dir\XMPSession.cpp.obj 
+protocol_link_includedir=-I..\..\src_protocol\protocol_link\.
+protocol_compress_obj=omqclient_build_dir\CompressPackage.cpp.obj omqclient_build_dir\CompressProtocol.cpp.obj omqclient_build_dir\CompressUtil.cpp.obj 
+protocol_compress_includedir=-I..\..\src_protocol\protocol_compress\.
+protocol_ftd_obj=omqclient_build_dir\FTDCProtocol.cpp.obj omqclient_build_dir\FTDCPubEndPoint.cpp.obj omqclient_build_dir\FTDCSession.cpp.obj omqclient_build_dir\FTDCSubEndPoint.cpp.obj omqclient_build_dir\OrderingQ.cpp.obj 
+protocol_ftd_includedir=-I..\..\src_protocol\protocol_ftd\.
+package_ftd_includedir= 
+package_obj=omqclient_build_dir\FieldSet.cpp.obj omqclient_build_dir\FTDCPackage.cpp.obj omqclient_build_dir\Package.cpp.obj omqclient_build_dir\XTPPackage.cpp.obj 
+package_includedir=-I..\..\src_protocol\package\.
+omqclient_obj=omqclient_build_dir\omqclient.cpp.obj omqclient_build_dir\SimpleConnect.cpp.obj 
+omqclient_includedir=-I.\.
+
+all_objs=$(function_obj) $(datastruct_obj) $(thread_obj) $(logger_obj) $(network_obj) $(network_tcp_obj) $(reactor_obj) $(flow_obj) $(protocol_obj) $(protocol_channel_obj) $(protocol_nameserver_obj) $(protocol_subscribe_obj) $(protocol_link_obj) $(protocol_compress_obj) $(protocol_ftd_obj) $(package_obj) $(omqclient_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(datastruct_includedir)  $(thread_includedir)  $(logger_includedir)  $(network_includedir)  $(network_tcp_includedir)  $(udpnetwork_includedir)  $(multinetwork_includedir)  $(reactor_includedir)  $(flow_includedir)  $(protocol_includedir)  $(protocol_channel_includedir)  $(protocol_nameserver_includedir)  $(protocol_subscribe_includedir)  $(protocol_link_includedir)  $(protocol_compress_includedir)  $(protocol_ftd_includedir)  $(package_ftd_includedir)  $(package_includedir)  $(omqclient_includedir) 
+
+omqclient_build_dir\BaseFunction.cpp.obj: ..\..\..\build\src\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\BaseFunction.cpp /Foomqclient_build_dir\BaseFunction.cpp.obj
+omqclient_build_dir\Config.cpp.obj: ..\..\..\build\src\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\Config.cpp /Foomqclient_build_dir\Config.cpp.obj
+omqclient_build_dir\platform.cpp.obj: ..\..\..\build\src\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\platform.cpp /Foomqclient_build_dir\platform.cpp.obj
+omqclient_build_dir\printinfo.cpp.obj: ..\..\..\build\src\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\printinfo.cpp /Foomqclient_build_dir\printinfo.cpp.obj
+omqclient_build_dir\profile.cpp.obj: ..\..\..\build\src\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\profile.cpp /Foomqclient_build_dir\profile.cpp.obj
+omqclient_build_dir\utility.cpp.obj: ..\..\..\build\src\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\utility.cpp /Foomqclient_build_dir\utility.cpp.obj
+omqclient_build_dir\utils.cpp.obj: ..\..\..\build\src\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\utils.cpp /Foomqclient_build_dir\utils.cpp.obj
+omqclient_build_dir\version.cpp.obj: ..\..\..\build\src\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\version.cpp /Foomqclient_build_dir\version.cpp.obj
+omqclient_build_dir\BigDigit.cpp.obj: ..\..\..\build\src\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\BigDigit.cpp /Foomqclient_build_dir\BigDigit.cpp.obj
+omqclient_build_dir\CDate.cpp.obj: ..\..\..\build\src\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CDate.cpp /Foomqclient_build_dir\CDate.cpp.obj
+omqclient_build_dir\CErrorEngine.cpp.obj: ..\..\..\build\src\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CErrorEngine.cpp /Foomqclient_build_dir\CErrorEngine.cpp.obj
+omqclient_build_dir\CSequence.cpp.obj: ..\..\..\build\src\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSequence.cpp /Foomqclient_build_dir\CSequence.cpp.obj
+omqclient_build_dir\CSVParser.cpp.obj: ..\..\..\build\src\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSVParser.cpp /Foomqclient_build_dir\CSVParser.cpp.obj
+omqclient_build_dir\CSVToField.cpp.obj: ..\..\..\build\src\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSVToField.cpp /Foomqclient_build_dir\CSVToField.cpp.obj
+omqclient_build_dir\FieldDescribe.cpp.obj: ..\..\..\build\src\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\FieldDescribe.cpp /Foomqclient_build_dir\FieldDescribe.cpp.obj
+omqclient_build_dir\Semaphore.cpp.obj: ..\..\..\build\src\thread\Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\thread\Semaphore.cpp /Foomqclient_build_dir\Semaphore.cpp.obj
+omqclient_build_dir\Thread.cpp.obj: ..\..\..\build\src\thread\Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\thread\Thread.cpp /Foomqclient_build_dir\Thread.cpp.obj
+omqclient_build_dir\CFilelogService.cpp.obj: ..\..\..\build\src\logger\CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\logger\CFilelogService.cpp /Foomqclient_build_dir\CFilelogService.cpp.obj
+omqclient_build_dir\CLogger.cpp.obj: ..\..\..\build\src\logger\CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\logger\CLogger.cpp /Foomqclient_build_dir\CLogger.cpp.obj
+omqclient_build_dir\CProbeLogger.cpp.obj: ..\..\..\build\src\logger\CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\logger\CProbeLogger.cpp /Foomqclient_build_dir\CProbeLogger.cpp.obj
+omqclient_build_dir\CSyslogService.cpp.obj: ..\..\..\build\src\logger\CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\logger\CSyslogService.cpp /Foomqclient_build_dir\CSyslogService.cpp.obj
+omqclient_build_dir\monitorIndex.cpp.obj: ..\..\..\build\src\logger\monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\logger\monitorIndex.cpp /Foomqclient_build_dir\monitorIndex.cpp.obj
+omqclient_build_dir\Channel.cpp.obj: ..\..\src_network\network\Channel.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\Channel.cpp /Foomqclient_build_dir\Channel.cpp.obj
+omqclient_build_dir\Client.cpp.obj: ..\..\src_network\network\Client.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\Client.cpp /Foomqclient_build_dir\Client.cpp.obj
+omqclient_build_dir\EpollReactor.cpp.obj: ..\..\src_network\network\EpollReactor.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\EpollReactor.cpp /Foomqclient_build_dir\EpollReactor.cpp.obj
+omqclient_build_dir\ListenCtrl.cpp.obj: ..\..\src_network\network\ListenCtrl.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\ListenCtrl.cpp /Foomqclient_build_dir\ListenCtrl.cpp.obj
+omqclient_build_dir\NetworkFactory.cpp.obj: ..\..\src_network\network\NetworkFactory.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\NetworkFactory.cpp /Foomqclient_build_dir\NetworkFactory.cpp.obj
+omqclient_build_dir\PipeEventHandler.cpp.obj: ..\..\src_network\network\PipeEventHandler.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\PipeEventHandler.cpp /Foomqclient_build_dir\PipeEventHandler.cpp.obj
+omqclient_build_dir\SelectReactor.cpp.obj: ..\..\src_network\network\SelectReactor.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\SelectReactor.cpp /Foomqclient_build_dir\SelectReactor.cpp.obj
+omqclient_build_dir\Server.cpp.obj: ..\..\src_network\network\Server.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\Server.cpp /Foomqclient_build_dir\Server.cpp.obj
+omqclient_build_dir\ServiceName.cpp.obj: ..\..\src_network\network\ServiceName.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\ServiceName.cpp /Foomqclient_build_dir\ServiceName.cpp.obj
+omqclient_build_dir\SocketInit.cpp.obj: ..\..\src_network\network\SocketInit.cpp $(network_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network\SocketInit.cpp /Foomqclient_build_dir\SocketInit.cpp.obj
+omqclient_build_dir\TcpChannel.cpp.obj: ..\..\src_network\network_tcp\TcpChannel.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network_tcp\TcpChannel.cpp /Foomqclient_build_dir\TcpChannel.cpp.obj
+omqclient_build_dir\TcpClient.cpp.obj: ..\..\src_network\network_tcp\TcpClient.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network_tcp\TcpClient.cpp /Foomqclient_build_dir\TcpClient.cpp.obj
+omqclient_build_dir\TcpNetworkFactory.cpp.obj: ..\..\src_network\network_tcp\TcpNetworkFactory.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network_tcp\TcpNetworkFactory.cpp /Foomqclient_build_dir\TcpNetworkFactory.cpp.obj
+omqclient_build_dir\TcpServer.cpp.obj: ..\..\src_network\network_tcp\TcpServer.cpp $(network_tcp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\network_tcp\TcpServer.cpp /Foomqclient_build_dir\TcpServer.cpp.obj
+omqclient_build_dir\EventDispatcher.cpp.obj: ..\..\src_network\reactor\EventDispatcher.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\EventDispatcher.cpp /Foomqclient_build_dir\EventDispatcher.cpp.obj
+omqclient_build_dir\EventHandler.cpp.obj: ..\..\src_network\reactor\EventHandler.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\EventHandler.cpp /Foomqclient_build_dir\EventHandler.cpp.obj
+omqclient_build_dir\EventQueue.cpp.obj: ..\..\src_network\reactor\EventQueue.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\EventQueue.cpp /Foomqclient_build_dir\EventQueue.cpp.obj
+omqclient_build_dir\Reactor.cpp.obj: ..\..\src_network\reactor\Reactor.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\Reactor.cpp /Foomqclient_build_dir\Reactor.cpp.obj
+omqclient_build_dir\SimpleReactor.cpp.obj: ..\..\src_network\reactor\SimpleReactor.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\SimpleReactor.cpp /Foomqclient_build_dir\SimpleReactor.cpp.obj
+omqclient_build_dir\TimerHeap.cpp.obj: ..\..\src_network\reactor\TimerHeap.cpp $(reactor_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_network\reactor\TimerHeap.cpp /Foomqclient_build_dir\TimerHeap.cpp.obj
+omqclient_build_dir\CachedFlow.cpp.obj: ..\..\src_protocol\flow\CachedFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\CachedFlow.cpp /Foomqclient_build_dir\CachedFlow.cpp.obj
+omqclient_build_dir\CacheList.cpp.obj: ..\..\src_protocol\flow\CacheList.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\CacheList.cpp /Foomqclient_build_dir\CacheList.cpp.obj
+omqclient_build_dir\FileFlow.cpp.obj: ..\..\src_protocol\flow\FileFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\FileFlow.cpp /Foomqclient_build_dir\FileFlow.cpp.obj
+omqclient_build_dir\FlowReader.cpp.obj: ..\..\src_protocol\flow\FlowReader.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\FlowReader.cpp /Foomqclient_build_dir\FlowReader.cpp.obj
+omqclient_build_dir\IndexFlow.cpp.obj: ..\..\src_protocol\flow\IndexFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\IndexFlow.cpp /Foomqclient_build_dir\IndexFlow.cpp.obj
+omqclient_build_dir\OneTimeFlow.cpp.obj: ..\..\src_protocol\flow\OneTimeFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\OneTimeFlow.cpp /Foomqclient_build_dir\OneTimeFlow.cpp.obj
+omqclient_build_dir\PubFlow.cpp.obj: ..\..\src_protocol\flow\PubFlow.cpp $(flow_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\flow\PubFlow.cpp /Foomqclient_build_dir\PubFlow.cpp.obj
+omqclient_build_dir\Protocol.cpp.obj: ..\..\src_protocol\protocol\Protocol.cpp $(protocol_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol\Protocol.cpp /Foomqclient_build_dir\Protocol.cpp.obj
+omqclient_build_dir\ChannelPackage.cpp.obj: ..\..\src_protocol\protocol_channel\ChannelPackage.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_channel\ChannelPackage.cpp /Foomqclient_build_dir\ChannelPackage.cpp.obj
+omqclient_build_dir\ChannelProtocol.cpp.obj: ..\..\src_protocol\protocol_channel\ChannelProtocol.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_channel\ChannelProtocol.cpp /Foomqclient_build_dir\ChannelProtocol.cpp.obj
+omqclient_build_dir\Session.cpp.obj: ..\..\src_protocol\protocol_channel\Session.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_channel\Session.cpp /Foomqclient_build_dir\Session.cpp.obj
+omqclient_build_dir\SessionFactory.cpp.obj: ..\..\src_protocol\protocol_channel\SessionFactory.cpp $(protocol_channel_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_channel\SessionFactory.cpp /Foomqclient_build_dir\SessionFactory.cpp.obj
+omqclient_build_dir\NsPackage.cpp.obj: ..\..\src_protocol\protocol_nameserver\NsPackage.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_nameserver\NsPackage.cpp /Foomqclient_build_dir\NsPackage.cpp.obj
+omqclient_build_dir\NsProtocol.cpp.obj: ..\..\src_protocol\protocol_nameserver\NsProtocol.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_nameserver\NsProtocol.cpp /Foomqclient_build_dir\NsProtocol.cpp.obj
+omqclient_build_dir\NsSession.cpp.obj: ..\..\src_protocol\protocol_nameserver\NsSession.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_nameserver\NsSession.cpp /Foomqclient_build_dir\NsSession.cpp.obj
+omqclient_build_dir\NsSessionFactory.cpp.obj: ..\..\src_protocol\protocol_nameserver\NsSessionFactory.cpp $(protocol_nameserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_nameserver\NsSessionFactory.cpp /Foomqclient_build_dir\NsSessionFactory.cpp.obj
+omqclient_build_dir\SCPPackage.cpp.obj: ..\..\src_protocol\protocol_subscribe\SCPPackage.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_subscribe\SCPPackage.cpp /Foomqclient_build_dir\SCPPackage.cpp.obj
+omqclient_build_dir\SCPPackageDesc.cpp.obj: ..\..\src_protocol\protocol_subscribe\SCPPackageDesc.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_subscribe\SCPPackageDesc.cpp /Foomqclient_build_dir\SCPPackageDesc.cpp.obj
+omqclient_build_dir\SCPProtocol.cpp.obj: ..\..\src_protocol\protocol_subscribe\SCPProtocol.cpp $(protocol_subscribe_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_subscribe\SCPProtocol.cpp /Foomqclient_build_dir\SCPProtocol.cpp.obj
+omqclient_build_dir\XMPPackage.cpp.obj: ..\..\src_protocol\protocol_link\XMPPackage.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_link\XMPPackage.cpp /Foomqclient_build_dir\XMPPackage.cpp.obj
+omqclient_build_dir\XMPProtocol.cpp.obj: ..\..\src_protocol\protocol_link\XMPProtocol.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_link\XMPProtocol.cpp /Foomqclient_build_dir\XMPProtocol.cpp.obj
+omqclient_build_dir\XMPSession.cpp.obj: ..\..\src_protocol\protocol_link\XMPSession.cpp $(protocol_link_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_link\XMPSession.cpp /Foomqclient_build_dir\XMPSession.cpp.obj
+omqclient_build_dir\CompressPackage.cpp.obj: ..\..\src_protocol\protocol_compress\CompressPackage.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_compress\CompressPackage.cpp /Foomqclient_build_dir\CompressPackage.cpp.obj
+omqclient_build_dir\CompressProtocol.cpp.obj: ..\..\src_protocol\protocol_compress\CompressProtocol.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_compress\CompressProtocol.cpp /Foomqclient_build_dir\CompressProtocol.cpp.obj
+omqclient_build_dir\CompressUtil.cpp.obj: ..\..\src_protocol\protocol_compress\CompressUtil.cpp $(protocol_compress_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_compress\CompressUtil.cpp /Foomqclient_build_dir\CompressUtil.cpp.obj
+omqclient_build_dir\FTDCProtocol.cpp.obj: ..\..\src_protocol\protocol_ftd\FTDCProtocol.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_ftd\FTDCProtocol.cpp /Foomqclient_build_dir\FTDCProtocol.cpp.obj
+omqclient_build_dir\FTDCPubEndPoint.cpp.obj: ..\..\src_protocol\protocol_ftd\FTDCPubEndPoint.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_ftd\FTDCPubEndPoint.cpp /Foomqclient_build_dir\FTDCPubEndPoint.cpp.obj
+omqclient_build_dir\FTDCSession.cpp.obj: ..\..\src_protocol\protocol_ftd\FTDCSession.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_ftd\FTDCSession.cpp /Foomqclient_build_dir\FTDCSession.cpp.obj
+omqclient_build_dir\FTDCSubEndPoint.cpp.obj: ..\..\src_protocol\protocol_ftd\FTDCSubEndPoint.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_ftd\FTDCSubEndPoint.cpp /Foomqclient_build_dir\FTDCSubEndPoint.cpp.obj
+omqclient_build_dir\OrderingQ.cpp.obj: ..\..\src_protocol\protocol_ftd\OrderingQ.cpp $(protocol_ftd_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\protocol_ftd\OrderingQ.cpp /Foomqclient_build_dir\OrderingQ.cpp.obj
+omqclient_build_dir\FieldSet.cpp.obj: ..\..\src_protocol\package\FieldSet.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\package\FieldSet.cpp /Foomqclient_build_dir\FieldSet.cpp.obj
+omqclient_build_dir\FTDCPackage.cpp.obj: ..\..\src_protocol\package\FTDCPackage.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\package\FTDCPackage.cpp /Foomqclient_build_dir\FTDCPackage.cpp.obj
+omqclient_build_dir\Package.cpp.obj: ..\..\src_protocol\package\Package.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\package\Package.cpp /Foomqclient_build_dir\Package.cpp.obj
+omqclient_build_dir\XTPPackage.cpp.obj: ..\..\src_protocol\package\XTPPackage.cpp $(package_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_protocol\package\XTPPackage.cpp /Foomqclient_build_dir\XTPPackage.cpp.obj
+omqclient_build_dir\omqclient.cpp.obj: .\omqclient.cpp $(omqclient_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\omqclient.cpp /Foomqclient_build_dir\omqclient.cpp.obj
+omqclient_build_dir\SimpleConnect.cpp.obj: .\SimpleConnect.cpp $(omqclient_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\SimpleConnect.cpp /Foomqclient_build_dir\SimpleConnect.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -out:$@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(network_obj)
+	-$(DEL) $(network_tcp_obj)
+	-$(DEL) $(reactor_obj)
+	-$(DEL) $(flow_obj)
+	-$(DEL) $(protocol_obj)
+	-$(DEL) $(protocol_channel_obj)
+	-$(DEL) $(protocol_nameserver_obj)
+	-$(DEL) $(protocol_subscribe_obj)
+	-$(DEL) $(protocol_link_obj)
+	-$(DEL) $(protocol_compress_obj)
+	-$(DEL) $(protocol_ftd_obj)
+	-$(DEL) $(package_obj)
+	-$(DEL) $(omqclient_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\..\..\..\build\run\test\tools\omqclient.pdb

@@ -1,0 +1,122 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DWINDOWS -DMSVC -DISLIB
+target=.\..\cplusplus\\LinkOneMega.dll
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DOUTFOGSERVICE_API_IS_LIB -DLIB_OUTFOGSERVICE_API_EXPORT $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  LinkOneMega_build_dir
+	-mkdir  .\..\cplusplus\\
+	
+datastruct_obj=LinkOneMega_build_dir\BigDigit.cpp.obj LinkOneMega_build_dir\CDate.cpp.obj LinkOneMega_build_dir\CErrorEngine.cpp.obj LinkOneMega_build_dir\CSequence.cpp.obj LinkOneMega_build_dir\CSVParser.cpp.obj LinkOneMega_build_dir\CSVToField.cpp.obj LinkOneMega_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\src_base\datastruct\.
+function_obj=LinkOneMega_build_dir\BaseFunction.cpp.obj LinkOneMega_build_dir\Config.cpp.obj LinkOneMega_build_dir\platform.cpp.obj LinkOneMega_build_dir\printinfo.cpp.obj LinkOneMega_build_dir\profile.cpp.obj LinkOneMega_build_dir\utility.cpp.obj LinkOneMega_build_dir\utils.cpp.obj LinkOneMega_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\src_base\function\.
+netstruct_obj=LinkOneMega_build_dir\errorDefine.cpp.obj LinkOneMega_build_dir\TableDefine.cpp.obj 
+netstruct_includedir=-I..\..\..\src_base\netstruct\.
+field_obj=LinkOneMega_build_dir\FieldData.cpp.obj LinkOneMega_build_dir\FieldMap.cpp.obj 
+field_includedir=-I..\..\..\src_base\field\.
+ofserviceapi_include_includedir=-I..\..\..\libs\ofserviceapi\1.0\include\.
+include_includedir=-I..\..\..\src_api\include\.
+linkswap_obj=LinkOneMega_build_dir\ExLinkApi.cpp.obj LinkOneMega_build_dir\LinkSwap.cpp.obj 
+linkswap_includedir=-I..\..\..\src_api\linkswap\.
+
+all_objs=$(datastruct_obj) $(function_obj) $(netstruct_obj) $(field_obj) $(linkswap_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(include_includedir)  $(linkswap_includedir) 
+
+LinkOneMega_build_dir\BigDigit.cpp.obj: ..\..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\BigDigit.cpp /FoLinkOneMega_build_dir\BigDigit.cpp.obj
+LinkOneMega_build_dir\CDate.cpp.obj: ..\..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CDate.cpp /FoLinkOneMega_build_dir\CDate.cpp.obj
+LinkOneMega_build_dir\CErrorEngine.cpp.obj: ..\..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CErrorEngine.cpp /FoLinkOneMega_build_dir\CErrorEngine.cpp.obj
+LinkOneMega_build_dir\CSequence.cpp.obj: ..\..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSequence.cpp /FoLinkOneMega_build_dir\CSequence.cpp.obj
+LinkOneMega_build_dir\CSVParser.cpp.obj: ..\..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVParser.cpp /FoLinkOneMega_build_dir\CSVParser.cpp.obj
+LinkOneMega_build_dir\CSVToField.cpp.obj: ..\..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVToField.cpp /FoLinkOneMega_build_dir\CSVToField.cpp.obj
+LinkOneMega_build_dir\FieldDescribe.cpp.obj: ..\..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\FieldDescribe.cpp /FoLinkOneMega_build_dir\FieldDescribe.cpp.obj
+LinkOneMega_build_dir\BaseFunction.cpp.obj: ..\..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\BaseFunction.cpp /FoLinkOneMega_build_dir\BaseFunction.cpp.obj
+LinkOneMega_build_dir\Config.cpp.obj: ..\..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\Config.cpp /FoLinkOneMega_build_dir\Config.cpp.obj
+LinkOneMega_build_dir\platform.cpp.obj: ..\..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\platform.cpp /FoLinkOneMega_build_dir\platform.cpp.obj
+LinkOneMega_build_dir\printinfo.cpp.obj: ..\..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\printinfo.cpp /FoLinkOneMega_build_dir\printinfo.cpp.obj
+LinkOneMega_build_dir\profile.cpp.obj: ..\..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\profile.cpp /FoLinkOneMega_build_dir\profile.cpp.obj
+LinkOneMega_build_dir\utility.cpp.obj: ..\..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utility.cpp /FoLinkOneMega_build_dir\utility.cpp.obj
+LinkOneMega_build_dir\utils.cpp.obj: ..\..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utils.cpp /FoLinkOneMega_build_dir\utils.cpp.obj
+LinkOneMega_build_dir\version.cpp.obj: ..\..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\version.cpp /FoLinkOneMega_build_dir\version.cpp.obj
+LinkOneMega_build_dir\errorDefine.cpp.obj: ..\..\..\src_base\netstruct\errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\netstruct\errorDefine.cpp /FoLinkOneMega_build_dir\errorDefine.cpp.obj
+LinkOneMega_build_dir\TableDefine.cpp.obj: ..\..\..\src_base\netstruct\TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\netstruct\TableDefine.cpp /FoLinkOneMega_build_dir\TableDefine.cpp.obj
+LinkOneMega_build_dir\FieldData.cpp.obj: ..\..\..\src_base\field\FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\field\FieldData.cpp /FoLinkOneMega_build_dir\FieldData.cpp.obj
+LinkOneMega_build_dir\FieldMap.cpp.obj: ..\..\..\src_base\field\FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\field\FieldMap.cpp /FoLinkOneMega_build_dir\FieldMap.cpp.obj
+LinkOneMega_build_dir\ExLinkApi.cpp.obj: ..\..\..\src_api\linkswap\ExLinkApi.cpp $(linkswap_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_api\linkswap\ExLinkApi.cpp /FoLinkOneMega_build_dir\ExLinkApi.cpp.obj
+LinkOneMega_build_dir\LinkSwap.cpp.obj: ..\..\..\src_api\linkswap\LinkSwap.cpp $(linkswap_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_api\linkswap\LinkSwap.cpp /FoLinkOneMega_build_dir\LinkSwap.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -out:$@ -implib:.\..\cplusplus\\LinkOneMega.lib $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(linkswap_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\..\cplusplus\\LinkOneMega.lib
+	-$(DEL) .\..\cplusplus\\LinkOneMega.pdb

@@ -1,0 +1,152 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=.//marketmaker
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p marketmaker_build_dir
+	-mkdir -p .//
+	
+crypt_obj=marketmaker_build_dir/cryptUtility.cpp.o marketmaker_build_dir/Des.cpp.o marketmaker_build_dir/hexEncode.cpp.o marketmaker_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=marketmaker_build_dir/BigDigit.cpp.o marketmaker_build_dir/CDate.cpp.o marketmaker_build_dir/CErrorEngine.cpp.o marketmaker_build_dir/CSequence.cpp.o marketmaker_build_dir/CSVParser.cpp.o marketmaker_build_dir/CSVToField.cpp.o marketmaker_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+function_obj=marketmaker_build_dir/BaseFunction.cpp.o marketmaker_build_dir/Config.cpp.o marketmaker_build_dir/platform.cpp.o marketmaker_build_dir/printinfo.cpp.o marketmaker_build_dir/profile.cpp.o marketmaker_build_dir/utility.cpp.o marketmaker_build_dir/utils.cpp.o marketmaker_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=marketmaker_build_dir/CFilelogService.cpp.o marketmaker_build_dir/CLogger.cpp.o marketmaker_build_dir/CProbeLogger.cpp.o marketmaker_build_dir/CSyslogService.cpp.o marketmaker_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+netstruct_obj=marketmaker_build_dir/errorDefine.cpp.o marketmaker_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=marketmaker_build_dir/FieldData.cpp.o marketmaker_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=marketmaker_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+marketmaker_obj=marketmaker_build_dir/FastWorker.cpp.o marketmaker_build_dir/IndexWorker.cpp.o marketmaker_build_dir/Main.cpp.o marketmaker_build_dir/MarketWorker.cpp.o 
+marketmaker_includedir=-I../../src/marketmaker/.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(ofapibase_obj) $(marketmaker_obj) 
+
+all_libs=
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(marketmaker_includedir) 
+
+marketmaker_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -omarketmaker_build_dir/cryptUtility.cpp.o
+marketmaker_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -omarketmaker_build_dir/Des.cpp.o
+marketmaker_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -omarketmaker_build_dir/hexEncode.cpp.o
+marketmaker_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -omarketmaker_build_dir/md5Handler.cpp.o
+marketmaker_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -omarketmaker_build_dir/BigDigit.cpp.o
+marketmaker_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -omarketmaker_build_dir/CDate.cpp.o
+marketmaker_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -omarketmaker_build_dir/CErrorEngine.cpp.o
+marketmaker_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -omarketmaker_build_dir/CSequence.cpp.o
+marketmaker_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -omarketmaker_build_dir/CSVParser.cpp.o
+marketmaker_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -omarketmaker_build_dir/CSVToField.cpp.o
+marketmaker_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -omarketmaker_build_dir/FieldDescribe.cpp.o
+marketmaker_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -omarketmaker_build_dir/BaseFunction.cpp.o
+marketmaker_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -omarketmaker_build_dir/Config.cpp.o
+marketmaker_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -omarketmaker_build_dir/platform.cpp.o
+marketmaker_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -omarketmaker_build_dir/printinfo.cpp.o
+marketmaker_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -omarketmaker_build_dir/profile.cpp.o
+marketmaker_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -omarketmaker_build_dir/utility.cpp.o
+marketmaker_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -omarketmaker_build_dir/utils.cpp.o
+marketmaker_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -omarketmaker_build_dir/version.cpp.o
+marketmaker_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -omarketmaker_build_dir/CFilelogService.cpp.o
+marketmaker_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -omarketmaker_build_dir/CLogger.cpp.o
+marketmaker_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -omarketmaker_build_dir/CProbeLogger.cpp.o
+marketmaker_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -omarketmaker_build_dir/CSyslogService.cpp.o
+marketmaker_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -omarketmaker_build_dir/monitorIndex.cpp.o
+marketmaker_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -omarketmaker_build_dir/errorDefine.cpp.o
+marketmaker_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -omarketmaker_build_dir/TableDefine.cpp.o
+marketmaker_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -omarketmaker_build_dir/FieldData.cpp.o
+marketmaker_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -omarketmaker_build_dir/FieldMap.cpp.o
+marketmaker_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -omarketmaker_build_dir/OutFogServiceApiWrapper.cpp.o
+marketmaker_build_dir/FastWorker.cpp.o: ../../src/marketmaker/FastWorker.cpp $(marketmaker_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/marketmaker/FastWorker.cpp -omarketmaker_build_dir/FastWorker.cpp.o
+marketmaker_build_dir/IndexWorker.cpp.o: ../../src/marketmaker/IndexWorker.cpp $(marketmaker_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/marketmaker/IndexWorker.cpp -omarketmaker_build_dir/IndexWorker.cpp.o
+marketmaker_build_dir/Main.cpp.o: ../../src/marketmaker/Main.cpp $(marketmaker_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/marketmaker/Main.cpp -omarketmaker_build_dir/Main.cpp.o
+marketmaker_build_dir/MarketWorker.cpp.o: ../../src/marketmaker/MarketWorker.cpp $(marketmaker_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/marketmaker/MarketWorker.cpp -omarketmaker_build_dir/MarketWorker.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(marketmaker_obj)
+
+	-$(DEL) $(target)

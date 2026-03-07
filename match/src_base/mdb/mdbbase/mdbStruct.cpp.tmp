@@ -1,0 +1,317 @@
+!!enter system!!
+/////////////////////////////////////////////////////////////////////////
+///@file BaseDataStruct.cpp
+///@brief实现了内存数据库用的基本数据结构类，以及iterator、trigger的基类
+///@history 
+/////////////////////////////////////////////////////////////////////////
+
+#include "mdbStruct.h"
+#include "mdbTable.h"
+
+int compare(const char *s1, const char *s2)
+{
+	int result=strcmp(s1,s2);
+	if (result>0)
+		return 1;
+	else if (result<0)
+		return -1;
+	return 0;
+}
+
+int compare(const int v1,const int v2)
+{
+	if (v1>v2)
+		return 1;
+	if (v1<v2)
+		return -1;
+	return 0;
+}
+
+int compare(const double v1,const double v2)
+{
+	//if (v1>v2+SMALL_DOUBLE)
+	//	return 1;
+	//if (v1<v2-SMALL_DOUBLE)
+	//	return -1;
+	//return 0;
+
+	//目前最大是12位小数，这里取12，如果系统的最大的小数变化，这里需要修改
+	double compareSmall = doubleCompareSmall(v1, SMALLEST_PRECISION);
+	if (v1 > v2 + compareSmall)
+		return 1;
+	if (v1 < v2 - compareSmall)
+		return -1;
+	return 0;
+}
+
+char *getNextToken(char *buffer)
+{
+	static char *last;
+	char *from, *to;
+	
+	if (buffer==NULL)
+	{
+		from=last;
+		if (from==NULL)
+		{
+			return NULL;
+		}
+	}
+	else
+	{
+		from=buffer;
+	}
+	
+	bool hasQuote=false;
+	if (*from=='"')
+	{
+		from++;
+		hasQuote=true;
+	}
+	to=from;
+	while ((*to!='\0')&&(*to!=',')&&(*to!='\n'))
+	{
+		if (hasQuote && (*to=='"'))
+		{
+			to++;
+			break;
+		}
+		to++;
+	}
+	if (*to!=',')
+	{
+		last=NULL;
+	}
+	else
+	{
+		last=to+1;
+	}
+	if (!hasQuote)
+	{
+		*to='\0';
+	}
+	else
+	{
+		*(to-1)='\0';
+	}
+	return from;
+}
+
+!!travel tables!!
+
+void CWriteable!!@name!!::writeCSVHead(FILE *output)
+{
+	fprintf(output,"!!travel fields!!!!if @pumpid!=0!!,!!endif!!\"!!@name!!!!@isPK!!\"!!next!!\n");
+}
+
+void CWriteable!!@name!!::writeCSVHeadPreVersion(FILE *output)
+{
+	fprintf(output,"!!travel fields!!!!if valid_name("preversion")!!!!if strcmp(@preversion,"")!!!!if @pumpid!=0!!,!!endif!!\"!!@preversion!!\"!!endif!!!!else!!!!if @pumpid!=0!!,!!endif!!\"!!@name!!\"!!endif!!!!next!!\n");
+}
+	
+void CWriteable!!@name!!::init()
+{
+	//初始化的时候已经clear了，这里只需要对notnull的init一下
+	!!travel fields!!
+		!!if !strcmp(@notnull,"yes")!!
+			!!if valid_name("default") && strcmp(@default,"")!!
+	!!@name!!.setValue(!!@default!!);
+			!!else!!
+	!!@name!!.init();
+			!!endif!!
+		!!else!!
+	!!@name!!.clear();
+		!!endif!!
+	!!next!!
+}
+
+void CWriteable!!@name!!::init(CMDB *pMDB)
+{
+	m_pMDB = pMDB;
+	init();
+}
+
+int CWriteable!!@name!!::read(FILE *input) 
+{
+	if (fread(this,1,sizeof(CWriteable!!@name!!),input)!=sizeof(CWriteable!!@name!!))
+		return 0;
+	else
+		return 1;
+}
+	
+int CWriteable!!@name!!::readCSV(FILE *input,vector<char *> *pNames)
+{
+	char buffer[1025];
+	char *token;
+	if (fgets(buffer,1024,input)==NULL)
+		return 0;
+	if (pNames==NULL)
+	{
+		!!travel fields!!
+		!!if @pumpid==0!!
+		token=getNextToken(buffer);
+		!!else!!
+		token=getNextToken(NULL);
+		!!endif!!
+		if (token!=NULL)
+			!!@name!!=token;
+		else
+			!!@name!!="";
+		!!next!!
+	}
+	else
+	{
+		init();
+		token=getNextToken(buffer);
+		int i=0;
+		while (token!=NULL)
+		{
+			char *fieldName;
+			fieldName=pNames->at(i);
+			if (fieldName==NULL)
+			{
+				break;
+			}
+			!!travel fields!!
+			!!if @pumpid==0!!
+			if (!strcmp(fieldName,"!!@name!!"))
+			!!else!!
+			else if (!strcmp(fieldName,"!!@name!!"))
+			!!endif!!
+			{
+				!!@name!!=token;
+			}
+			!!next!!
+			i++;
+			token=getNextToken(NULL);
+		}
+	}
+	return 1;
+}
+	
+int CWriteable!!@name!!::write(FILE *output) const
+{
+	if (fwrite(this,1,sizeof(CWriteable!!@name!!),output)!=sizeof(CWriteable!!@name!!))
+		return 0;
+	else
+		return 1;
+}
+
+int CWriteable!!@name!!::writeCSV(FILE *output) const
+{
+	!!travel fields!!
+	!!if @pumpid!=0!!
+	fprintf(output,",");
+	!!endif!!
+	fprintf(output,"\"%s\"",!!@name!!.getAllString().c_str());
+	!!next!!
+	fprintf(output,"\n");
+	return 1;
+}
+
+int CWriteable!!@name!!::writeCSVPreVersion(FILE *output) const
+{
+	!!travel fields!!
+		!!if valid_name("preversion")!!
+			!!if strcmp(@preversion,"")!!
+				!!if @pumpid!=0!!
+	fprintf(output,",");
+				!!endif!!			
+	fprintf(output,"\"%s\"",!!@name!!.getAllString().c_str());
+			!!endif!!
+		!!else!!
+			!!if @pumpid!=0!!
+	fprintf(output,",");
+			!!endif!!		
+	fprintf(output,"\"%s\"",!!@name!!.getAllString().c_str());	
+		!!endif!!
+	!!next!!
+	fprintf(output,"\n");
+	return 1;
+}
+
+!!++!!
+int CWriteable!!@name!!::isValid() const
+{
+	!!travel fields!!
+	if (! !!@name!!.isValid())
+		return 0;
+	!!next!!
+	return 1;
+}
+!!--!!
+void CWriteable!!@name!!::dump(FILE *fp,int index) const
+{
+	char index_buf[20];
+	if(fp==NULL)
+		fp=stdout;
+	if (index>=0)
+		sprintf(index_buf,"[%d]",index);
+	else
+		index_buf[0]='\0';
+	fprintf(fp, "\tC!!@name!!%s = {\n", index_buf);
+	!!travel fields!!
+	fprintf(fp,"\t\t!!@name!! = %s    [!!@comment!!]\n",!!@name!!.getString().c_str());	
+	!!next!!	
+	fprintf(fp,"\t}\n");
+}
+
+void CWriteable!!@name!!::dumpDiff(FILE *fp, const CWriteable!!@name!! *pOriginal) const
+{
+	if(fp==NULL)
+		fp=stdout;
+	fprintf(fp, "\tC!!@name!! = {\n");
+	!!travel fields!!
+	if (compare(!!@name!!.getValue(),pOriginal->!!@name!!.getValue())!=0)
+		fprintf(fp,"\t\t!!@name!! = %s -> %s    [!!@comment!!]\n",pOriginal->!!@name!!.getString().c_str(),!!@name!!.getString().c_str());
+	else
+		fprintf(fp,"\t\t!!@name!! = %s    [!!@comment!!]\n",!!@name!!.getString().c_str());
+	!!next!!	
+	fprintf(fp,"\t}\n");
+}
+
+void CWriteable!!@name!!::dumpInLine(FILE *fp) const
+{
+	if(fp==NULL)
+		fp=stdout;
+	!!travel fields!!
+	fprintf(fp,",!!@name!!=%s",!!@name!!.getString().c_str());	
+	!!next!!
+	fprintf(fp,"\n");
+}
+
+void CWriteable!!@name!!::dumpString(char *target) const
+{
+	char *p=target;
+	!!travel fields!!
+	sprintf(p,"!!@name!!=%s,",!!@name!!.getString().c_str());
+	p+=strlen(p);
+	!!next!!
+	p--;
+	*p='\0';
+}
+
+!!if !strcmp(@hasTable,"yes")!!
+void C!!@name!!Iterator::dump(FILE *output)
+{
+	C!!@name!! *p!!@name!!;
+	while ((p!!@name!!=next())!=NULL)
+	{
+		p!!@name!!->dump(output);
+	}
+}
+!!endif!!
+
+!!let tableName=@name!!
+!!travel foreigns!!
+const CWriteable!!@factory!! *CWriteable!!@tableName!!::link!!@name!!() const
+{
+	void *target=(void *)(&p!!@name!!);
+	*((const CWriteable!!@factory!! **)target)=m_pMDB->m_!!@factory!!Factory->find!!@method!!(!!@key!!);
+	return p!!@name!!;
+}
+
+!!next!!
+
+!!next!!
+!!leave!!

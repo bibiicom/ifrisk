@@ -1,0 +1,47 @@
+########################################################
+#各种输出文件的路径
+########################################################
+##日志文件路径
+SyslogPath=trade.log
+##snap快照文件位置
+SnapPath=./snap/
+##inc文件位置
+#IncPath=./snap/
+##错误的报单等的日志路径
+#ErrorPath=./dump/
+
+########################################################
+#内存数据库使用内存的各个参数
+########################################################
+#内存数据库的大小，以M为单位，在32位下，缺省为512，在64位下，缺省为4096
+MemorySize=512
+#内存数据库中分块的数量，在32位下，缺省为16384，在64位下，缺省为131072
+MaxBlockCount=131072
+#MDB的操作落地文件名，排查问题
+MDBLog=
+
+SystemName=Ofex
+
+#日志运行级别
+#define LOG_NONE		0
+#define LOG_EMERGENCY	1
+#define LOG_CRITICAL	2
+#define LOG_ERROR		3
+#define LOG_WARNING		4
+#define LOG_INFO		5
+#define LOG_DEBUG		6
+LogLevel=5
+
+##是否需要dump，作为备系统运行时此配置选项无用，一定dump
+##主系统选择不dump，目的为了避免dump是遇到卡顿，影响交易
+##为了避免备系统全面消失的情况下，主系统没有dump文件导致备系统再也无法启动
+##的死循环，在主系统选择不dump时，再使用一个系统接收input流水，反演并dump文件即可
+##不配置，说明不需要dump
+##是否支持手动dump，两个同样dump目录的不能同时dump到同一个目录
+MannualDump=yes
+
+##多少个报文snap一次
+SnapCount=200000
+
+##redo的时候多少个报文snap一次
+SnapCountRedo=100000

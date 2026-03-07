@@ -1,0 +1,116 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DLINUX -DGCC -DISLIB
+target=././libOneMegaToStable.so
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DONE_MEGAAPI_IS_LIB -DLIB_ONE_MEGA_API_EXPORT $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p OneMegaToStable_build_dir
+	-mkdir -p ././
+	
+datastruct_obj=OneMegaToStable_build_dir/BigDigit.cpp.o OneMegaToStable_build_dir/CDate.cpp.o OneMegaToStable_build_dir/CErrorEngine.cpp.o OneMegaToStable_build_dir/CSequence.cpp.o OneMegaToStable_build_dir/CSVParser.cpp.o OneMegaToStable_build_dir/CSVToField.cpp.o OneMegaToStable_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../src_base/datastruct/.
+function_obj=OneMegaToStable_build_dir/BaseFunction.cpp.o OneMegaToStable_build_dir/Config.cpp.o OneMegaToStable_build_dir/platform.cpp.o OneMegaToStable_build_dir/printinfo.cpp.o OneMegaToStable_build_dir/profile.cpp.o OneMegaToStable_build_dir/utility.cpp.o OneMegaToStable_build_dir/utils.cpp.o OneMegaToStable_build_dir/version.cpp.o 
+function_includedir=-I../../../src_base/function/.
+tool_obj=OneMegaToStable_build_dir/tool.cpp.o 
+tool_includedir=-I../../../src_base/tool/.
+thread_obj=OneMegaToStable_build_dir/Semaphore.cpp.o OneMegaToStable_build_dir/Thread.cpp.o 
+thread_includedir=-I../../../src_base/thread/.
+include_includedir=-I../../../src_api/include/.
+OneMegaToStable_obj=OneMegaToStable_build_dir/Link.cpp.o 
+OneMegaToStable_includedir=-I./.
+
+all_objs=$(datastruct_obj) $(function_obj) $(tool_obj) $(thread_obj) $(OneMegaToStable_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(tool_includedir)  $(thread_includedir)  $(include_includedir)  $(OneMegaToStable_includedir) 
+
+OneMegaToStable_build_dir/BigDigit.cpp.o: ../../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/BigDigit.cpp -oOneMegaToStable_build_dir/BigDigit.cpp.o
+OneMegaToStable_build_dir/CDate.cpp.o: ../../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CDate.cpp -oOneMegaToStable_build_dir/CDate.cpp.o
+OneMegaToStable_build_dir/CErrorEngine.cpp.o: ../../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CErrorEngine.cpp -oOneMegaToStable_build_dir/CErrorEngine.cpp.o
+OneMegaToStable_build_dir/CSequence.cpp.o: ../../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSequence.cpp -oOneMegaToStable_build_dir/CSequence.cpp.o
+OneMegaToStable_build_dir/CSVParser.cpp.o: ../../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVParser.cpp -oOneMegaToStable_build_dir/CSVParser.cpp.o
+OneMegaToStable_build_dir/CSVToField.cpp.o: ../../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVToField.cpp -oOneMegaToStable_build_dir/CSVToField.cpp.o
+OneMegaToStable_build_dir/FieldDescribe.cpp.o: ../../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/FieldDescribe.cpp -oOneMegaToStable_build_dir/FieldDescribe.cpp.o
+OneMegaToStable_build_dir/BaseFunction.cpp.o: ../../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/BaseFunction.cpp -oOneMegaToStable_build_dir/BaseFunction.cpp.o
+OneMegaToStable_build_dir/Config.cpp.o: ../../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/Config.cpp -oOneMegaToStable_build_dir/Config.cpp.o
+OneMegaToStable_build_dir/platform.cpp.o: ../../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/platform.cpp -oOneMegaToStable_build_dir/platform.cpp.o
+OneMegaToStable_build_dir/printinfo.cpp.o: ../../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/printinfo.cpp -oOneMegaToStable_build_dir/printinfo.cpp.o
+OneMegaToStable_build_dir/profile.cpp.o: ../../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/profile.cpp -oOneMegaToStable_build_dir/profile.cpp.o
+OneMegaToStable_build_dir/utility.cpp.o: ../../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utility.cpp -oOneMegaToStable_build_dir/utility.cpp.o
+OneMegaToStable_build_dir/utils.cpp.o: ../../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utils.cpp -oOneMegaToStable_build_dir/utils.cpp.o
+OneMegaToStable_build_dir/version.cpp.o: ../../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/version.cpp -oOneMegaToStable_build_dir/version.cpp.o
+OneMegaToStable_build_dir/tool.cpp.o: ../../../src_base/tool/tool.cpp $(tool_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/tool/tool.cpp -oOneMegaToStable_build_dir/tool.cpp.o
+OneMegaToStable_build_dir/Semaphore.cpp.o: ../../../src_base/thread/Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Semaphore.cpp -oOneMegaToStable_build_dir/Semaphore.cpp.o
+OneMegaToStable_build_dir/Thread.cpp.o: ../../../src_base/thread/Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/thread/Thread.cpp -oOneMegaToStable_build_dir/Thread.cpp.o
+OneMegaToStable_build_dir/Link.cpp.o: ./Link.cpp $(OneMegaToStable_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ./Link.cpp -oOneMegaToStable_build_dir/Link.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(tool_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(OneMegaToStable_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) ././OneMegaToStable.a

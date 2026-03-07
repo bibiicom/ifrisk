@@ -1,0 +1,7 @@
+<project target="demo" targettype="exe" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2" libs="" workdir="../">
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>
+	</cppflags>	
+	<package dir="../."/>
+	<package dir="."/>
+</project>

@@ -1,0 +1,7 @@
+call create_partition_by_month('perpetual','t_D_FinishOrder')
+call create_partition_by_month('perpetual','t_D_Trade')
+call create_partition_by_month('perpetual','t_D_FinishPosition')
+call create_partition_by_month('perpetual','t_D_AccountDetail')
+call create_partition_by_month('perpetual','t_D_KLine')
+call create_partition_by_month('perpetual','t_D_SettleDetail')
+call create_partition_by_month('perpetual','t_D_FinishTriggerOrder')

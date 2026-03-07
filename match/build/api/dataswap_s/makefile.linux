@@ -1,0 +1,128 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DLINUX -DGCC -DISLIB
+target=./../cplusplus/libdataswap_s.so
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DOUTFOGSERVICE_API_IS_LIB -DLIB_OUTFOGSERVICE_API_EXPORT $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p dataswap_s_build_dir
+	-mkdir -p ./../cplusplus/
+	
+datastruct_obj=dataswap_s_build_dir/BigDigit.cpp.o dataswap_s_build_dir/CDate.cpp.o dataswap_s_build_dir/CErrorEngine.cpp.o dataswap_s_build_dir/CSequence.cpp.o dataswap_s_build_dir/CSVParser.cpp.o dataswap_s_build_dir/CSVToField.cpp.o dataswap_s_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../src_base/datastruct/.
+function_obj=dataswap_s_build_dir/BaseFunction.cpp.o dataswap_s_build_dir/Config.cpp.o dataswap_s_build_dir/platform.cpp.o dataswap_s_build_dir/printinfo.cpp.o dataswap_s_build_dir/profile.cpp.o dataswap_s_build_dir/utility.cpp.o dataswap_s_build_dir/utils.cpp.o dataswap_s_build_dir/version.cpp.o 
+function_includedir=-I../../../src_base/function/.
+netstruct_obj=dataswap_s_build_dir/errorDefine.cpp.o dataswap_s_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../../src_base/netstruct/.
+field_obj=dataswap_s_build_dir/FieldData.cpp.o dataswap_s_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../../src_base/field/.
+ofserviceapi_include_includedir=-I../../../libs/ofserviceapi/1.0/include/.
+fromjson_obj=dataswap_s_build_dir/JsonToField.cpp.o 
+fromjson_includedir=-I../../../src_api/dataswap_s/fromjson/.
+formdata_obj=dataswap_s_build_dir/FormToField.cpp.o 
+formdata_includedir=-I../../../src_api/dataswap_s/formdata/.
+dataswap_s_obj=dataswap_s_build_dir/DataSwap.cpp.o 
+dataswap_s_includedir=-I../../../src_api/dataswap_s/.
+
+all_objs=$(datastruct_obj) $(function_obj) $(netstruct_obj) $(field_obj) $(fromjson_obj) $(formdata_obj) $(dataswap_s_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(fromjson_includedir)  $(formdata_includedir)  $(dataswap_s_includedir) 
+
+dataswap_s_build_dir/BigDigit.cpp.o: ../../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/BigDigit.cpp -odataswap_s_build_dir/BigDigit.cpp.o
+dataswap_s_build_dir/CDate.cpp.o: ../../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CDate.cpp -odataswap_s_build_dir/CDate.cpp.o
+dataswap_s_build_dir/CErrorEngine.cpp.o: ../../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CErrorEngine.cpp -odataswap_s_build_dir/CErrorEngine.cpp.o
+dataswap_s_build_dir/CSequence.cpp.o: ../../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSequence.cpp -odataswap_s_build_dir/CSequence.cpp.o
+dataswap_s_build_dir/CSVParser.cpp.o: ../../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVParser.cpp -odataswap_s_build_dir/CSVParser.cpp.o
+dataswap_s_build_dir/CSVToField.cpp.o: ../../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/CSVToField.cpp -odataswap_s_build_dir/CSVToField.cpp.o
+dataswap_s_build_dir/FieldDescribe.cpp.o: ../../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/datastruct/FieldDescribe.cpp -odataswap_s_build_dir/FieldDescribe.cpp.o
+dataswap_s_build_dir/BaseFunction.cpp.o: ../../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/BaseFunction.cpp -odataswap_s_build_dir/BaseFunction.cpp.o
+dataswap_s_build_dir/Config.cpp.o: ../../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/Config.cpp -odataswap_s_build_dir/Config.cpp.o
+dataswap_s_build_dir/platform.cpp.o: ../../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/platform.cpp -odataswap_s_build_dir/platform.cpp.o
+dataswap_s_build_dir/printinfo.cpp.o: ../../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/printinfo.cpp -odataswap_s_build_dir/printinfo.cpp.o
+dataswap_s_build_dir/profile.cpp.o: ../../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/profile.cpp -odataswap_s_build_dir/profile.cpp.o
+dataswap_s_build_dir/utility.cpp.o: ../../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utility.cpp -odataswap_s_build_dir/utility.cpp.o
+dataswap_s_build_dir/utils.cpp.o: ../../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/utils.cpp -odataswap_s_build_dir/utils.cpp.o
+dataswap_s_build_dir/version.cpp.o: ../../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/function/version.cpp -odataswap_s_build_dir/version.cpp.o
+dataswap_s_build_dir/errorDefine.cpp.o: ../../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/errorDefine.cpp -odataswap_s_build_dir/errorDefine.cpp.o
+dataswap_s_build_dir/TableDefine.cpp.o: ../../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/netstruct/TableDefine.cpp -odataswap_s_build_dir/TableDefine.cpp.o
+dataswap_s_build_dir/FieldData.cpp.o: ../../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldData.cpp -odataswap_s_build_dir/FieldData.cpp.o
+dataswap_s_build_dir/FieldMap.cpp.o: ../../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_base/field/FieldMap.cpp -odataswap_s_build_dir/FieldMap.cpp.o
+dataswap_s_build_dir/JsonToField.cpp.o: ../../../src_api/dataswap_s/fromjson/JsonToField.cpp $(fromjson_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_api/dataswap_s/fromjson/JsonToField.cpp -odataswap_s_build_dir/JsonToField.cpp.o
+dataswap_s_build_dir/FormToField.cpp.o: ../../../src_api/dataswap_s/formdata/FormToField.cpp $(formdata_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_api/dataswap_s/formdata/FormToField.cpp -odataswap_s_build_dir/FormToField.cpp.o
+dataswap_s_build_dir/DataSwap.cpp.o: ../../../src_api/dataswap_s/DataSwap.cpp $(dataswap_s_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../src_api/dataswap_s/DataSwap.cpp -odataswap_s_build_dir/DataSwap.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(fromjson_obj)
+	-$(DEL) $(formdata_obj)
+	-$(DEL) $(dataswap_s_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) ./../cplusplus/dataswap_s.a

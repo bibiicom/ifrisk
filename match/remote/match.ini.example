@@ -1,0 +1,14 @@
+#发布服务器配置
+##不填默认是build_user
+release_user=trade
+##不填和build_ip一样
+#release_ip=
+release_path=./release
+
+#代码配置
+git_ip=github.com
+git_path=bibiicom/match
+
+#编译服务器配置
+build_ip=43.134.74.19
+build_user=root

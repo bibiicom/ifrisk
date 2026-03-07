@@ -1,0 +1,168 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././querydb
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p querydb_build_dir
+	-mkdir -p ././
+	
+crypt_obj=querydb_build_dir/cryptUtility.cpp.o querydb_build_dir/Des.cpp.o querydb_build_dir/hexEncode.cpp.o querydb_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=querydb_build_dir/BigDigit.cpp.o querydb_build_dir/CDate.cpp.o querydb_build_dir/CErrorEngine.cpp.o querydb_build_dir/CSequence.cpp.o querydb_build_dir/CSVParser.cpp.o querydb_build_dir/CSVToField.cpp.o querydb_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+function_obj=querydb_build_dir/BaseFunction.cpp.o querydb_build_dir/Config.cpp.o querydb_build_dir/platform.cpp.o querydb_build_dir/printinfo.cpp.o querydb_build_dir/profile.cpp.o querydb_build_dir/utility.cpp.o querydb_build_dir/utils.cpp.o querydb_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=querydb_build_dir/CFilelogService.cpp.o querydb_build_dir/CLogger.cpp.o querydb_build_dir/CProbeLogger.cpp.o querydb_build_dir/CSyslogService.cpp.o querydb_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+netstruct_obj=querydb_build_dir/errorDefine.cpp.o querydb_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=querydb_build_dir/FieldData.cpp.o querydb_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=querydb_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+sqlapi_include_includedir=-I../../libs/sqlapi/4.1.3/include/.
+sqlapi_lib_lib=-L../../libs/sqlapi/4.1.3/./linux_x64 -lmysqlclient_r -lsqlapi ../../libs/sqlapi/4.1.3/./linux_x64/libmysqlclient.so.18 
+sqlapi_lib_includedir= 
+dbconnect_obj=querydb_build_dir/DbConnection.cpp.o querydb_build_dir/DbHelper.cpp.o 
+dbconnect_includedir=-I../../libs/sqlapi/dbconnect/.
+querydb_obj=querydb_build_dir/AccountDetailHandler.cpp.o querydb_build_dir/App.cpp.o querydb_build_dir/FinishOrderHandler.cpp.o querydb_build_dir/FinishTriggerOrderHandler.cpp.o querydb_build_dir/KLineHandler.cpp.o querydb_build_dir/SettleDetailHandler.cpp.o querydb_build_dir/TradeHandler.cpp.o 
+querydb_includedir=-I../../src/querydb/.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(ofapibase_obj) $(dbconnect_obj) $(querydb_obj) 
+
+all_libs=$(sqlapi_lib_lib) 
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(sqlapi_include_includedir)  $(sqlapi_lib_includedir)  $(dbconnect_includedir)  $(querydb_includedir) 
+
+querydb_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -oquerydb_build_dir/cryptUtility.cpp.o
+querydb_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -oquerydb_build_dir/Des.cpp.o
+querydb_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -oquerydb_build_dir/hexEncode.cpp.o
+querydb_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -oquerydb_build_dir/md5Handler.cpp.o
+querydb_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -oquerydb_build_dir/BigDigit.cpp.o
+querydb_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -oquerydb_build_dir/CDate.cpp.o
+querydb_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -oquerydb_build_dir/CErrorEngine.cpp.o
+querydb_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -oquerydb_build_dir/CSequence.cpp.o
+querydb_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -oquerydb_build_dir/CSVParser.cpp.o
+querydb_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -oquerydb_build_dir/CSVToField.cpp.o
+querydb_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -oquerydb_build_dir/FieldDescribe.cpp.o
+querydb_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -oquerydb_build_dir/BaseFunction.cpp.o
+querydb_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -oquerydb_build_dir/Config.cpp.o
+querydb_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -oquerydb_build_dir/platform.cpp.o
+querydb_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -oquerydb_build_dir/printinfo.cpp.o
+querydb_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -oquerydb_build_dir/profile.cpp.o
+querydb_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -oquerydb_build_dir/utility.cpp.o
+querydb_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -oquerydb_build_dir/utils.cpp.o
+querydb_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -oquerydb_build_dir/version.cpp.o
+querydb_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -oquerydb_build_dir/CFilelogService.cpp.o
+querydb_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -oquerydb_build_dir/CLogger.cpp.o
+querydb_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -oquerydb_build_dir/CProbeLogger.cpp.o
+querydb_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -oquerydb_build_dir/CSyslogService.cpp.o
+querydb_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -oquerydb_build_dir/monitorIndex.cpp.o
+querydb_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -oquerydb_build_dir/errorDefine.cpp.o
+querydb_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -oquerydb_build_dir/TableDefine.cpp.o
+querydb_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -oquerydb_build_dir/FieldData.cpp.o
+querydb_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -oquerydb_build_dir/FieldMap.cpp.o
+querydb_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -oquerydb_build_dir/OutFogServiceApiWrapper.cpp.o
+querydb_build_dir/DbConnection.cpp.o: ../../libs/sqlapi/dbconnect/DbConnection.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/sqlapi/dbconnect/DbConnection.cpp -oquerydb_build_dir/DbConnection.cpp.o
+querydb_build_dir/DbHelper.cpp.o: ../../libs/sqlapi/dbconnect/DbHelper.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/sqlapi/dbconnect/DbHelper.cpp -oquerydb_build_dir/DbHelper.cpp.o
+querydb_build_dir/AccountDetailHandler.cpp.o: ../../src/querydb/AccountDetailHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/AccountDetailHandler.cpp -oquerydb_build_dir/AccountDetailHandler.cpp.o
+querydb_build_dir/App.cpp.o: ../../src/querydb/App.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/App.cpp -oquerydb_build_dir/App.cpp.o
+querydb_build_dir/FinishOrderHandler.cpp.o: ../../src/querydb/FinishOrderHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/FinishOrderHandler.cpp -oquerydb_build_dir/FinishOrderHandler.cpp.o
+querydb_build_dir/FinishTriggerOrderHandler.cpp.o: ../../src/querydb/FinishTriggerOrderHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/FinishTriggerOrderHandler.cpp -oquerydb_build_dir/FinishTriggerOrderHandler.cpp.o
+querydb_build_dir/KLineHandler.cpp.o: ../../src/querydb/KLineHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/KLineHandler.cpp -oquerydb_build_dir/KLineHandler.cpp.o
+querydb_build_dir/SettleDetailHandler.cpp.o: ../../src/querydb/SettleDetailHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/SettleDetailHandler.cpp -oquerydb_build_dir/SettleDetailHandler.cpp.o
+querydb_build_dir/TradeHandler.cpp.o: ../../src/querydb/TradeHandler.cpp $(querydb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/querydb/TradeHandler.cpp -oquerydb_build_dir/TradeHandler.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(dbconnect_obj)
+	-$(DEL) $(querydb_obj)
+
+	-$(DEL) $(target)

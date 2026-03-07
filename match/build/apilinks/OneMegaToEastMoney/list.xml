@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="OneMegaToEastMoney" targettype="dll" workdir="." hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2">
+	<cppflags>
+		<cppflag name="DDEBUG_NOT_LOG"/>
+		<cppflag name="ONE_MEGAAPI_IS_LIB"/>
+		<cppflag name="LIB_ONE_MEGA_API_EXPORT"/>
+		<cppflag name="MG_ENABLE_OPENSSL=0"/>
+	</cppflags>
+	<package dir="../../../src_base/datastruct"/>
+	<package dir="../../../src_base/function"/>
+	<package dir="../../../src_base/mongoose79"/>
+	<package dir="../../../src_base/tool"/>
+	<package dir="../../../src_base/jsoncpp"/>
+	<package dir="../../../src_base/thread"/>
+
+	<package dir="../../../src_api/include"/>
+	<package dir="."/>
+</project>

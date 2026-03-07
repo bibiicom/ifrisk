@@ -1,0 +1,14 @@
+#include "public.h"
+#include "FieldData.h"
+
+!!enter XTP!!
+!!travel fields!!
+static void DescribeMemberOfC!!@name!!Field() 
+{
+	C!!@name!!Field f;
+	f.DescribeMembers();
+}
+CFieldDescribe C!!@name!!Field::m_Describe(FID_!!@name!!,sizeof(C!!@name!!Field),"C!!@name!!Field","!!@comment!!",&DescribeMemberOfC!!@name!!Field);
+
+!!next!!
+!!leave!!

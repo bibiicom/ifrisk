@@ -1,0 +1,5 @@
+@echo off
+setlocal enabledelayedexpansion
+
+copy ..\..\libs\ofserviceapi\1.0\omqsapi\windows_x64\*.dll .\
+copy ..\..\libs\sqlapi\4.1.3\windows_x64\*.dll .\

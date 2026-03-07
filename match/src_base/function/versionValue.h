@@ -1,0 +1,2 @@
+#define INNER_BASE_VERSION "Trade_2.6_20220816" 
+#define INNER_DUE_DATE "20990630" 

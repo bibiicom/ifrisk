@@ -1,0 +1,188 @@
+
+CPP=g++ -fpic -std=c++11
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=././/triggerorder
+
+APPEND_CPPFLAGS=-g3 -gdwarf-2 -O0 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=-g -O0 -m64
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p triggerorder_build_dir
+	-mkdir -p ././/
+	
+crypt_obj=triggerorder_build_dir/cryptUtility.cpp.o triggerorder_build_dir/Des.cpp.o triggerorder_build_dir/hexEncode.cpp.o triggerorder_build_dir/md5Handler.cpp.o 
+crypt_includedir=-I../../src_base/crypt/.
+datastruct_obj=triggerorder_build_dir/BigDigit.cpp.o triggerorder_build_dir/CDate.cpp.o triggerorder_build_dir/CErrorEngine.cpp.o triggerorder_build_dir/CSequence.cpp.o triggerorder_build_dir/CSVParser.cpp.o triggerorder_build_dir/CSVToField.cpp.o triggerorder_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../src_base/datastruct/.
+function_obj=triggerorder_build_dir/BaseFunction.cpp.o triggerorder_build_dir/Config.cpp.o triggerorder_build_dir/platform.cpp.o triggerorder_build_dir/printinfo.cpp.o triggerorder_build_dir/profile.cpp.o triggerorder_build_dir/utility.cpp.o triggerorder_build_dir/utils.cpp.o triggerorder_build_dir/version.cpp.o 
+function_includedir=-I../../src_base/function/.
+logger_obj=triggerorder_build_dir/CFilelogService.cpp.o triggerorder_build_dir/CLogger.cpp.o triggerorder_build_dir/CProbeLogger.cpp.o triggerorder_build_dir/CSyslogService.cpp.o triggerorder_build_dir/monitorIndex.cpp.o 
+logger_includedir=-I../../src_base/logger/.
+netstruct_obj=triggerorder_build_dir/errorDefine.cpp.o triggerorder_build_dir/TableDefine.cpp.o 
+netstruct_includedir=-I../../src_base/netstruct/.
+field_obj=triggerorder_build_dir/FieldData.cpp.o triggerorder_build_dir/FieldMap.cpp.o 
+field_includedir=-I../../src_base/field/.
+mdbbase_obj=triggerorder_build_dir/mdb.cpp.o triggerorder_build_dir/mdbAction.cpp.o triggerorder_build_dir/mdbIter.cpp.o triggerorder_build_dir/mdbLog.cpp.o triggerorder_build_dir/mdbSearch.cpp.o triggerorder_build_dir/mdbStruct.cpp.o triggerorder_build_dir/mdbTable.cpp.o 
+mdbbase_includedir=-I../../src_base/mdb/mdbbase/.
+mdbstruct_obj=triggerorder_build_dir/Allocator.cpp.o triggerorder_build_dir/CAVLTree.cpp.o triggerorder_build_dir/CBaseObject.cpp.o triggerorder_build_dir/CDatabaseDataFactory.cpp.o triggerorder_build_dir/CDatabaseResource.cpp.o triggerorder_build_dir/CDoubleHash.cpp.o triggerorder_build_dir/CFixMem.cpp.o triggerorder_build_dir/CHashIndex.cpp.o triggerorder_build_dir/CTransaction.cpp.o 
+mdbstruct_includedir=-I../../src_base/mdb/mdbstruct/.
+ofserviceapi_include_includedir=-I../../libs/ofserviceapi/1.0/include/.
+ofapibase_obj=triggerorder_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../libs/ofserviceapi/ofapibase/.
+triggerorder_obj=triggerorder_build_dir/CallbackWorker.cpp.o triggerorder_build_dir/StopOrderWorker.cpp.o triggerorder_build_dir/TriggerOrder.cpp.o 
+triggerorder_includedir=-I../../src/triggerorder/.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(mdbbase_obj) $(mdbstruct_obj) $(ofapibase_obj) $(triggerorder_obj) 
+
+all_libs=
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(triggerorder_includedir) 
+
+triggerorder_build_dir/cryptUtility.cpp.o: ../../src_base/crypt/cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/cryptUtility.cpp -otriggerorder_build_dir/cryptUtility.cpp.o
+triggerorder_build_dir/Des.cpp.o: ../../src_base/crypt/Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/Des.cpp -otriggerorder_build_dir/Des.cpp.o
+triggerorder_build_dir/hexEncode.cpp.o: ../../src_base/crypt/hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/hexEncode.cpp -otriggerorder_build_dir/hexEncode.cpp.o
+triggerorder_build_dir/md5Handler.cpp.o: ../../src_base/crypt/md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/crypt/md5Handler.cpp -otriggerorder_build_dir/md5Handler.cpp.o
+triggerorder_build_dir/BigDigit.cpp.o: ../../src_base/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/BigDigit.cpp -otriggerorder_build_dir/BigDigit.cpp.o
+triggerorder_build_dir/CDate.cpp.o: ../../src_base/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CDate.cpp -otriggerorder_build_dir/CDate.cpp.o
+triggerorder_build_dir/CErrorEngine.cpp.o: ../../src_base/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CErrorEngine.cpp -otriggerorder_build_dir/CErrorEngine.cpp.o
+triggerorder_build_dir/CSequence.cpp.o: ../../src_base/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSequence.cpp -otriggerorder_build_dir/CSequence.cpp.o
+triggerorder_build_dir/CSVParser.cpp.o: ../../src_base/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVParser.cpp -otriggerorder_build_dir/CSVParser.cpp.o
+triggerorder_build_dir/CSVToField.cpp.o: ../../src_base/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/CSVToField.cpp -otriggerorder_build_dir/CSVToField.cpp.o
+triggerorder_build_dir/FieldDescribe.cpp.o: ../../src_base/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/datastruct/FieldDescribe.cpp -otriggerorder_build_dir/FieldDescribe.cpp.o
+triggerorder_build_dir/BaseFunction.cpp.o: ../../src_base/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/BaseFunction.cpp -otriggerorder_build_dir/BaseFunction.cpp.o
+triggerorder_build_dir/Config.cpp.o: ../../src_base/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/Config.cpp -otriggerorder_build_dir/Config.cpp.o
+triggerorder_build_dir/platform.cpp.o: ../../src_base/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/platform.cpp -otriggerorder_build_dir/platform.cpp.o
+triggerorder_build_dir/printinfo.cpp.o: ../../src_base/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/printinfo.cpp -otriggerorder_build_dir/printinfo.cpp.o
+triggerorder_build_dir/profile.cpp.o: ../../src_base/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/profile.cpp -otriggerorder_build_dir/profile.cpp.o
+triggerorder_build_dir/utility.cpp.o: ../../src_base/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utility.cpp -otriggerorder_build_dir/utility.cpp.o
+triggerorder_build_dir/utils.cpp.o: ../../src_base/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/utils.cpp -otriggerorder_build_dir/utils.cpp.o
+triggerorder_build_dir/version.cpp.o: ../../src_base/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/function/version.cpp -otriggerorder_build_dir/version.cpp.o
+triggerorder_build_dir/CFilelogService.cpp.o: ../../src_base/logger/CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CFilelogService.cpp -otriggerorder_build_dir/CFilelogService.cpp.o
+triggerorder_build_dir/CLogger.cpp.o: ../../src_base/logger/CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CLogger.cpp -otriggerorder_build_dir/CLogger.cpp.o
+triggerorder_build_dir/CProbeLogger.cpp.o: ../../src_base/logger/CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CProbeLogger.cpp -otriggerorder_build_dir/CProbeLogger.cpp.o
+triggerorder_build_dir/CSyslogService.cpp.o: ../../src_base/logger/CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/CSyslogService.cpp -otriggerorder_build_dir/CSyslogService.cpp.o
+triggerorder_build_dir/monitorIndex.cpp.o: ../../src_base/logger/monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/logger/monitorIndex.cpp -otriggerorder_build_dir/monitorIndex.cpp.o
+triggerorder_build_dir/errorDefine.cpp.o: ../../src_base/netstruct/errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/errorDefine.cpp -otriggerorder_build_dir/errorDefine.cpp.o
+triggerorder_build_dir/TableDefine.cpp.o: ../../src_base/netstruct/TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/netstruct/TableDefine.cpp -otriggerorder_build_dir/TableDefine.cpp.o
+triggerorder_build_dir/FieldData.cpp.o: ../../src_base/field/FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldData.cpp -otriggerorder_build_dir/FieldData.cpp.o
+triggerorder_build_dir/FieldMap.cpp.o: ../../src_base/field/FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/field/FieldMap.cpp -otriggerorder_build_dir/FieldMap.cpp.o
+triggerorder_build_dir/mdb.cpp.o: ../../src_base/mdb/mdbbase/mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdb.cpp -otriggerorder_build_dir/mdb.cpp.o
+triggerorder_build_dir/mdbAction.cpp.o: ../../src_base/mdb/mdbbase/mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbAction.cpp -otriggerorder_build_dir/mdbAction.cpp.o
+triggerorder_build_dir/mdbIter.cpp.o: ../../src_base/mdb/mdbbase/mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbIter.cpp -otriggerorder_build_dir/mdbIter.cpp.o
+triggerorder_build_dir/mdbLog.cpp.o: ../../src_base/mdb/mdbbase/mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbLog.cpp -otriggerorder_build_dir/mdbLog.cpp.o
+triggerorder_build_dir/mdbSearch.cpp.o: ../../src_base/mdb/mdbbase/mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbSearch.cpp -otriggerorder_build_dir/mdbSearch.cpp.o
+triggerorder_build_dir/mdbStruct.cpp.o: ../../src_base/mdb/mdbbase/mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbStruct.cpp -otriggerorder_build_dir/mdbStruct.cpp.o
+triggerorder_build_dir/mdbTable.cpp.o: ../../src_base/mdb/mdbbase/mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbbase/mdbTable.cpp -otriggerorder_build_dir/mdbTable.cpp.o
+triggerorder_build_dir/Allocator.cpp.o: ../../src_base/mdb/mdbstruct/Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/Allocator.cpp -otriggerorder_build_dir/Allocator.cpp.o
+triggerorder_build_dir/CAVLTree.cpp.o: ../../src_base/mdb/mdbstruct/CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CAVLTree.cpp -otriggerorder_build_dir/CAVLTree.cpp.o
+triggerorder_build_dir/CBaseObject.cpp.o: ../../src_base/mdb/mdbstruct/CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CBaseObject.cpp -otriggerorder_build_dir/CBaseObject.cpp.o
+triggerorder_build_dir/CDatabaseDataFactory.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseDataFactory.cpp -otriggerorder_build_dir/CDatabaseDataFactory.cpp.o
+triggerorder_build_dir/CDatabaseResource.cpp.o: ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDatabaseResource.cpp -otriggerorder_build_dir/CDatabaseResource.cpp.o
+triggerorder_build_dir/CDoubleHash.cpp.o: ../../src_base/mdb/mdbstruct/CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CDoubleHash.cpp -otriggerorder_build_dir/CDoubleHash.cpp.o
+triggerorder_build_dir/CFixMem.cpp.o: ../../src_base/mdb/mdbstruct/CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CFixMem.cpp -otriggerorder_build_dir/CFixMem.cpp.o
+triggerorder_build_dir/CHashIndex.cpp.o: ../../src_base/mdb/mdbstruct/CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CHashIndex.cpp -otriggerorder_build_dir/CHashIndex.cpp.o
+triggerorder_build_dir/CTransaction.cpp.o: ../../src_base/mdb/mdbstruct/CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src_base/mdb/mdbstruct/CTransaction.cpp -otriggerorder_build_dir/CTransaction.cpp.o
+triggerorder_build_dir/OutFogServiceApiWrapper.cpp.o: ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -otriggerorder_build_dir/OutFogServiceApiWrapper.cpp.o
+triggerorder_build_dir/CallbackWorker.cpp.o: ../../src/triggerorder/CallbackWorker.cpp $(triggerorder_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/triggerorder/CallbackWorker.cpp -otriggerorder_build_dir/CallbackWorker.cpp.o
+triggerorder_build_dir/StopOrderWorker.cpp.o: ../../src/triggerorder/StopOrderWorker.cpp $(triggerorder_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/triggerorder/StopOrderWorker.cpp -otriggerorder_build_dir/StopOrderWorker.cpp.o
+triggerorder_build_dir/TriggerOrder.cpp.o: ../../src/triggerorder/TriggerOrder.cpp $(triggerorder_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../src/triggerorder/TriggerOrder.cpp -otriggerorder_build_dir/TriggerOrder.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(triggerorder_obj)
+
+	-$(DEL) $(target)

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="GB2312"?>
+<XTP author="TOM" version="1.0" head="XTP" comment="XTP协议中用到的各种包和域">
+	<packages>
+		<package name="DataSyncStart" tid="0x00001001" comment="数据同步开始" pto="xtp" usage="tinit">
+			<field name="CurrentTime" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="DataSyncEnd" tid="0x00001002" comment="数据同步结束" pto="xtp" usage="tinit">
+			<field name="CurrentTime" minOccur="1" maxOccur="1"/>
+		</package>
+		<package name="SendInsert" tid="0x00001003" comment="插入操作请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvInsert" tid="0x00001004" comment="插入操作应答" pto="all" usage="mdbresponse"/>
+		<package name="SendUpdate" tid="0x00001005" comment="更新操作请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvUpdate" tid="0x00001006" comment="更新操作应答" pto="all" usage="mdbresponse"/>
+		<package name="SendDelete" tid="0x00001007" comment="删除操作请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvDelete" tid="0x00001008" comment="删除操作应答" pto="all" usage="mdbresponse"/>
+		<package name="SendInsUpd" tid="0x00001009" comment="插入没有就更新请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvInsUpd" tid="0x0000100A" comment="插入没有就更新应答" pto="all" usage="mdbresponse"/>
+		<package name="SendQryOne" tid="0x0000100B" comment="查询唯一索引记录请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvQryOne" tid="0x0000100C" comment="查询唯一索引记录应答" pto="all" usage="mdbresponse"/>
+		<package name="SendClear" tid="0x0000100D" comment="设置字段值清空请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvClear" tid="0x0000100E" comment="设置字段值清空应答" pto="all" usage="mdbresponse"/>
+		<package name="SendInit" tid="0x00001010" comment="初始化操作请求" pto="all" usage="mdbrequest"/>
+		<package name="RecvInit" tid="0x00001011" comment="初始化操作应答" pto="all" usage="mdbresponse"/>		
+	</packages>
+	<!-- csvload 表示所有程序在load初始化文件(dump.-1)的时候不会load这个文件，系统会使用其他表来自动生成-->
+	<!-- dbload  表示sinkdb在load初始化文件的时候不会load这个文件，此表无需更新数据库，并且丢失不会影响核心业务流程，或者可以写代码重新生成-->
+	<fields>	
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="ServiceConfig" fid="0x1001" comment="业务配置" pto="all" ref="ServiceConfig"
+			DBPK="ConfigName,Index1,Index2"/>
+		<!--Instrument在初始化的时候会UpdateCurrency所以Currency要放在之前 -->
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Currency" fid="0x1108" comment="币种信息" pto="all" ref="Currency"
+			DBPK="Currency,SettlementGroup"
+			sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="SettlementGroup,Currency"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="MarketData" fid="0x1101" comment="市场行情" pto="all" ref="MarketData"
+			DBPK="ExchangeID,InstrumentID"
+			sinkredis="yes" rediskey="ProductGroup" valuetype="hash" hashfield="ExchangeID,InstrumentID" 
+			sinkkafka="no" kafkakey=""/>			
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Instrument" fid="0x1102" comment="交易标的" pto="all" ref="Instrument"  
+			DBPK="ExchangeID,InstrumentID" DbKeys="ExchangeID,ProductGroup"
+			sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="ExchangeID,InstrumentID"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="CurrentTime" short="T" fid="0x1002" comment="当前时间" pto="all" ref="CurrentTime"
+			DBPK="SystemID"
+			sinkkafka="no" kafkakey=""/>
+		<fieldDefine usage="InitTable" syncno="5" pre="perpetual.t_" name="Member" fid="0x1006" comment="成员" pto="all" ref="Member"
+			DBPK="MemberID"
+			multi="10" multiField="MemberID" multiType="char"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="UserSession" fid="0x1005" comment="用户会话" pto="all" ref="UserSession"
+			DBPK="Token"
+			sinkredis="yes" rediskey1="All" valuetype="hash" hashfield="Token"/>	
+
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="LastKLine" short="LK" fid="0x1103" comment="最新K线" pto="all" ref="LastKLine" dbload="no"
+			DBPK="ExchangeID,InstrumentID,Bar"/>
+
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="CFDRate" fid="0x1106" comment="CFD溢价率" pto="all" ref="CFDRate"
+			DBPK="MemberID,InstrumentID,TriggerOrderType"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="TradingRight" fid="0x1201" comment="交易权限" pto="all" ref="TradingRight"
+			DBPK="MemberID,InstrumentID,Direction"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="MarginRate" fid="0x1202" comment="保证金率" pto="all" ref="MarginRate"
+			DBPK="MemberID,InstrumentID"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Fee" fid="0x1203" comment="手续费率" pto="all" ref="Fee"
+			DBPK="MemberID,InstrumentID,MatchRole"/>
+		<fieldDefine usage="InitTable" syncno="1" pre="perpetual.t_" name="Liquidity" fid="0x1204" comment="流动性设置表" pto="all" ref="Liquidity"
+			DBPK="LiquidityGrade,LiquidityGroup"/>	
+				
+		<fieldDefine usage="InitTable" syncno="5" pre="perpetual.t_" name="Account" fid="0x1205" comment="账户资金" pto="all" ref="Account"
+			DBPK="AccountID,Currency,SettlementGroup" DbKeys="MemberID"
+			multi="10" multiField="MemberID" multiType="char" 
+			sinkredis="yes" rediskey="SettlementGroup,MemberID" valuetype="hash" hashfield="AccountID,Currency,SettlementGroup"
+			sinkkafka="yes" kafkakey="MemberID"/>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="MemberPosition" fid="0x1209" comment="成员持仓汇总" pto="all" ref="MemberPosition" dbload="no"
+			DBPK="MemberID,AccountID,ExchangeID,InstrumentID"/>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="Position" fid="0x1206" comment="标的持仓" pto="all" ref="Position"
+			DBPK="PositionID"
+			multi="10" multiField="MemberID" multiType="char"
+			sinkredis="yes" rediskey="ProductGroup,MemberID" valuetype="hash" filter="false" hashfield="MemberID,AccountID,TradeUnitID,ExchangeID,InstrumentID,PosiDirection"
+			sinkkafka="yes" kafkakey="MemberID"/>
+		<fieldDefine usage="InitTable" syncno="25" pre="perpetual.t_" name="Order" fid="0x1207" comment="报单" pto="all" ref="Order"
+			DBPK="OrderID" DbKeys="MemberID,CopyMemberID"
+			multi="10" multiField="OrderID" multiType="char" 
+			sinkredis="yes" rediskey="ProductGroup,MemberID" rediskey2="ProductGroup,MemberID,ExchangeID,InstrumentID" valuetype="hash" hashfield="AccountID,OrderID"
+			sinkkafka="yes" kafkakey="MemberID"/>
+		<fieldDefine usage="InitTable" syncno="2" pre="perpetual.t_" name="TriggerOrder" fid="0x120A" comment="条件报单" pto="all" ref="TriggerOrder"
+			DBPK="OrderID" DbKeys="MemberID,CopyMemberID"
+			sinkredis="yes" rediskey="ProductGroup,MemberID" rediskey2="ProductGroup,MemberID,ExchangeID,InstrumentID" valuetype="hash" hashfield="AccountID,OrderID"
+			sinkkafka="yes" kafkakey="MemberID"/>
+		<fieldDefine usage="InitTable" syncno="15" pre="perpetual.t_" name="PositionOrder" fid="0x120B" comment="持仓订单组成" pto="all" ref="PositionOrder" dbload="no"
+			DBPK="OrderID"
+			multi="10" multiField="OrderID" multiType="char"
+			sinkredis="no" rediskey="ProductGroup,MemberID" valuetype="hash" hashfield="AccountID,OrderID"/>
+		
+		<fieldDefine usage="DownTable" syncno="100" pre="perpetual.t_D_" name="FinishOrder" fid="0x1301" comment="完成的报单" pto="all" ref="Order"
+			DBPK="OrderID" DbKeys="AccountID,InstrumentID,MemberID;PositionID"
+			multi="10" multiField="OrderID" multiType="char"/>
+		<fieldDefine usage="DownTable" syncno="110" pre="perpetual.t_D_" name="Trade" fid="0x1302" comment="成交" pto="all" ref="Trade"
+			DBPK="TradeID,Direction" DbKeys="OrderID;PositionID"
+			multi="10" multiField="TradeID" multiType="char"
+			sinkkafka="yes" kafkakey="MemberID" sinklist="yes"/>
+		<fieldDefine usage="DownTable" syncno="110" pre="perpetual.t_D_" name="FinishPosition" fid="0x1309" comment="持仓历史" pto="all" ref="Position"
+			DBPK="PositionID" DbKeys="AccountID,InstrumentID"
+			multi="10" multiField="PositionID" multiType="char"/>
+		<!-- AccountDetail 对账程序需要一次比对，多线程情况下会有差别导致获取数据先后有问题，单独一个线程比较好-->
+		<fieldDefine usage="DownTable" syncno="120" pre="perpetual.t_D_" name="AccountDetail" fid="0x1303" comment="账户流水" pto="all" ref="AccountDetail"
+			DBPK="AccountDetailID" DbKeys="AccountID,Currency,Source"
+			multi="10" multiField="AccountDetailID" multiType="char"
+			sinkkafka="yes" kafkakey="MemberID" />
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="KLine" short="K" fid="0x1304" comment="历史K线" pto="all" ref="KLine"
+			DBPK="ExchangeID,InstrumentID,Bar,InsertTime" DbKeys="ExchangeID,InstrumentID,Bar;Bar,InsertTime"/>
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="SettleDetail" fid="0x1305" comment="操作流水" pto="all" ref="SettleDetail"
+			DBPK="ExchangeID,InstrumentID,SettleDetailID"/>
+		<fieldDefine usage="DownTable" syncno="130" pre="perpetual.t_D_" name="FinishTriggerOrder" fid="0x1306" comment="完成的条件报单" pto="all" ref="TriggerOrder"
+			DBPK="OrderID" DbKeys="InstrumentID,MemberID,TriggerStatus"/>
+		<fieldDefine usage="Table" name="MarketOrder" short="O" fid="0x1307" comment="订单簿变化" pto="all" ref="MarketOrder"/>
+		<fieldDefine usage="Table" name="PublishKLine" short="PK" fid="0x1308" comment="发布K线" pto="all" ref="PublishKLine"/>			
+	</fields>
+</XTP>

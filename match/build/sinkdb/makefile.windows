@@ -1,0 +1,174 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DWINDOWS -DMSVC
+target=.\..\..\build\sinkdb\\sinkdb.exe
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  sinkdb_build_dir
+	-mkdir  .\..\..\build\sinkdb\\
+	
+datastruct_obj=sinkdb_build_dir\BigDigit.cpp.obj sinkdb_build_dir\CDate.cpp.obj sinkdb_build_dir\CErrorEngine.cpp.obj sinkdb_build_dir\CSequence.cpp.obj sinkdb_build_dir\CSVParser.cpp.obj sinkdb_build_dir\CSVToField.cpp.obj sinkdb_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\src_base\datastruct\.
+function_obj=sinkdb_build_dir\BaseFunction.cpp.obj sinkdb_build_dir\Config.cpp.obj sinkdb_build_dir\platform.cpp.obj sinkdb_build_dir\printinfo.cpp.obj sinkdb_build_dir\profile.cpp.obj sinkdb_build_dir\utility.cpp.obj sinkdb_build_dir\utils.cpp.obj sinkdb_build_dir\version.cpp.obj 
+function_includedir=-I..\..\src_base\function\.
+thread_obj=sinkdb_build_dir\Semaphore.cpp.obj sinkdb_build_dir\Thread.cpp.obj 
+thread_includedir=-I..\..\src_base\thread\.
+logger_obj=sinkdb_build_dir\CFilelogService.cpp.obj sinkdb_build_dir\CLogger.cpp.obj sinkdb_build_dir\CProbeLogger.cpp.obj sinkdb_build_dir\CSyslogService.cpp.obj sinkdb_build_dir\monitorIndex.cpp.obj 
+logger_includedir=-I..\..\src_base\logger\.
+jsoncpp_obj=sinkdb_build_dir\json_reader.cpp.obj sinkdb_build_dir\json_value.cpp.obj sinkdb_build_dir\json_writer.cpp.obj 
+jsoncpp_includedir=-I..\..\src_base\jsoncpp\.
+netstruct_obj=sinkdb_build_dir\errorDefine.cpp.obj sinkdb_build_dir\TableDefine.cpp.obj 
+netstruct_includedir=-I..\..\src_base\netstruct\.
+field_obj=sinkdb_build_dir\FieldData.cpp.obj sinkdb_build_dir\FieldMap.cpp.obj 
+field_includedir=-I..\..\src_base\field\.
+ofserviceapi_include_includedir=-I..\..\libs\ofserviceapi\1.0\include\.
+ofapibase_obj=sinkdb_build_dir\OutFogServiceApiWrapper.cpp.obj 
+ofapibase_includedir=-I..\..\libs\ofserviceapi\ofapibase\.
+sqlapi_include_includedir=-I..\..\libs\sqlapi\4.1.3\include\.
+sqlapi_lib_lib=/libpath:..\..\libs\sqlapi\4.1.3\.\windows_x64 sqlapi.lib 
+sqlapi_lib_includedir= 
+dbconnect_obj=sinkdb_build_dir\DbConnection.cpp.obj sinkdb_build_dir\DbHelper.cpp.obj 
+dbconnect_includedir=-I..\..\libs\sqlapi\dbconnect\.
+sinkdb_obj=sinkdb_build_dir\DelayMDB.cpp.obj sinkdb_build_dir\SinkDB.cpp.obj sinkdb_build_dir\SinkDBCSVWorker.cpp.obj sinkdb_build_dir\SinkDBDispatcher.cpp.obj sinkdb_build_dir\SinkDBEngine.cpp.obj sinkdb_build_dir\SinkDBSQLWorker.cpp.obj sinkdb_build_dir\TableSync.cpp.obj 
+sinkdb_includedir=-I..\..\src\sinkdb\.
+
+all_objs=$(datastruct_obj) $(function_obj) $(thread_obj) $(logger_obj) $(jsoncpp_obj) $(netstruct_obj) $(field_obj) $(ofapibase_obj) $(dbconnect_obj) $(sinkdb_obj) 
+
+all_libs=$(sqlapi_lib_lib) 
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(thread_includedir)  $(logger_includedir)  $(jsoncpp_includedir)  $(netstruct_includedir)  $(field_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(sqlapi_include_includedir)  $(sqlapi_lib_includedir)  $(dbconnect_includedir)  $(sinkdb_includedir) 
+
+sinkdb_build_dir\BigDigit.cpp.obj: ..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\BigDigit.cpp /Fosinkdb_build_dir\BigDigit.cpp.obj
+sinkdb_build_dir\CDate.cpp.obj: ..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CDate.cpp /Fosinkdb_build_dir\CDate.cpp.obj
+sinkdb_build_dir\CErrorEngine.cpp.obj: ..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CErrorEngine.cpp /Fosinkdb_build_dir\CErrorEngine.cpp.obj
+sinkdb_build_dir\CSequence.cpp.obj: ..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSequence.cpp /Fosinkdb_build_dir\CSequence.cpp.obj
+sinkdb_build_dir\CSVParser.cpp.obj: ..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSVParser.cpp /Fosinkdb_build_dir\CSVParser.cpp.obj
+sinkdb_build_dir\CSVToField.cpp.obj: ..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSVToField.cpp /Fosinkdb_build_dir\CSVToField.cpp.obj
+sinkdb_build_dir\FieldDescribe.cpp.obj: ..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\FieldDescribe.cpp /Fosinkdb_build_dir\FieldDescribe.cpp.obj
+sinkdb_build_dir\BaseFunction.cpp.obj: ..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\BaseFunction.cpp /Fosinkdb_build_dir\BaseFunction.cpp.obj
+sinkdb_build_dir\Config.cpp.obj: ..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\Config.cpp /Fosinkdb_build_dir\Config.cpp.obj
+sinkdb_build_dir\platform.cpp.obj: ..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\platform.cpp /Fosinkdb_build_dir\platform.cpp.obj
+sinkdb_build_dir\printinfo.cpp.obj: ..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\printinfo.cpp /Fosinkdb_build_dir\printinfo.cpp.obj
+sinkdb_build_dir\profile.cpp.obj: ..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\profile.cpp /Fosinkdb_build_dir\profile.cpp.obj
+sinkdb_build_dir\utility.cpp.obj: ..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\utility.cpp /Fosinkdb_build_dir\utility.cpp.obj
+sinkdb_build_dir\utils.cpp.obj: ..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\utils.cpp /Fosinkdb_build_dir\utils.cpp.obj
+sinkdb_build_dir\version.cpp.obj: ..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\version.cpp /Fosinkdb_build_dir\version.cpp.obj
+sinkdb_build_dir\Semaphore.cpp.obj: ..\..\src_base\thread\Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\thread\Semaphore.cpp /Fosinkdb_build_dir\Semaphore.cpp.obj
+sinkdb_build_dir\Thread.cpp.obj: ..\..\src_base\thread\Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\thread\Thread.cpp /Fosinkdb_build_dir\Thread.cpp.obj
+sinkdb_build_dir\CFilelogService.cpp.obj: ..\..\src_base\logger\CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CFilelogService.cpp /Fosinkdb_build_dir\CFilelogService.cpp.obj
+sinkdb_build_dir\CLogger.cpp.obj: ..\..\src_base\logger\CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CLogger.cpp /Fosinkdb_build_dir\CLogger.cpp.obj
+sinkdb_build_dir\CProbeLogger.cpp.obj: ..\..\src_base\logger\CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CProbeLogger.cpp /Fosinkdb_build_dir\CProbeLogger.cpp.obj
+sinkdb_build_dir\CSyslogService.cpp.obj: ..\..\src_base\logger\CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CSyslogService.cpp /Fosinkdb_build_dir\CSyslogService.cpp.obj
+sinkdb_build_dir\monitorIndex.cpp.obj: ..\..\src_base\logger\monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\monitorIndex.cpp /Fosinkdb_build_dir\monitorIndex.cpp.obj
+sinkdb_build_dir\json_reader.cpp.obj: ..\..\src_base\jsoncpp\json_reader.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\jsoncpp\json_reader.cpp /Fosinkdb_build_dir\json_reader.cpp.obj
+sinkdb_build_dir\json_value.cpp.obj: ..\..\src_base\jsoncpp\json_value.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\jsoncpp\json_value.cpp /Fosinkdb_build_dir\json_value.cpp.obj
+sinkdb_build_dir\json_writer.cpp.obj: ..\..\src_base\jsoncpp\json_writer.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\jsoncpp\json_writer.cpp /Fosinkdb_build_dir\json_writer.cpp.obj
+sinkdb_build_dir\errorDefine.cpp.obj: ..\..\src_base\netstruct\errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\netstruct\errorDefine.cpp /Fosinkdb_build_dir\errorDefine.cpp.obj
+sinkdb_build_dir\TableDefine.cpp.obj: ..\..\src_base\netstruct\TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\netstruct\TableDefine.cpp /Fosinkdb_build_dir\TableDefine.cpp.obj
+sinkdb_build_dir\FieldData.cpp.obj: ..\..\src_base\field\FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\field\FieldData.cpp /Fosinkdb_build_dir\FieldData.cpp.obj
+sinkdb_build_dir\FieldMap.cpp.obj: ..\..\src_base\field\FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\field\FieldMap.cpp /Fosinkdb_build_dir\FieldMap.cpp.obj
+sinkdb_build_dir\OutFogServiceApiWrapper.cpp.obj: ..\..\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp /Fosinkdb_build_dir\OutFogServiceApiWrapper.cpp.obj
+sinkdb_build_dir\DbConnection.cpp.obj: ..\..\libs\sqlapi\dbconnect\DbConnection.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\libs\sqlapi\dbconnect\DbConnection.cpp /Fosinkdb_build_dir\DbConnection.cpp.obj
+sinkdb_build_dir\DbHelper.cpp.obj: ..\..\libs\sqlapi\dbconnect\DbHelper.cpp $(dbconnect_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\libs\sqlapi\dbconnect\DbHelper.cpp /Fosinkdb_build_dir\DbHelper.cpp.obj
+sinkdb_build_dir\DelayMDB.cpp.obj: ..\..\src\sinkdb\DelayMDB.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\DelayMDB.cpp /Fosinkdb_build_dir\DelayMDB.cpp.obj
+sinkdb_build_dir\SinkDB.cpp.obj: ..\..\src\sinkdb\SinkDB.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\SinkDB.cpp /Fosinkdb_build_dir\SinkDB.cpp.obj
+sinkdb_build_dir\SinkDBCSVWorker.cpp.obj: ..\..\src\sinkdb\SinkDBCSVWorker.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\SinkDBCSVWorker.cpp /Fosinkdb_build_dir\SinkDBCSVWorker.cpp.obj
+sinkdb_build_dir\SinkDBDispatcher.cpp.obj: ..\..\src\sinkdb\SinkDBDispatcher.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\SinkDBDispatcher.cpp /Fosinkdb_build_dir\SinkDBDispatcher.cpp.obj
+sinkdb_build_dir\SinkDBEngine.cpp.obj: ..\..\src\sinkdb\SinkDBEngine.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\SinkDBEngine.cpp /Fosinkdb_build_dir\SinkDBEngine.cpp.obj
+sinkdb_build_dir\SinkDBSQLWorker.cpp.obj: ..\..\src\sinkdb\SinkDBSQLWorker.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\SinkDBSQLWorker.cpp /Fosinkdb_build_dir\SinkDBSQLWorker.cpp.obj
+sinkdb_build_dir\TableSync.cpp.obj: ..\..\src\sinkdb\TableSync.cpp $(sinkdb_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\sinkdb\TableSync.cpp /Fosinkdb_build_dir\TableSync.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -out:$@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(jsoncpp_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(dbconnect_obj)
+	-$(DEL) $(sinkdb_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\..\..\build\sinkdb\\sinkdb.pdb

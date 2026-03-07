@@ -1,0 +1,108 @@
+===========================管理操作（只有后台才能做）===============================
+一、增加用户
+(1) 增加一个新登录用户	
+	依赖系统产生Token,用户可用这个用户名和密码在前端登录
+	curl -d '{"UserID":"8001","APPID":"app1","MemberID":"8001","UserType":"2","Password":"111111","EncryptType":"0","IsActive":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/UserSession
+	取本系统的Token(需要客户端使用Token直连本系统的时候需要)
+	curl -d '{"UserID":"8001","Password":"111111"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUserLogin
+	自己有Token,直接赋值给系统，用户只可以用Token登录
+	curl -d '{"UserID":"8001","APPID":"app1","MemberID":"8001","UserType":"2","Token":"xxxxxxx"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/UserSession
+	删除登录用户
+	curl -d '{"Token":"xxxxxxxxxx"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/UserSession
+(2) 增加一个参与者
+	curl -d '{"MemberID":"8001"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Member
+	增加特殊客户
+	curl -d '{"MemberID":"521672","Grade":"X","AccountID":"521672","CheckAccount":1,"Priority":0,"PositionProfitUse":"0","Remark":""}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Member
+	查询内存中增加用户的情况
+	curl -d '{"MemberID":"8001"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendQryOne/Member
+
+二、增加交易对
+(1) 修改手续费（如果使用默认手续费，可以不用设置）
+	curl -d '{"MemberID":"default","InstrumentID":"default","MatchRole":"0","OpenFeeRate":0.0003,"CloseFeeRate":0.0003,"Remark":"xss"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsUpd/Fee	
+(2) 增加币币
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTC/USDT","InstrumentName":"BTC/USDT","SettleGroup":"SG1","ProductID":"Spot1","ProductClass":"4","ProductGroup":"Spot","ProductType":"8","VolumeMultiple":1,"UnderlyingMultiple":1,"PriceCurrency":"USDT","ClearCurrency":"BTC","IsInverse":0,"BaseCurrency":"BTC","BasisPrice":12000,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","DayStartTime":"00:00:00","SortNumber":1,"InstrumentStatus":"2"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Instrument
+(3) 增加合约
+	//合约
+	curl -d '{"MarketID":"DigitalCurrency","ExchangeID":"Test","InstrumentID":"ETHUSD","InstrumentName":"ETHUSD_SWAP","SettleGroup":"SG1","ProductID":"ETH_SWAP_B","ProductClass":"1","ProductGroup":"Swap","ProductType":"2","PositionType":"2","VolumeMultiple":10,"UnderlyingMultiple":1,"PriceCurrency":"USD","ClearCurrency":"ETH","IsInverse":1,"BaseCurrency":"ETH","MarginPriceType":"2","BasisPrice":560,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.05,"MarketTick1":0.1,"MarketTick2":1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","UseYdPosition":0,"DayStartTime":"00:00:00","SortNumber":2,"InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/Instrument
+	//增加保证金	
+	curl -d '{"MemberID":"default","TradeUnitID":"default","ExchangeID":"Test","InstrumentID":"ETHUSD","ValueMode":"0","LongMarginRatio":0.005,"LongMaintMarginRatio":0.005,"LongMarginStep":0.0,"LongMaintMarginStep":0.0,"LongRiskLimit":0.0,"LongRiskStep":0.0,"ShortMarginRatio":0.005,"ShortMaintMarginRatio":0.005,"ShortMarginStep":0.0,"ShortMaintMarginStep":0.0,"ShortRiskLimit":0.0,"ShortRiskStep":0.0"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendInsert/MarginRate
+(4)设置交易对的交易状态
+	启动交易
+	curl -d '{"ExchangeID":"Test","InstrumentID":"KEY/USDT","InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/MarketData
+	暂停交易
+	curl -d '{"ExchangeID":"Test","InstrumentID":"KEY/USDT","InstrumentStatus":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendUpdate/MarketData
+	
+三、出入金（如果是体验金的操作每个操作增加 "IsReserve":1）
+出入金流程：A系统->B系统  
+	注意点：调用程序同一个AccountID的LocalID必须在一个线程保证先后顺序，而且需要递增，可以重置
+	(1) 冻结A系统的账户金额，使用AccountID+LocalID操作
+		对这个指令都需要设定TimeGap和TimeStamp，保证解冻指令先到的情况下，冻结指令后到会失败
+		如果rsp明确失败：出入金失败
+		如果rsp明确成功：走(2)
+		如果不返回，走(3)解冻动作，用AccountID+ActionLocalID解冻
+	(2) B系统入金，使用AccountID+LocalID操作
+		如果rsp明确失败：出入金失败，走(3)解冻A系统
+		如果rsp返回重复操作：查询Account表的MaxLocalID是否=此次的LocalID，
+			是:走(4)解冻并入金
+			否:把这个Account置为报警状态，人工处理
+		如果rsp明确成功：走(4)解冻并入金
+		如果不返回：继续操作n次，之后把这个操作置为报警状态，人工处理
+	(3) A系统解冻，使用 AccountID+ActionLocalID
+		如果rsp明确成功：结束
+		如果rsp明确失败：结束
+		如果不返回：继续操作n次，之后把这个操作置为报警状态，人工处理
+	(4) A系统解冻并出金，使用 AccountID+ActionLocalID
+		如果rsp明确成功：结束
+		如果rsp明确失败：把这个操作置为报警状态，人工处理
+		如果不返回：继续操作n次，之后把这个操作置为报警状态，人工处理
+(1) 入金：
+	curl -d '{"MemberID":"8001","LocalID":"","AccountID":"8001","SettleGroup":"SG1","Amount":1000,"Currency":"BTC","ActionType":"1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(2) 出金：先冻结资金，然后再到资金账户里面去增加钱
+	curl -d '{"LocalID":"0001","AccountID":"8001","SettleGroup":"SG1","Amount":10,"Currency":"BTC","ActionType":"3"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(3) 资金账户增加钱成功之后，调用解冻并出金
+	curl -d '{"LocalID":"","AccountID":"8001","SettleGroup":"SG1","Amount":10,"Currency":"BTC","ActionType":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+	#根据之前的订单的LocalID解冻
+	curl -d '{"ActionLocalID":"0001","ActionType":"5"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(4) 如果资金账户增加钱失败之后，回滚解冻
+	curl -d '{"LocalID":"","AccountID":"8001","SettleGroup":"SG1","Amount":10,"Currency":"BTC","ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+	#根据之前的订单的LocalID回滚
+	curl -d '{"ActionLocalID":"0001","ActionType":"4"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+----------------
+体验金出入金：
+(1)	入金并作为体验金
+	curl -d '{"MemberID":"8001","LocalID":"","AccountID":"1001","SettleGroup":"SG1","Amount":20,"Currency":"BTC","ActionType":"1","IsReserve":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(2) 从账户8001转体验金到账户1001
+	curl -d '{"LocalID":"","AccountID":"8001","SettleGroup":"SG1","Amount":10,"Currency":"BTC","ActionType":"6","OtherAccountID":"1001","OtherSettleGroup":"BTC","IsReserve":1}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(3) 体验金的盈亏分配，将账户8001的体验金的盈利部分转到账户1001
+	curl -d '{"LocalID":"","AccountID":"8001","SettleGroup":"SG1","Amount":10,"Currency":"BTC","ActionType":"7","OtherAccountID":"1001","OtherSettleGroup":"BTC"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+(4) 设置体验金类型
+	curl -d '{"LocalID":"","SettleGroup":"SG1","Amount":0,"Currency":"BTC","ActionType":"8"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendAccountAction
+
+删除账户:(当没有资金之后，可以考虑删除这个Account)
+	curl -d '{"SettleGroup":"SG1","AccountID":"8001","Currency":"BTC"}' -X POST  http://127.0.0.1:10000/action/v1.0/SendDelete/Account
+
+四、资金费率操作
+(1) 设置合约的资金费用结算周期
+	curl -d '{"SettleAction":"3","ExchangeID":"Test","InstrumentID":"BTCUSD"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+(2) 更新指数
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSDT","UnderlyingPrice":8000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+(3) 更新资金费用
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSDT","FundingFee":8000}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+
+五、结算操作
+结算(按照结算组)，在结算价全部更新之后，一个结算组必须一起结算，但是要注意部分合约结算失败的情况，全部回退重新结算
+(1) 更新结算价，一个合约一个合约更新
+	curl -d '{"ExchangeID":"Test","InstrumentID":"BTCUSD","SettlementPrice":9988.88}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendMarketDataUpdate
+(2) 结算
+	curl -d '{"SettleAction":"1","SettleGroup":"SG1"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+
+六、数据清理
+6.1 清理Order表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Order"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+6.2 清理Position表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Position"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+6.3 清理Account表的冻结
+	curl -d '{"SettleAction":"9","Remark":"Account"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+	curl -d '{"SettleAction":"9","Remark":"MemberPosition"}'  -X POST  http://127.0.0.1:10000/action/v1.0/SendSettlement
+
+PS：查询操作可以使用下面的查询，也可以直接使用DB和Redis

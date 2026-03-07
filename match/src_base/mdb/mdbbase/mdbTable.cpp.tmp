@@ -1,0 +1,694 @@
+!!include function.itmp!!
+!!enter system!!
+#include "mdbStruct.h"
+#include "mdbTable.h"
+#include "mdbAction.h"
+#include "monitorIndex.h"
+
+///强制进行复制，不理会const标记
+///@param	target	复制的目标地址
+///@param	source	复制的源地址
+///@param	size	复制的空间大小
+static void forceCopy(const void *target, const void *source, int size)
+{
+	if ((source==NULL)||(target==NULL)){
+		REPORT_EVENT(LOG_CRITICAL,"InternalError","copy from or to null");
+		return;
+	}
+	memcpy((void *)target,source,size);
+}
+
+!!travel tables!!
+!!if !strcmp(@hasTable,"yes")!!
+!!command resetEntityMap();!!
+!!travel fields!!
+!!command addEntity(@name,@type)!!
+!!next!!
+!!let tableName=@name!!
+!!travel index!!
+extern int compareFor!!@name!!in!!@tableName!!(const void *pV1, const void *pV2);
+!!next!!
+void C!!@name!!Factory::init(int maxUnit,IMemoryAllocator *pAllocator,map<string,int>* pIndexMap,bool reuse,int reuseID,int readOnly)
+{
+	!!travel index!!
+	p!!@name!! = NULL;
+	switch (g_cMDBRunLevel)
+	{
+	!!command vector<string> vct = Txtsplit(@runLevel,",");!!
+	!!command for(int i =0; i<vct.size(); i++) {!!
+	case '!!command display_string(vct[i].c_str())!!':
+	!!command }!!
+	{
+		if(!reuse) {
+			p!!@name!!=new CAVLTree(maxUnit,compareFor!!@name!!in!!@tableName!!,pAllocator,reuse,reuseID,readOnly);
+			if(pIndexMap != NULL)
+				pIndexMap->insert(map<string,int>::value_type("!!@tableName!!_!!@name!!",p!!@name!!->getReuseID()));
+		}else{
+			map<string,int>::iterator it = pIndexMap->find("!!@tableName!!_!!@name!!");
+			if(it != pIndexMap->end()) {
+				p!!@name!!=new CAVLTree(maxUnit,compareFor!!@name!!in!!@tableName!!,pAllocator,reuse,it->second,readOnly);
+			}
+		}
+		if (p!!@name!!==NULL)
+			EMERGENCY_EXIT("Insufficient memory space");		
+		break;
+	}	
+	}	
+	
+	!!next!!
+	!!if valid_name("hashindex")!!
+	!!travel hashindex!!
+	p!!@name!! = NULL;
+
+	switch (g_cMDBRunLevel)
+	{
+	!!command vector<string> vct = Txtsplit(@runLevel,",");!!
+	!!command for(int i =0; i<vct.size(); i++) {!!
+	case '!!command display_string(vct[i].c_str())!!':
+	!!command }!!
+	{
+		int hashKeySize=!!@hashKeySize!!;
+		if(!reuse) {
+			p!!@name!!=new CHashIndex(hashKeySize,pAllocator,reuse,reuseID,readOnly);
+			if(pIndexMap != NULL)
+				pIndexMap->insert(map<string,int>::value_type("!!@tableName!!_!!@name!!",p!!@name!!->getReuseID()));
+		}else {
+			map<string,int>::iterator it = pIndexMap->find("!!@tableName!!_!!@name!!");
+			if(it != pIndexMap->end()) {
+				p!!@name!!=new CHashIndex(hashKeySize,pAllocator,reuse,it->second,readOnly);
+			}
+		}
+		if (p!!@name!!==NULL)
+			EMERGENCY_EXIT("Insufficient memory space");	
+	break;
+	}
+	}	
+	
+	!!next!!
+	!!endif!!
+	!!travel search!!
+	!!if (strcmp(@searchUnique,"yes"))!!
+	pLastFoundInSearch!!@name!!=NULL;
+	!!endif!!
+	!!next!!
+!!++!!if (reuse&&!readOnly)
+	{
+		C!!@name!! *p!!@name!!;
+		p!!@name!!=(C!!@name!! *)(pMem->getFirst());
+		while (p!!@name!!!=NULL){
+			!!let tableName=@name!!
+			!!travel index!!
+				if (p!!@name!! != NULL)
+					p!!@name!!->addObject(p!!@tableName!!);
+			!!next!!
+			p!!@name!!=(C!!@name!! *)(pMem->getNext());
+		}
+	}!!--!!
+	pActionTriggers=new vector<C!!@name!!ActionTrigger *>;
+	pCommitTriggers=new vector<C!!@name!!CommitTrigger *>;
+}
+
+C!!@name!!Factory::C!!@name!!Factory(CMDB* pMDB,int maxUnit,IMemoryAllocator *pAllocator,map<string,int>* pIndexMap,bool reuse,int reuseID,int readOnly) :
+	CDatabaseDataFactory(sizeof(C!!@name!!),maxUnit,pAllocator,reuse,reuseID, readOnly)
+{
+	m_pMDB=pMDB;
+	init(maxUnit,pAllocator,pIndexMap,reuse,reuseID,readOnly);
+}
+
+C!!@name!!Factory::C!!@name!!Factory(CMDB* pMDB,IMemoryAllocator *pAllocator,map<string,int>* pIndexMap,bool reuse,int reuseID,int readOnly) :
+	CDatabaseDataFactory(sizeof(C!!@name!!),MDB_DEFAULT_BLOCK_SIZE,pAllocator,reuse,reuseID,readOnly)
+{
+	m_pMDB=pMDB;
+	init(MDB_DEFAULT_BLOCK_SIZE,pAllocator,pIndexMap,reuse,reuseID,readOnly);		
+}
+
+C!!@name!!Factory::~C!!@name!!Factory()
+{
+	!!travel index!!
+	if (p!!@name!!!=NULL)
+		delete p!!@name!!;
+	!!next!!
+	!!if valid_name("hashindex")!!
+	!!travel hashindex!!
+	if (p!!@name!!!=NULL)
+		delete p!!@name!!;
+	!!next!!
+	!!endif!!
+	if (pActionTriggers!=NULL)
+		delete pActionTriggers;
+	if (pCommitTriggers!=NULL)
+		delete pCommitTriggers;
+}
+
+int C!!@name!!Factory::readCSV(char *filename)
+{
+	FILE *input;
+	CWriteable!!@name!! this!!@name!!;
+	char buffer[1025];
+	vector<char *> *pNames;
+	char *token;
+	input=mfopen(filename,"rt");
+	if (input==NULL)
+		return 0;
+	pNames=new vector<char *>;
+	fgets(buffer,1024,input);
+	token=getNextToken(buffer);
+	while (token!=NULL) {
+		pNames->push_back(token);
+		token=getNextToken(NULL);
+	}
+	while (this!!@name!!.readCSV(input,pNames))
+		add(&this!!@name!!);
+	fclose(input);
+	delete pNames;
+	return 1;
+}
+
+int C!!@name!!Factory::readCSVByPath(char *pPath)
+{
+	char szFileName[300];
+	strcpy(szFileName, pPath);
+	strcat(szFileName, "!!@name!!.csv");
+	return readCSV(szFileName);
+}
+
+int C!!@name!!Factory::writeCSV(char *filename)
+{
+	FILE *output;
+	CWriteable!!@name!! *p!!@name!!;
+	output=mfopen(filename,"wt");
+	if (output==NULL)
+		return 0;
+	CWriteable!!@name!!::writeCSVHead(output);
+	p!!@name!!=(CWriteable!!@name!! *)(pMem->getFirst());
+	while (p!!@name!!!=NULL) {
+		p!!@name!!->writeCSV(output);
+		p!!@name!!=(CWriteable!!@name!! *)(pMem->getNext());
+	}
+	fclose(output);
+	return 1;
+}
+
+int C!!@name!!Factory::writeCSVPreVersion(char *filename)
+{
+	FILE *output;
+	CWriteable!!@name!! *p!!@name!!;
+	output=mfopen(filename,"wt");
+	if (output==NULL)
+		return 0;
+	CWriteable!!@name!!::writeCSVHeadPreVersion(output);
+	p!!@name!!=(CWriteable!!@name!! *)(pMem->getFirst());
+	while (p!!@name!!!=NULL) {
+		p!!@name!!->writeCSVPreVersion(output);
+		p!!@name!!=(CWriteable!!@name!! *)(pMem->getNext());
+	}
+	fclose(output);
+	return 1;
+}
+
+int C!!@name!!Factory::writeCSVByPath(char *pPath)
+{
+	char szFileName[300];
+	strcpy(szFileName, pPath);
+	strcat(szFileName, "!!@name!!.csv");
+	return writeCSV(szFileName);
+}
+
+void C!!@name!!Factory::dump(char *filename)
+{
+	FILE *fp;
+	fp = mfopen(filename,"w+b");
+	dump(fp);
+	if (fp!=NULL) fclose(fp);
+}	
+
+void C!!@name!!Factory::dump(FILE *fp)
+{
+	int index=0; ///下标
+	CWriteable!!@name!! *p!!@name!!;
+	if(fp==NULL) fp=stdout;
+	pMem->dump(fp);
+	fprintf(fp,"C!!@name!!Factory={       Total Count=%d\n", pMem->getCount());
+	p!!@name!!=(CWriteable!!@name!! *)(pMem->getFirst());
+	while (p!!@name!!!=NULL) {
+		p!!@name!!->dump(fp,index++);
+		p!!@name!!=(CWriteable!!@name!! *)(pMem->getNext());
+	}
+	fprintf(fp,"}\n");
+}
+
+void C!!@name!!Factory::clearAll()
+{
+	CDatabaseDataFactory::clearAll();
+	!!travel index!!
+	if(p!!@name!! != NULL)
+		p!!@name!!->removeAll();
+	!!next!!
+	!!if valid_name("hashindex")!!
+	!!travel hashindex!!
+	if(p!!@name!! != NULL)
+		p!!@name!!->removeAll();
+	!!next!!
+	!!endif!!
+}
+
+C!!@name!! *C!!@name!!Factory::internalAdd(CWriteable!!@name!! *p!!@name!!, bool bNoTransaction)
+{
+	p!!@name!!->m_pMDB = m_pMDB;
+!!if !strcmp(@writeTable,"yes")!!
+	!!let tableName=@name!!
+	!!travel fields!!
+		!!if !strcmp(@name,"InsertTime")!!
+	if(p!!@tableName!!->!!@name!!.isNull())
+		p!!@tableName!!->!!@name!! = g_nCurrentTime;
+		!!endif!!
+		!!if valid_name("default")!!
+	if(p!!@tableName!!->!!@name!!.isNull())
+		p!!@tableName!!->!!@name!! = !!@default!!;
+		!!endif!!
+	!!next!!
+	C!!@name!! *pTarget;
+	//beforeAdd(p!!@name!!);
+	pTarget=(C!!@name!! *)createObject();
+	if (pTarget==NULL) {
+		EMERGENCY_EXIT("Can not alloc enough !!@name!! in memory database");
+		return NULL;
+	}
+	forceCopy(pTarget, p!!@name!!, sizeof(C!!@name!!));
+	pMem->updateObject(pTarget);
+	!!travel index!!
+		!!if valid_name("useCase")!!
+	if (!!@useCase!!){
+		if (p!!@name!! != NULL)
+			p!!@name!!->addObject(pTarget);
+	}
+		!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->addObject(pTarget);
+		!!endif!!
+	!!next!!
+	!!if valid_name("hashindex")!!
+		!!travel hashindex!!
+			!!if valid_name("useCase")!!
+	if (!!@useCase!!){
+		if (p!!@name!! != NULL)
+			p!!@name!!->addObject(pTarget,pTarget->Hash!!@hashKey!!);
+	}
+			!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->addObject(pTarget,pTarget->Hash!!@hashKey!!);			
+			!!endif!!
+		!!next!!
+	!!endif!!
+	//afterAdd(pTarget);
+	if (bNoTransaction)
+		commitAdd(pTarget);
+	return pTarget;
+!!else!!
+	return NULL;
+!!endif!!
+}
+
+C!!@name!!* C!!@name!!Factory::add(CWriteable!!@name!! *p!!@name!!, CTransaction *pTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	p!!@name!!->calAllHash();
+	if (pTransaction==NULL) {
+		return internalAdd(p!!@name!!,true);
+	}else{
+		C!!@name!! *pNew!!@name!!;
+		pNew!!@name!! = internalAdd(p!!@name!!,false);
+		pTransaction->addResource(C!!@name!!Resource::alloc(CREATE_ACTION,this,pNew!!@name!!));
+		return pNew!!@name!!;
+	}
+!!else!!
+	!!let tableName=@name!!
+	!!travel fields!!
+		!!if !strcmp(@name,"InsertTime")!!
+	p!!@tableName!!->InsertTime = g_nCurrentTime;
+		!!endif!!
+	!!next!!
+	if (pTransaction==NULL) {
+		commitAdd(p!!@name!!);
+	}else {
+		pTransaction->addResource(C!!@name!!Resource::alloc(CREATE_ACTION,this,p!!@name!!));
+	}
+	return NULL;
+!!endif!!
+}
+
+C!!@name!!* C!!@name!!Factory::internalUpdate(C!!@name!! *p!!@name!!, CWriteable!!@name!! *pNew!!@name!!,bool bNoTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	!!let tableName=@name!!
+	!!travel fields!!
+		!!if !strcmp(@name,"UpdateTime")!!
+	pNew!!@tableName!!->UpdateTime = g_nCurrentTime;
+		!!endif!!
+	!!next!!
+	CWriteable!!@name!! theOld!!@name!!;
+	if (bNoTransaction)
+		forceCopy(&theOld!!@name!!,p!!@name!!,sizeof(C!!@name!!));	
+	!!travel index!!
+	!!if !strcmp(@stableIndex,"no")!!
+	CAVLNode *p!!@name!!Node=NULL;
+	!!endif!!
+	!!next!!
+	!!if !strcmp(@stableIndex,"no")!!
+	C!!@name!! *pTarget = p!!@name!!;
+	!!endif!!
+	!!travel index!!
+		!!if !strcmp(@stableIndex,"no")!!
+			!!if valid_name("useCase")!!
+	if (!!@useCase!!)
+		if (p!!@name!! != NULL)
+			p!!@name!!->removeObject(p!!@tableName!!);
+			!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!Node=p!!@name!!->findObject(p!!@tableName!!);	
+			!!endif!!
+		!!endif!!
+	!!next!!
+	!!if valid_name("hashindex")!!
+		!!travel hashindex!!
+			!!if !strcmp(@stableIndex,"no")!!
+				!!if valid_name("useCase")!!
+	if (!!@useCase!!){
+		if (p!!@name!! != NULL)
+			p!!@name!!->removeObject(p!!@tableName!!,p!!@tableName!!->Hash!!@hashKey!!);
+	}
+				!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->removeObject(p!!@tableName!!,p!!@tableName!!->Hash!!@hashKey!!);					
+				!!endif!!
+			!!endif!!
+		!!next!!
+	!!endif!!
+	forceCopy(p!!@name!!,pNew!!@name!!,sizeof(C!!@name!!));
+	pMem->updateObject(p!!@name!!);
+	!!travel index!!
+		!!if !strcmp(@stableIndex,"no")!!
+			!!if valid_name("useCase")!!
+	if (!!@useCase!!)
+		if (p!!@name!! != NULL)
+			p!!@name!!->addObject(pTarget);
+			!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->updateNode(p!!@name!!Node);
+			!!endif!!
+		!!endif!!
+	!!next!!
+	!!if valid_name("hashindex")!!
+		!!travel hashindex!!
+			!!if !strcmp(@stableIndex,"no")!!
+	if (p!!@name!! != NULL){
+		((CWriteable!!@tableName!!*)p!!@tableName!!)->calHash!!@hashKey!!();
+		p!!@name!!->addObject(p!!@tableName!!,p!!@tableName!!->Hash!!@hashKey!!);
+	}
+			!!endif!!
+		!!next!!
+	!!endif!!
+	if (bNoTransaction)
+		commitUpdate(p!!@name!!,&theOld!!@name!!);
+	return p!!@name!!;
+!!else!!
+	return NULL;
+!!endif!!	
+}
+
+C!!@name!!* C!!@name!!Factory::update(C!!@name!! *p!!@name!!, CWriteable!!@name!! *pNew!!@name!!, CTransaction *pTransaction, bool bNoTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	if(p!!@name!! == NULL)
+		return NULL;
+	if (pTransaction==NULL) {
+		return internalUpdate(p!!@name!!,pNew!!@name!!,bNoTransaction);
+	}else{
+		pTransaction->addResource(C!!@name!!Resource::alloc(UPDATE_ACTION,this,p!!@name!!));
+		return internalUpdate(p!!@name!!,pNew!!@name!!,false);
+	}
+!!else!!
+	return NULL;
+!!endif!!
+}
+
+void C!!@name!!Factory::internalRemove(C!!@name!! *p!!@name!!, bool bNoTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	CWriteable!!@name!! theOld!!@name!!;
+	//beforeRemove(p!!@name!!);
+	if (bNoTransaction)
+		forceCopy(&theOld!!@name!!,p!!@name!!,sizeof(C!!@name!!));
+	C!!@name!! *pTarget = p!!@name!!;
+	!!travel index!!
+		!!if valid_name("useCase")!!
+	if (!!@useCase!!){
+		if (p!!@name!! != NULL)
+			p!!@name!!->removeObject(p!!@tableName!!);
+	}
+		!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->removeObject(p!!@tableName!!);	
+		!!endif!!
+	!!next!!
+	
+	!!if valid_name("hashindex")!!
+	!!travel hashindex!!
+		!!if valid_name("useCase")!!
+	if (!!@useCase!!){
+		if (p!!@name!! != NULL)
+			p!!@name!!->removeObject(p!!@tableName!!,p!!@tableName!!->Hash!!@hashKey!!);
+	}
+		!!else!!
+	if (p!!@name!! != NULL)
+		p!!@name!!->removeObject(p!!@tableName!!,p!!@tableName!!->Hash!!@hashKey!!);		
+		!!endif!
+	!!next!!
+	!!endif!!
+	pMem->free(p!!@name!!);
+	if(bNoTransaction)
+		commitRemove(&theOld!!@name!!);
+!!endif!!
+}
+
+void C!!@name!!Factory::remove(C!!@name!! *p!!@name!!, CTransaction *pTransaction, bool bNoTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	if(p!!@name!! == NULL)
+		return;
+	if (pTransaction == NULL) {
+		internalRemove(p!!@name!!, bNoTransaction);
+	}else{
+		pTransaction->addResource(C!!@name!!Resource::alloc(DELETE_ACTION,this,p!!@name!!));
+		internalRemove(p!!@name!!,false);
+	}
+!!endif!!
+}
+
+C!!@name!!* C!!@name!!Factory::addOrUpdate(C!!@name!! *p!!@name!!, CWriteable!!@name!! *pNew!!@name!!, CTransaction *pTransaction)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	if(p!!@name!! == NULL)
+		return add(pNew!!@name!!,pTransaction);
+	else
+		return update(p!!@name!!,pNew!!@name!!,pTransaction);
+!!else!!
+	return NULL;
+!!endif!!
+}
+
+void C!!@name!!Factory::retrieve(C!!@name!! *p!!@name!!, CWriteable!!@name!! *pTarget!!@name!!)
+{
+!!if !strcmp(@writeTable,"yes")!!
+	if(p!!@name!! == NULL)
+		return;
+	forceCopy(pTarget!!@name!!, p!!@name!!, sizeof(C!!@name!!));
+!!endif!!
+}
+	
+int C!!@name!!Factory::addActionTrigger(C!!@name!!ActionTrigger *pActionTrigger)
+{
+	pActionTrigger->setFactory(this);
+	pActionTriggers->push_back(pActionTrigger);
+	return 1;
+}
+
+int C!!@name!!Factory::removeActionTrigger(C!!@name!!ActionTrigger *pActionTrigger)
+{
+	for (int i=0; i < (int)pActionTriggers->size(); i++) {
+		if (pActionTriggers->at(i)==pActionTrigger) {
+			pActionTriggers->erase(pActionTriggers->begin()+i);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int C!!@name!!Factory::addCommitTrigger(C!!@name!!CommitTrigger *pCommitTrigger)
+{
+	pCommitTrigger->setFactory(this);
+	pCommitTriggers->push_back(pCommitTrigger);
+	return 1;
+}
+
+int C!!@name!!Factory::removeCommitTrigger(C!!@name!!CommitTrigger *pCommitTrigger)
+{
+	for (int i=0;i < (int)pCommitTriggers->size(); i++) {
+		if (pCommitTriggers->at(i)==pCommitTrigger) {
+			pCommitTriggers->erase(pCommitTriggers->begin()+i);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+C!!@name!!* C!!@name!!Factory::getFirst()
+{
+	return (C!!@name!! *)(pMem->getFirst());
+}
+	
+C!!@name!!* C!!@name!!Factory::getNext()
+{
+	return (C!!@name!! *)(pMem->getNext());
+}
+
+void C!!@name!!Factory::commitAdd(C!!@name!! *p!!@name!!)
+{
+	for (int i = 0; i < (int)pCommitTriggers->size(); i++) {
+		pCommitTriggers->at(i)->commitAdd(p!!@name!!);
+	}
+}
+
+void C!!@name!!Factory::commitUpdate(C!!@name!! *p!!@name!!, CWriteable!!@name!! *pOld!!@name!!)
+{
+	for (int i = 0; i < (int)pCommitTriggers->size(); i++) {
+		pCommitTriggers->at(i)->commitUpdate(p!!@name!!,pOld!!@name!!);
+	}
+}
+	
+void C!!@name!!Factory::commitRemove(CWriteable!!@name!! *p!!@name!!)
+{
+	for (int i = 0; i < (int)pCommitTriggers->size(); i++) {
+		pCommitTriggers->at(i)->commitRemove(p!!@name!!);
+	}
+}
+
+void C!!@tableName!!Factory::checkNull(FILE *pFile)
+{
+	C!!@tableName!! *pTarget = getFirst();
+	while (pTarget != NULL)
+	{
+		bool bNull = false;
+		!!travel fields!!
+			!!if !strcmp(@notnull,"yes")!!
+		if(pTarget->!!@name!!.isNull()){
+			bNull = true;
+			fprintf(pFile, "!!@tableName!!->!!@name!!:NULL\n");
+		}
+			!!endif!!
+		!!next!!
+		if (bNull){
+			pTarget->dumpInLine(pFile);
+			fflush(pFile);
+		}
+		pTarget = getNext();
+	}
+}
+
+void C!!@tableName!!Factory::checkValid(FILE *pFile)
+{
+	C!!@tableName!! *pTarget = getFirst();
+	while (pTarget != NULL)	{
+		bool bValid = true;
+		!!travel fields!!
+		if(!pTarget->!!@name!!.isValid()){
+			bValid = false;
+			fprintf(pFile, "!!@tableName!!->!!@name!!:inValid\n");
+		}
+		!!next!!
+		if (!bValid){
+			pTarget->dumpInLine(pFile);
+			fflush(pFile);
+		}
+		pTarget = getNext();
+	}
+}
+
+!!travel foreigns!!
+void C!!@tableName!!Factory::linkAll!!@name!!()
+{
+	C!!@tableName!! *pTarget = getFirst();
+	while (pTarget != NULL) {
+		pTarget->link!!@name!!();
+		pTarget=getNext();
+	}
+}
+
+!!next!!
+!!travel foreigns!!
+void C!!@tableName!!Factory::checkLink!!@name!!(FILE *pFile)
+{
+	C!!@tableName!! *pTarget = getFirst();
+	while (pTarget != NULL){
+		if (pTarget->get!!@name!!() == NULL){
+	!!if valid_name("inValid")!!
+			if(!!@inValid!!){
+				pTarget = getNext();
+				continue;
+			}
+	!!endif!!
+	!!command vector<string> vct;!!
+	!!command split_str(@key, ",", vct);!!
+	!!command for (int i=0; i<vct.size(); i++) {!!
+			if (pTarget->!!command display_string(vct[i].c_str())!!.isNull()){
+				pTarget = getNext();
+				continue;
+			}
+	!!command }!!
+			fprintf(pFile, "!!@tableName!!->!!@name!!:LinkToNull\n");
+			pTarget->dumpInLine(pFile);
+			fflush(pFile);
+		}
+		pTarget = getNext();
+	}
+}
+
+!!next!!
+!!travel foreigns!!
+void C!!@tableName!!Factory::clearLink!!@name!!()
+{
+	!!if valid_name("clearkey")!!
+	C!!@tableName!! *pTarget = getFirst();
+	while (pTarget != NULL){
+		if (pTarget->get!!@name!!() == NULL){
+	!!if valid_name("inValid")!!
+			if(!!@inValid!!){
+				pTarget = getNext();
+				continue;
+			}
+	!!endif!!
+			CWriteable!!@tableName!! theTarget;
+			retrieve(pTarget, &theTarget);
+			!!command vector<string> vct;!!
+			!!command split_str(@clearkey, ",", vct);!!
+			!!command for (int i=0; i<vct.size(); i++) {!!
+			theTarget.!!command display_string(vct[i].c_str())!!.clear();	
+			!!command }!!
+			update(pTarget, &theTarget);
+		}
+		pTarget = getNext();
+	}
+	!!endif!!
+}
+
+!!next!!
+!!++!!void C!!@name!!Factory::checkAddress(C!!@name!! *p!!@name!!)
+{
+	if (!pMem->checkAddress(p!!@name!!)) {
+		EMERGENCY_EXIT("Invalid C!!@name!!");
+	}
+}!!--!!
+!!endif!!
+!!next!!
+
+!!leave!!

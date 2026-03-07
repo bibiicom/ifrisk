@@ -1,0 +1,201 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DWINDOWS -DMSVC
+target=.\.\risk.exe
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  risk_build_dir
+	-mkdir  .\.\
+	
+crypt_obj=risk_build_dir\cryptUtility.cpp.obj risk_build_dir\Des.cpp.obj risk_build_dir\hexEncode.cpp.obj risk_build_dir\md5Handler.cpp.obj 
+crypt_includedir=-I..\..\src_base\crypt\.
+datastruct_obj=risk_build_dir\BigDigit.cpp.obj risk_build_dir\CDate.cpp.obj risk_build_dir\CErrorEngine.cpp.obj risk_build_dir\CSequence.cpp.obj risk_build_dir\CSVParser.cpp.obj risk_build_dir\CSVToField.cpp.obj risk_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\src_base\datastruct\.
+function_obj=risk_build_dir\BaseFunction.cpp.obj risk_build_dir\Config.cpp.obj risk_build_dir\platform.cpp.obj risk_build_dir\printinfo.cpp.obj risk_build_dir\profile.cpp.obj risk_build_dir\utility.cpp.obj risk_build_dir\utils.cpp.obj risk_build_dir\version.cpp.obj 
+function_includedir=-I..\..\src_base\function\.
+logger_obj=risk_build_dir\CFilelogService.cpp.obj risk_build_dir\CLogger.cpp.obj risk_build_dir\CProbeLogger.cpp.obj risk_build_dir\CSyslogService.cpp.obj risk_build_dir\monitorIndex.cpp.obj 
+logger_includedir=-I..\..\src_base\logger\.
+netstruct_obj=risk_build_dir\errorDefine.cpp.obj risk_build_dir\TableDefine.cpp.obj 
+netstruct_includedir=-I..\..\src_base\netstruct\.
+field_obj=risk_build_dir\FieldData.cpp.obj risk_build_dir\FieldMap.cpp.obj 
+field_includedir=-I..\..\src_base\field\.
+mdbbase_obj=risk_build_dir\mdb.cpp.obj risk_build_dir\mdbAction.cpp.obj risk_build_dir\mdbIter.cpp.obj risk_build_dir\mdbLog.cpp.obj risk_build_dir\mdbSearch.cpp.obj risk_build_dir\mdbStruct.cpp.obj risk_build_dir\mdbTable.cpp.obj 
+mdbbase_includedir=-I..\..\src_base\mdb\mdbbase\.
+mdbstruct_obj=risk_build_dir\Allocator.cpp.obj risk_build_dir\CAVLTree.cpp.obj risk_build_dir\CBaseObject.cpp.obj risk_build_dir\CDatabaseDataFactory.cpp.obj risk_build_dir\CDatabaseResource.cpp.obj risk_build_dir\CDoubleHash.cpp.obj risk_build_dir\CFixMem.cpp.obj risk_build_dir\CHashIndex.cpp.obj risk_build_dir\CTransaction.cpp.obj 
+mdbstruct_includedir=-I..\..\src_base\mdb\mdbstruct\.
+mdbchange_obj=risk_build_dir\AlterService.cpp.obj risk_build_dir\AlterServiceInterface.cpp.obj risk_build_dir\TableTrigger.cpp.obj 
+mdbchange_includedir=-I..\..\src_base\mdb\mdbchange\.
+ofserviceapi_include_includedir=-I..\..\libs\ofserviceapi\1.0\include\.
+ofapibase_obj=risk_build_dir\OutFogServiceApiWrapper.cpp.obj 
+ofapibase_includedir=-I..\..\libs\ofserviceapi\ofapibase\.
+service_obj=risk_build_dir\ServiceShare.cpp.obj risk_build_dir\tradingTools.cpp.obj 
+service_includedir=-I..\..\src\service\.
+risk_obj=risk_build_dir\App.cpp.obj 
+risk_includedir=-I..\..\src\risk\.
+
+all_objs=$(crypt_obj) $(datastruct_obj) $(function_obj) $(logger_obj) $(netstruct_obj) $(field_obj) $(mdbbase_obj) $(mdbstruct_obj) $(mdbchange_obj) $(ofapibase_obj) $(service_obj) $(risk_obj) 
+
+all_libs=
+INCLUDEDIR= $(crypt_includedir)  $(datastruct_includedir)  $(function_includedir)  $(logger_includedir)  $(netstruct_includedir)  $(field_includedir)  $(mdbbase_includedir)  $(mdbstruct_includedir)  $(mdbchange_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(service_includedir)  $(risk_includedir) 
+
+risk_build_dir\cryptUtility.cpp.obj: ..\..\src_base\crypt\cryptUtility.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\crypt\cryptUtility.cpp /Forisk_build_dir\cryptUtility.cpp.obj
+risk_build_dir\Des.cpp.obj: ..\..\src_base\crypt\Des.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\crypt\Des.cpp /Forisk_build_dir\Des.cpp.obj
+risk_build_dir\hexEncode.cpp.obj: ..\..\src_base\crypt\hexEncode.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\crypt\hexEncode.cpp /Forisk_build_dir\hexEncode.cpp.obj
+risk_build_dir\md5Handler.cpp.obj: ..\..\src_base\crypt\md5Handler.cpp $(crypt_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\crypt\md5Handler.cpp /Forisk_build_dir\md5Handler.cpp.obj
+risk_build_dir\BigDigit.cpp.obj: ..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\BigDigit.cpp /Forisk_build_dir\BigDigit.cpp.obj
+risk_build_dir\CDate.cpp.obj: ..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CDate.cpp /Forisk_build_dir\CDate.cpp.obj
+risk_build_dir\CErrorEngine.cpp.obj: ..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CErrorEngine.cpp /Forisk_build_dir\CErrorEngine.cpp.obj
+risk_build_dir\CSequence.cpp.obj: ..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSequence.cpp /Forisk_build_dir\CSequence.cpp.obj
+risk_build_dir\CSVParser.cpp.obj: ..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSVParser.cpp /Forisk_build_dir\CSVParser.cpp.obj
+risk_build_dir\CSVToField.cpp.obj: ..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\CSVToField.cpp /Forisk_build_dir\CSVToField.cpp.obj
+risk_build_dir\FieldDescribe.cpp.obj: ..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\datastruct\FieldDescribe.cpp /Forisk_build_dir\FieldDescribe.cpp.obj
+risk_build_dir\BaseFunction.cpp.obj: ..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\BaseFunction.cpp /Forisk_build_dir\BaseFunction.cpp.obj
+risk_build_dir\Config.cpp.obj: ..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\Config.cpp /Forisk_build_dir\Config.cpp.obj
+risk_build_dir\platform.cpp.obj: ..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\platform.cpp /Forisk_build_dir\platform.cpp.obj
+risk_build_dir\printinfo.cpp.obj: ..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\printinfo.cpp /Forisk_build_dir\printinfo.cpp.obj
+risk_build_dir\profile.cpp.obj: ..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\profile.cpp /Forisk_build_dir\profile.cpp.obj
+risk_build_dir\utility.cpp.obj: ..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\utility.cpp /Forisk_build_dir\utility.cpp.obj
+risk_build_dir\utils.cpp.obj: ..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\utils.cpp /Forisk_build_dir\utils.cpp.obj
+risk_build_dir\version.cpp.obj: ..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\function\version.cpp /Forisk_build_dir\version.cpp.obj
+risk_build_dir\CFilelogService.cpp.obj: ..\..\src_base\logger\CFilelogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CFilelogService.cpp /Forisk_build_dir\CFilelogService.cpp.obj
+risk_build_dir\CLogger.cpp.obj: ..\..\src_base\logger\CLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CLogger.cpp /Forisk_build_dir\CLogger.cpp.obj
+risk_build_dir\CProbeLogger.cpp.obj: ..\..\src_base\logger\CProbeLogger.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CProbeLogger.cpp /Forisk_build_dir\CProbeLogger.cpp.obj
+risk_build_dir\CSyslogService.cpp.obj: ..\..\src_base\logger\CSyslogService.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\CSyslogService.cpp /Forisk_build_dir\CSyslogService.cpp.obj
+risk_build_dir\monitorIndex.cpp.obj: ..\..\src_base\logger\monitorIndex.cpp $(logger_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\logger\monitorIndex.cpp /Forisk_build_dir\monitorIndex.cpp.obj
+risk_build_dir\errorDefine.cpp.obj: ..\..\src_base\netstruct\errorDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\netstruct\errorDefine.cpp /Forisk_build_dir\errorDefine.cpp.obj
+risk_build_dir\TableDefine.cpp.obj: ..\..\src_base\netstruct\TableDefine.cpp $(netstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\netstruct\TableDefine.cpp /Forisk_build_dir\TableDefine.cpp.obj
+risk_build_dir\FieldData.cpp.obj: ..\..\src_base\field\FieldData.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\field\FieldData.cpp /Forisk_build_dir\FieldData.cpp.obj
+risk_build_dir\FieldMap.cpp.obj: ..\..\src_base\field\FieldMap.cpp $(field_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\field\FieldMap.cpp /Forisk_build_dir\FieldMap.cpp.obj
+risk_build_dir\mdb.cpp.obj: ..\..\src_base\mdb\mdbbase\mdb.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdb.cpp /Forisk_build_dir\mdb.cpp.obj
+risk_build_dir\mdbAction.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbAction.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbAction.cpp /Forisk_build_dir\mdbAction.cpp.obj
+risk_build_dir\mdbIter.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbIter.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbIter.cpp /Forisk_build_dir\mdbIter.cpp.obj
+risk_build_dir\mdbLog.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbLog.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbLog.cpp /Forisk_build_dir\mdbLog.cpp.obj
+risk_build_dir\mdbSearch.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbSearch.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbSearch.cpp /Forisk_build_dir\mdbSearch.cpp.obj
+risk_build_dir\mdbStruct.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbStruct.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbStruct.cpp /Forisk_build_dir\mdbStruct.cpp.obj
+risk_build_dir\mdbTable.cpp.obj: ..\..\src_base\mdb\mdbbase\mdbTable.cpp $(mdbbase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbbase\mdbTable.cpp /Forisk_build_dir\mdbTable.cpp.obj
+risk_build_dir\Allocator.cpp.obj: ..\..\src_base\mdb\mdbstruct\Allocator.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\Allocator.cpp /Forisk_build_dir\Allocator.cpp.obj
+risk_build_dir\CAVLTree.cpp.obj: ..\..\src_base\mdb\mdbstruct\CAVLTree.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CAVLTree.cpp /Forisk_build_dir\CAVLTree.cpp.obj
+risk_build_dir\CBaseObject.cpp.obj: ..\..\src_base\mdb\mdbstruct\CBaseObject.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CBaseObject.cpp /Forisk_build_dir\CBaseObject.cpp.obj
+risk_build_dir\CDatabaseDataFactory.cpp.obj: ..\..\src_base\mdb\mdbstruct\CDatabaseDataFactory.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CDatabaseDataFactory.cpp /Forisk_build_dir\CDatabaseDataFactory.cpp.obj
+risk_build_dir\CDatabaseResource.cpp.obj: ..\..\src_base\mdb\mdbstruct\CDatabaseResource.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CDatabaseResource.cpp /Forisk_build_dir\CDatabaseResource.cpp.obj
+risk_build_dir\CDoubleHash.cpp.obj: ..\..\src_base\mdb\mdbstruct\CDoubleHash.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CDoubleHash.cpp /Forisk_build_dir\CDoubleHash.cpp.obj
+risk_build_dir\CFixMem.cpp.obj: ..\..\src_base\mdb\mdbstruct\CFixMem.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CFixMem.cpp /Forisk_build_dir\CFixMem.cpp.obj
+risk_build_dir\CHashIndex.cpp.obj: ..\..\src_base\mdb\mdbstruct\CHashIndex.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CHashIndex.cpp /Forisk_build_dir\CHashIndex.cpp.obj
+risk_build_dir\CTransaction.cpp.obj: ..\..\src_base\mdb\mdbstruct\CTransaction.cpp $(mdbstruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbstruct\CTransaction.cpp /Forisk_build_dir\CTransaction.cpp.obj
+risk_build_dir\AlterService.cpp.obj: ..\..\src_base\mdb\mdbchange\AlterService.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbchange\AlterService.cpp /Forisk_build_dir\AlterService.cpp.obj
+risk_build_dir\AlterServiceInterface.cpp.obj: ..\..\src_base\mdb\mdbchange\AlterServiceInterface.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbchange\AlterServiceInterface.cpp /Forisk_build_dir\AlterServiceInterface.cpp.obj
+risk_build_dir\TableTrigger.cpp.obj: ..\..\src_base\mdb\mdbchange\TableTrigger.cpp $(mdbchange_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src_base\mdb\mdbchange\TableTrigger.cpp /Forisk_build_dir\TableTrigger.cpp.obj
+risk_build_dir\OutFogServiceApiWrapper.cpp.obj: ..\..\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp /Forisk_build_dir\OutFogServiceApiWrapper.cpp.obj
+risk_build_dir\ServiceShare.cpp.obj: ..\..\src\service\ServiceShare.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\service\ServiceShare.cpp /Forisk_build_dir\ServiceShare.cpp.obj
+risk_build_dir\tradingTools.cpp.obj: ..\..\src\service\tradingTools.cpp $(service_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\service\tradingTools.cpp /Forisk_build_dir\tradingTools.cpp.obj
+risk_build_dir\App.cpp.obj: ..\..\src\risk\App.cpp $(risk_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\src\risk\App.cpp /Forisk_build_dir\App.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -out:$@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(crypt_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(logger_obj)
+	-$(DEL) $(netstruct_obj)
+	-$(DEL) $(field_obj)
+	-$(DEL) $(mdbbase_obj)
+	-$(DEL) $(mdbstruct_obj)
+	-$(DEL) $(mdbchange_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(service_obj)
+	-$(DEL) $(risk_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\.\risk.pdb

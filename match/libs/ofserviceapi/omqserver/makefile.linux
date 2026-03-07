@@ -1,0 +1,108 @@
+
+CPP=g++ -fpic
+LINK=g++
+LIB32=ar -ru
+PREP=g++ -E -P
+COPY=cp
+DEL=rm
+MAKE=make
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DLINUX -DGCC
+target=./../../../build/run/test/tools/omqserver
+
+APPEND_CPPFLAGS=-O3 -pthread -m64
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-Wall -Wno-sign-compare
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= -lpthread -lrt  
+
+DEBUG_LDFLAGS=
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=-Wall -Wno-sign-compare
+
+LDFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -shared -Wl,-Bsymbolic -ldl $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir -p omqserver_build_dir
+	-mkdir -p ./../../../build/run/test/tools/
+	
+function_obj=omqserver_build_dir/BaseFunction.cpp.o omqserver_build_dir/Config.cpp.o omqserver_build_dir/platform.cpp.o omqserver_build_dir/printinfo.cpp.o omqserver_build_dir/profile.cpp.o omqserver_build_dir/utility.cpp.o omqserver_build_dir/utils.cpp.o omqserver_build_dir/version.cpp.o 
+function_includedir=-I../../../build/src/function/.
+datastruct_obj=omqserver_build_dir/BigDigit.cpp.o omqserver_build_dir/CDate.cpp.o omqserver_build_dir/CErrorEngine.cpp.o omqserver_build_dir/CSequence.cpp.o omqserver_build_dir/CSVParser.cpp.o omqserver_build_dir/CSVToField.cpp.o omqserver_build_dir/FieldDescribe.cpp.o 
+datastruct_includedir=-I../../../build/src/datastruct/.
+ofserviceapi_include_includedir=-I../../../build/libs/ofserviceapi/1.0/include/.
+ofapibase_obj=omqserver_build_dir/OutFogServiceApiWrapper.cpp.o 
+ofapibase_includedir=-I../../../build/libs/ofserviceapi/ofapibase/.
+omqserver_obj=omqserver_build_dir/omqserver.cpp.o 
+omqserver_includedir= 
+
+all_objs=$(function_obj) $(datastruct_obj) $(ofapibase_obj) $(omqserver_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(datastruct_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(omqserver_includedir) 
+
+omqserver_build_dir/BaseFunction.cpp.o: ../../../build/src/function/BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/BaseFunction.cpp -oomqserver_build_dir/BaseFunction.cpp.o
+omqserver_build_dir/Config.cpp.o: ../../../build/src/function/Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/Config.cpp -oomqserver_build_dir/Config.cpp.o
+omqserver_build_dir/platform.cpp.o: ../../../build/src/function/platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/platform.cpp -oomqserver_build_dir/platform.cpp.o
+omqserver_build_dir/printinfo.cpp.o: ../../../build/src/function/printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/printinfo.cpp -oomqserver_build_dir/printinfo.cpp.o
+omqserver_build_dir/profile.cpp.o: ../../../build/src/function/profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/profile.cpp -oomqserver_build_dir/profile.cpp.o
+omqserver_build_dir/utility.cpp.o: ../../../build/src/function/utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/utility.cpp -oomqserver_build_dir/utility.cpp.o
+omqserver_build_dir/utils.cpp.o: ../../../build/src/function/utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/utils.cpp -oomqserver_build_dir/utils.cpp.o
+omqserver_build_dir/version.cpp.o: ../../../build/src/function/version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/function/version.cpp -oomqserver_build_dir/version.cpp.o
+omqserver_build_dir/BigDigit.cpp.o: ../../../build/src/datastruct/BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/BigDigit.cpp -oomqserver_build_dir/BigDigit.cpp.o
+omqserver_build_dir/CDate.cpp.o: ../../../build/src/datastruct/CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CDate.cpp -oomqserver_build_dir/CDate.cpp.o
+omqserver_build_dir/CErrorEngine.cpp.o: ../../../build/src/datastruct/CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CErrorEngine.cpp -oomqserver_build_dir/CErrorEngine.cpp.o
+omqserver_build_dir/CSequence.cpp.o: ../../../build/src/datastruct/CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSequence.cpp -oomqserver_build_dir/CSequence.cpp.o
+omqserver_build_dir/CSVParser.cpp.o: ../../../build/src/datastruct/CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSVParser.cpp -oomqserver_build_dir/CSVParser.cpp.o
+omqserver_build_dir/CSVToField.cpp.o: ../../../build/src/datastruct/CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/CSVToField.cpp -oomqserver_build_dir/CSVToField.cpp.o
+omqserver_build_dir/FieldDescribe.cpp.o: ../../../build/src/datastruct/FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/src/datastruct/FieldDescribe.cpp -oomqserver_build_dir/FieldDescribe.cpp.o
+omqserver_build_dir/OutFogServiceApiWrapper.cpp.o: ../../../build/libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ../../../build/libs/ofserviceapi/ofapibase/OutFogServiceApiWrapper.cpp -oomqserver_build_dir/OutFogServiceApiWrapper.cpp.o
+omqserver_build_dir/omqserver.cpp.o: ./omqserver.cpp $(omqserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ./omqserver.cpp -oomqserver_build_dir/omqserver.cpp.o
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -o $@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(omqserver_obj)
+
+	-$(DEL) $(target)

@@ -1,0 +1,25 @@
+@echo off
+
+rem vs2017社区版x86编译环境
+rem vcvars32.bat和vcvars64.bat的脚本的安装位置
+rem set cc_install_dir=C:\\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat
+rem 动态库和静态库选择相应的平台架构 x86/x64
+rem set cc_arch=x86
+rem 静态库使用,编译器版本 vc6.0/vs2017
+rem set cc_version=vs2017
+
+rem vs2017社区版x64编译环境
+rem vcvars32.bat和vcvars64.bat的脚本的安装位置
+set cc_install_dir=C:\\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat
+rem 动态库和静态库选择相应的平台架构 x86/x64
+set cc_arch=x64
+rem 静态库使用,编译器版本 vc6.0/vs2017
+set cc_version=vs2017
+
+echo =============================================================
+echo == this build arch is [%cc_arch%] and build compile version is [%cc_version%]
+echo == ccpath is ["%cc_install_dir%"]
+echo =============================================================
+if not "%cc_install_dir%"=="" (
+	call "%cc_install_dir%"
+)

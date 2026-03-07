@@ -1,0 +1,16 @@
+/////////////////////////////////////////////////////////////////////////
+///databaseData.h
+///内存数据库的对外开放接口
+/////////////////////////////////////////////////////////////////////////
+
+#ifndef DATABASEDATA_H
+#define DATABASEDATA_H
+
+#include "mdbStruct.h"
+#include "mdbTable.h"
+#include "mdbIter.h"
+#include "mdb.h"
+#include "mdbLog.h"
+//#include "mdbGroupActions.h"
+
+#endif

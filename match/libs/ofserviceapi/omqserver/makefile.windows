@@ -1,0 +1,109 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=N
+DEFINES=-DWINDOWS -DMSVC
+target=.\..\..\..\build\run\test\tools\omqserver.exe
+
+APPEND_CPPFLAGS=-nologo -EHsc -MT -O2 -GF -FD
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDEBUG_NOT_LOG $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  omqserver_build_dir
+	-mkdir  .\..\..\..\build\run\test\tools\
+	
+function_obj=omqserver_build_dir\BaseFunction.cpp.obj omqserver_build_dir\Config.cpp.obj omqserver_build_dir\platform.cpp.obj omqserver_build_dir\printinfo.cpp.obj omqserver_build_dir\profile.cpp.obj omqserver_build_dir\utility.cpp.obj omqserver_build_dir\utils.cpp.obj omqserver_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\build\src\function\.
+datastruct_obj=omqserver_build_dir\BigDigit.cpp.obj omqserver_build_dir\CDate.cpp.obj omqserver_build_dir\CErrorEngine.cpp.obj omqserver_build_dir\CSequence.cpp.obj omqserver_build_dir\CSVParser.cpp.obj omqserver_build_dir\CSVToField.cpp.obj omqserver_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\build\src\datastruct\.
+ofserviceapi_include_includedir=-I..\..\..\build\libs\ofserviceapi\1.0\include\.
+ofapibase_obj=omqserver_build_dir\OutFogServiceApiWrapper.cpp.obj 
+ofapibase_includedir=-I..\..\..\build\libs\ofserviceapi\ofapibase\.
+omqserver_obj=omqserver_build_dir\omqserver.cpp.obj 
+omqserver_includedir= 
+
+all_objs=$(function_obj) $(datastruct_obj) $(ofapibase_obj) $(omqserver_obj) 
+
+all_libs=
+INCLUDEDIR= $(function_includedir)  $(datastruct_includedir)  $(ofserviceapi_include_includedir)  $(ofapibase_includedir)  $(omqserver_includedir) 
+
+omqserver_build_dir\BaseFunction.cpp.obj: ..\..\..\build\src\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\BaseFunction.cpp /Foomqserver_build_dir\BaseFunction.cpp.obj
+omqserver_build_dir\Config.cpp.obj: ..\..\..\build\src\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\Config.cpp /Foomqserver_build_dir\Config.cpp.obj
+omqserver_build_dir\platform.cpp.obj: ..\..\..\build\src\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\platform.cpp /Foomqserver_build_dir\platform.cpp.obj
+omqserver_build_dir\printinfo.cpp.obj: ..\..\..\build\src\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\printinfo.cpp /Foomqserver_build_dir\printinfo.cpp.obj
+omqserver_build_dir\profile.cpp.obj: ..\..\..\build\src\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\profile.cpp /Foomqserver_build_dir\profile.cpp.obj
+omqserver_build_dir\utility.cpp.obj: ..\..\..\build\src\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\utility.cpp /Foomqserver_build_dir\utility.cpp.obj
+omqserver_build_dir\utils.cpp.obj: ..\..\..\build\src\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\utils.cpp /Foomqserver_build_dir\utils.cpp.obj
+omqserver_build_dir\version.cpp.obj: ..\..\..\build\src\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\function\version.cpp /Foomqserver_build_dir\version.cpp.obj
+omqserver_build_dir\BigDigit.cpp.obj: ..\..\..\build\src\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\BigDigit.cpp /Foomqserver_build_dir\BigDigit.cpp.obj
+omqserver_build_dir\CDate.cpp.obj: ..\..\..\build\src\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CDate.cpp /Foomqserver_build_dir\CDate.cpp.obj
+omqserver_build_dir\CErrorEngine.cpp.obj: ..\..\..\build\src\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CErrorEngine.cpp /Foomqserver_build_dir\CErrorEngine.cpp.obj
+omqserver_build_dir\CSequence.cpp.obj: ..\..\..\build\src\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSequence.cpp /Foomqserver_build_dir\CSequence.cpp.obj
+omqserver_build_dir\CSVParser.cpp.obj: ..\..\..\build\src\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSVParser.cpp /Foomqserver_build_dir\CSVParser.cpp.obj
+omqserver_build_dir\CSVToField.cpp.obj: ..\..\..\build\src\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\CSVToField.cpp /Foomqserver_build_dir\CSVToField.cpp.obj
+omqserver_build_dir\FieldDescribe.cpp.obj: ..\..\..\build\src\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\src\datastruct\FieldDescribe.cpp /Foomqserver_build_dir\FieldDescribe.cpp.obj
+omqserver_build_dir\OutFogServiceApiWrapper.cpp.obj: ..\..\..\build\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp $(ofapibase_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\build\libs\ofserviceapi\ofapibase\OutFogServiceApiWrapper.cpp /Foomqserver_build_dir\OutFogServiceApiWrapper.cpp.obj
+omqserver_build_dir\omqserver.cpp.obj: .\omqserver.cpp $(omqserver_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\omqserver.cpp /Foomqserver_build_dir\omqserver.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(LDFLAGS) -out:$@ $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(function_obj)
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(ofapibase_obj)
+	-$(DEL) $(omqserver_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\..\..\..\build\run\test\tools\omqserver.pdb

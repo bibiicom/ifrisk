@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="gb2312"?>
+!!enter api!!
+!!let apiname=@apiname!!
+!!let APINAME=@APINAME!!
+!!let apiid=@apiid!!
+!!let APIID=@APIID!!
+!!leave!!
+<project target="!!@apiname!!!!@apiid!!Api" targettype="dll" workdir="" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2" libs="" model="../../../xmls/entity/" apiname="!!@apiname!!" APINAME="!!@APINAME!!" apiid="!!@apiid!!" APIID="!!@APIID!!">
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>
+		<cppflag name="LIB_!!@APINAME!!_!!@APIID!!_API_EXPORT"/>
+		<cppflag name="!!@APINAME!!_!!@APIID!!API_IS_LIB"/>
+		<cppflag name="!!@APIID!!API"/>
+	</cppflags>	
+	<package dir="../../../src_base/function"/>
+	<package dir="../../../src_base/datastruct"/>
+	<package dir="../../../src_base/thread"/>
+	<package dir="../../../src_base/xml"/>
+	<package dir="../../../src_base/logger"/>
+	<package dir="../../../src_base/netstruct"/>
+	<package dir="../../../src_base/field"/>
+	
+	<package dir="../../../libs/ofserviceapi" version="1.0" libpath=""/>
+	<package dir="../../../libs/ofserviceapi/ofapibase"/>
+	
+	<package dir="../../../src_api/include" prefix="!!@apiname!!!!@apiid!!"/>
+	<package dir="../../../src_api/api"/>
+</project>

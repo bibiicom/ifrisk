@@ -1,0 +1,144 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DWINDOWS -DMSVC -DISLIB
+target=.\.\OneMegaToEastMoneyKc50.dll
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DONE_MEGAAPI_IS_LIB -DLIB_ONE_MEGA_API_EXPORT $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  OneMegaToEastMoneyKc50_build_dir
+	-mkdir  .\.\
+	
+datastruct_obj=OneMegaToEastMoneyKc50_build_dir\BigDigit.cpp.obj OneMegaToEastMoneyKc50_build_dir\CDate.cpp.obj OneMegaToEastMoneyKc50_build_dir\CErrorEngine.cpp.obj OneMegaToEastMoneyKc50_build_dir\CSequence.cpp.obj OneMegaToEastMoneyKc50_build_dir\CSVParser.cpp.obj OneMegaToEastMoneyKc50_build_dir\CSVToField.cpp.obj OneMegaToEastMoneyKc50_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\src_base\datastruct\.
+function_obj=OneMegaToEastMoneyKc50_build_dir\BaseFunction.cpp.obj OneMegaToEastMoneyKc50_build_dir\Config.cpp.obj OneMegaToEastMoneyKc50_build_dir\platform.cpp.obj OneMegaToEastMoneyKc50_build_dir\printinfo.cpp.obj OneMegaToEastMoneyKc50_build_dir\profile.cpp.obj OneMegaToEastMoneyKc50_build_dir\utility.cpp.obj OneMegaToEastMoneyKc50_build_dir\utils.cpp.obj OneMegaToEastMoneyKc50_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\src_base\function\.
+mongoose79_obj=OneMegaToEastMoneyKc50_build_dir\HttpClient.cpp.obj OneMegaToEastMoneyKc50_build_dir\SMTPClient.cpp.obj OneMegaToEastMoneyKc50_build_dir\WSClient.cpp.obj OneMegaToEastMoneyKc50_build_dir\mongoose.c.obj 
+mongoose79_includedir=-I..\..\..\src_base\mongoose79\.
+tool_obj=OneMegaToEastMoneyKc50_build_dir\tool.cpp.obj 
+tool_includedir=-I..\..\..\src_base\tool\.
+jsoncpp_obj=OneMegaToEastMoneyKc50_build_dir\json_reader.cpp.obj OneMegaToEastMoneyKc50_build_dir\json_value.cpp.obj OneMegaToEastMoneyKc50_build_dir\json_writer.cpp.obj 
+jsoncpp_includedir=-I..\..\..\src_base\jsoncpp\.
+thread_obj=OneMegaToEastMoneyKc50_build_dir\Semaphore.cpp.obj OneMegaToEastMoneyKc50_build_dir\Thread.cpp.obj 
+thread_includedir=-I..\..\..\src_base\thread\.
+include_includedir=-I..\..\..\src_api\include\.
+openssl_include_obj=OneMegaToEastMoneyKc50_build_dir\ApiKeyUtil.cpp.obj 
+openssl_include_includedir=-I..\..\..\libs\openssl\1.1.0h\include\.
+openssl_lib_lib=/libpath:..\..\..\libs\openssl\1.1.0h\static\windows_x64 crypto.lib ssl.lib Crypt32.lib 
+openssl_lib_includedir= 
+OneMegaToEastMoneyKc50_obj=OneMegaToEastMoneyKc50_build_dir\Link.cpp.obj 
+OneMegaToEastMoneyKc50_includedir=-I.\.
+
+all_objs=$(datastruct_obj) $(function_obj) $(mongoose79_obj) $(tool_obj) $(jsoncpp_obj) $(thread_obj) $(openssl_include_obj) $(OneMegaToEastMoneyKc50_obj) 
+
+all_libs=$(openssl_lib_lib) 
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(mongoose79_includedir)  $(tool_includedir)  $(jsoncpp_includedir)  $(thread_includedir)  $(include_includedir)  $(openssl_include_includedir)  $(openssl_lib_includedir)  $(OneMegaToEastMoneyKc50_includedir) 
+
+OneMegaToEastMoneyKc50_build_dir\BigDigit.cpp.obj: ..\..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\BigDigit.cpp /FoOneMegaToEastMoneyKc50_build_dir\BigDigit.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\CDate.cpp.obj: ..\..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CDate.cpp /FoOneMegaToEastMoneyKc50_build_dir\CDate.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\CErrorEngine.cpp.obj: ..\..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CErrorEngine.cpp /FoOneMegaToEastMoneyKc50_build_dir\CErrorEngine.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\CSequence.cpp.obj: ..\..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSequence.cpp /FoOneMegaToEastMoneyKc50_build_dir\CSequence.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\CSVParser.cpp.obj: ..\..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVParser.cpp /FoOneMegaToEastMoneyKc50_build_dir\CSVParser.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\CSVToField.cpp.obj: ..\..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVToField.cpp /FoOneMegaToEastMoneyKc50_build_dir\CSVToField.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\FieldDescribe.cpp.obj: ..\..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\FieldDescribe.cpp /FoOneMegaToEastMoneyKc50_build_dir\FieldDescribe.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\BaseFunction.cpp.obj: ..\..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\BaseFunction.cpp /FoOneMegaToEastMoneyKc50_build_dir\BaseFunction.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\Config.cpp.obj: ..\..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\Config.cpp /FoOneMegaToEastMoneyKc50_build_dir\Config.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\platform.cpp.obj: ..\..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\platform.cpp /FoOneMegaToEastMoneyKc50_build_dir\platform.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\printinfo.cpp.obj: ..\..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\printinfo.cpp /FoOneMegaToEastMoneyKc50_build_dir\printinfo.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\profile.cpp.obj: ..\..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\profile.cpp /FoOneMegaToEastMoneyKc50_build_dir\profile.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\utility.cpp.obj: ..\..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utility.cpp /FoOneMegaToEastMoneyKc50_build_dir\utility.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\utils.cpp.obj: ..\..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utils.cpp /FoOneMegaToEastMoneyKc50_build_dir\utils.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\version.cpp.obj: ..\..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\version.cpp /FoOneMegaToEastMoneyKc50_build_dir\version.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\HttpClient.cpp.obj: ..\..\..\src_base\mongoose79\HttpClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\HttpClient.cpp /FoOneMegaToEastMoneyKc50_build_dir\HttpClient.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\SMTPClient.cpp.obj: ..\..\..\src_base\mongoose79\SMTPClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\SMTPClient.cpp /FoOneMegaToEastMoneyKc50_build_dir\SMTPClient.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\WSClient.cpp.obj: ..\..\..\src_base\mongoose79\WSClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\WSClient.cpp /FoOneMegaToEastMoneyKc50_build_dir\WSClient.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\mongoose.c.obj: ..\..\..\src_base\mongoose79\mongoose.c $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\mongoose.c /FoOneMegaToEastMoneyKc50_build_dir\mongoose.c.obj
+OneMegaToEastMoneyKc50_build_dir\tool.cpp.obj: ..\..\..\src_base\tool\tool.cpp $(tool_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\tool\tool.cpp /FoOneMegaToEastMoneyKc50_build_dir\tool.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\json_reader.cpp.obj: ..\..\..\src_base\jsoncpp\json_reader.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_reader.cpp /FoOneMegaToEastMoneyKc50_build_dir\json_reader.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\json_value.cpp.obj: ..\..\..\src_base\jsoncpp\json_value.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_value.cpp /FoOneMegaToEastMoneyKc50_build_dir\json_value.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\json_writer.cpp.obj: ..\..\..\src_base\jsoncpp\json_writer.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_writer.cpp /FoOneMegaToEastMoneyKc50_build_dir\json_writer.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\Semaphore.cpp.obj: ..\..\..\src_base\thread\Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\thread\Semaphore.cpp /FoOneMegaToEastMoneyKc50_build_dir\Semaphore.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\Thread.cpp.obj: ..\..\..\src_base\thread\Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\thread\Thread.cpp /FoOneMegaToEastMoneyKc50_build_dir\Thread.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\ApiKeyUtil.cpp.obj: ..\..\..\libs\openssl\1.1.0h\include\ApiKeyUtil.cpp $(openssl_include_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\libs\openssl\1.1.0h\include\ApiKeyUtil.cpp /FoOneMegaToEastMoneyKc50_build_dir\ApiKeyUtil.cpp.obj
+OneMegaToEastMoneyKc50_build_dir\Link.cpp.obj: .\Link.cpp $(OneMegaToEastMoneyKc50_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\Link.cpp /FoOneMegaToEastMoneyKc50_build_dir\Link.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -out:$@ -implib:.\.\OneMegaToEastMoneyKc50.lib $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(mongoose79_obj)
+	-$(DEL) $(tool_obj)
+	-$(DEL) $(jsoncpp_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(openssl_include_obj)
+	-$(DEL) $(OneMegaToEastMoneyKc50_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\.\OneMegaToEastMoneyKc50.lib
+	-$(DEL) .\.\OneMegaToEastMoneyKc50.pdb

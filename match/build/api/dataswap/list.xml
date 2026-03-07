@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="dataswap" targettype="dll" workdir="../cplusplus" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2" model="../../../xmls/entity/">
+	<cppflags>
+		<cppflag name="DDEBUG_NOT_LOG"/>
+		<cppflag name="OUTFOGSERVICE_API_IS_LIB"/>
+		<cppflag name="LIB_OUTFOGSERVICE_API_EXPORT"/>
+	</cppflags>
+
+	<package dir="../../../src_base/datastruct"/>
+	<package dir="../../../src_base/function"/>
+	<package dir="../../../src_base/netstruct"/>
+	<package dir="../../../src_base/field"/>
+	
+	<package dir="../../../libs/ofserviceapi" version="1.0" libpath=""/>
+	<package dir="../../../src_api/dataswap/fromjson"/>
+	<package dir="../../../src_api/dataswap/formdata"/>
+	<package dir="../../../src_api/dataswap"/>
+</project>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="GB2312"?>
+<api author="" apiname="One" APINAME="ONE" apiid="Mega" APIID="MEGA" version="1.0" comment="API选择,报文名字设置为*表明所有的报文">
+	<package name="*"/>
+</api>

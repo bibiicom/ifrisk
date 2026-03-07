@@ -1,0 +1,26 @@
+(1) 增加合约
+	//币币
+	curl -d '{"MarketID":"DigitalCurrency","ExchangeID":"Test","InstrumentID":"BTC/USDT","InstrumentName":"BTC/USDT","SettleGroup":"Spot","ProductID":"Spot1","ProductClass":"4","ProductGroup":"Spot","ProductType":"8","VolumeMultiple":1,"UnderlyingMultiple":1,"PriceCurrency":"USDT","ClearCurrency":"BTC","IsInverse":0,"BaseCurrency":"BTC","BasisPrice":12000,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","DayStartTime":"00:00:00","SortNumber":1,"InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:8090/action/v1.0/SendInsert/Instrument
+	//合约
+	curl -d '{"MarketID":"DigitalCurrency","ExchangeID":"Test","InstrumentID":"ETHUSD","InstrumentName":"ETHUSD_SWAP","SettleGroup":"Swap","ProductID":"ETH_SWAP_B","ProductClass":"1","ProductGroup":"Swap","ProductType":"2","PositionType":"2","VolumeMultiple":10,"UnderlyingMultiple":1,"PriceCurrency":"USD","ClearCurrency":"ETH","IsInverse":1,"BaseCurrency":"ETH","MarginPriceType":"2","BasisPrice":560,"MinOrderVolume":1,"MaxOrderVolume":100000,"PriceTick":0.05,"MarketTick1":0.1,"MarketTick2":1,"VolumeTick":1,"TradePriceMode":"1","TradingModel":"0","UseYdPosition":0,"DayStartTime":"00:00:00","SortNumber":2,"InstrumentStatus":"2"}'  -X POST  http://127.0.0.1:8090/action/v1.0/SendInsert/Instrument
+	
+(2)增加保证金率	
+	curl -d '{"MemberID":"default","TradeUnitID":"default","ExchangeID":"Test","InstrumentID":"ETHUSD","ValueMode":"0","LongMarginRatio":0.005,"LongMaintMarginRatio":0.005,"LongMarginStep":0.0,"LongMaintMarginStep":0.0,"LongRiskLimit":0.0,"LongRiskStep":0.0,"ShortMarginRatio":0.005,"ShortMaintMarginRatio":0.005,"ShortMarginStep":0.0,"ShortMaintMarginStep":0.0,"ShortRiskLimit":0.0,"ShortRiskStep":0.0"}' -X POST  http://127.0.0.1:8090/action/v1.0/SendInsert/MarginRate
+	
+(2)增加手续费
+	curl -d '{"ExchangeID":"DeepCoin","InstrumentID":"ETHUSD","ValueMode":"0","RoundingMode":"1","PriceLimitType":"0","BandingPriceType":"3","UpperValue":0.05,"LowerValue":0.05}' -X POST  http://127.0.0.1:8090/action/v1.0/SendUpdate/Fee
+
+(7) 增加做市账户
+	设置做市账户为单边持仓，特殊账户手续费为0
+	curl -d '{"MemberID":"8522189","Grade":"X","CheckAccount":1,"Priority":0,"PositionProfitUse":"0"}' -X POST  http://127.0.0.1:8090/action/v1.0/SendInsUpd/Member
+	2.1 入金：
+	curl -d '{"LocalID":"","AccountID":"8001","SettleGroup":"Swap","Amount":1000,"Currency":"BTC","ActionType":"1"}'  -X POST  http://127.0.0.1:8090/action/v1.0/SendAccountAction
+	
+
+(9)分控账户增加账户或者打一点钱
+
+其他：
+	增加K线
+	做市启动
+	补充风险准备金
+	补充资金费率

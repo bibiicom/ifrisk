@@ -1,0 +1,125 @@
+!!enter system!!
+/////////////////////////////////////////////////////////////////////////
+///mdb.h
+///定义了类CMDB
+/////////////////////////////////////////////////////////////////////////
+
+#ifndef CMEMORYDB_H
+#define CMEMORYDB_H
+
+#include "CBaseObject.h"
+#include "mdbStruct.h"
+#include "mdbTable.h"
+#include "mdbIter.h"
+
+struct TableStruct
+{
+	char tableName[100];
+	int  reuseID;
+};
+
+class CMDBSnap
+{
+public:
+	CMDBSnap()
+	{
+		m_Status = 0;
+	}
+	virtual ~CMDBSnap() {};
+	//0:初始化状态(快照同步)，可以生成快照
+	//1:快照生成完成，可以同步快照到磁盘
+	volatile int m_Status;
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	vector<CWriteable!!@name!!> m_!!@name!!;	//!!@usage!!表
+		!!endif!!
+	!!next!!
+};
+
+/////////////////////////////////////////////////////////////////////////
+///CMDB是一个内存数据库类，包含了所有定义的表信息
+///@author	xuzh
+///@version	1.0,20050824
+/////////////////////////////////////////////////////////////////////////
+class CMDB : public CBaseObject
+{
+public:
+	///构造方法，创建内存数据库
+	CMDB();
+	
+	///析构方法，将负责释放所占用的空间
+	virtual ~CMDB();
+	
+	virtual int isA(char *objectType);
+	virtual const char *getType();
+
+	///进行初始化工作
+	///@param	pConfig	初始化时使用的配置信息
+	///@return	1表示成功，0表示失败
+	virtual int init(int memorySize, int blockCount, IMemoryAllocator *pAllocator=NULL, bool reuse=false);
+	
+	///进行数据载入工作
+	///@param	path	载入指定路径的数据
+	///@return	1表示成功，0表示失败
+	virtual int load(const char *path);
+
+	///进行WriteableTable数据存储工作
+	///@param	path	保存到指定路径
+	///@return	1表示成功，0表示失败
+	virtual int save(const char *path, UF_INT8 nSequenceNo=0.0);
+	
+	//存储前一个版本的数据
+	//用于比较和前一个版本的数据
+	///@param	path	保存到指定路径
+	///@return	1表示成功，0表示失败	
+	virtual int savePreVersion(const char *path, UF_INT8 nSequenceNo=0.0);
+	
+	///进行所有数据存储工作
+	///@param	path	保存到指定路径
+	///@return	1表示成功，0表示失败
+	virtual int saveAll(const char *path, UF_INT8 nSequenceNo=0.0);
+	virtual int saveAllPreVersion(const char *path, UF_INT8 nSequenceNo=0.0);	
+
+	///清空所有的数据
+	///@return	1表示成功，0表示失败
+	virtual void clear();
+	
+	///完成所有外键的连接
+	virtual void linkAll();
+	
+	///Link数据检查
+	///@param	pFile	检查结果输出文件
+	virtual void checkLink(FILE *pFile) const;
+	
+	///Link数据清理
+	virtual void clearLink();	
+	
+	///Null数据检查
+	///@param	pFile	检查结果输出文件
+	virtual void checkNull(FILE *pFile) const;
+	
+	///Valid数据检查
+	///@param	pFile	检查结果输出文件
+	virtual void checkValid(FILE *pFile) const;	
+	
+	//为了异步写文件快照
+	bool snap(const char *path, UF_INT8 nSequenceNo = 0.0);
+	bool snapAll(const char *path, UF_INT8 nSequenceNo = 0.0);	
+	bool saveSnap();
+	bool clearSnap();
+	bool canSnap();
+
+	!!travel tables!!
+		!!if !strcmp(@hasTable,"yes")!!
+	C!!@name!!Factory *m_!!@name!!Factory;		//!!@usage!!表
+		!!endif!!
+	!!next!!
+private:
+	CFixMem *pMem;		///用来存放表的信息
+	CMDBSnap m_MDBLastSnap;
+	char m_sLastSnapPath[128];
+	UF_INT8 m_nLastSequenceNo;
+};
+
+#endif
+!!leave!!

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project target="public" targettype="exe" workdir="./" model="../../xmls/entity/" hasdebug="yes" hasmap="no" hasprofile="no" multithread="yes" warninglevel="2"/>
+	<cppflags>
+		<cppflag name="DEBUG_NOT_LOG"/>
+	</cppflags>
+	<package dir="../../src_base/crypt"/>
+	<package dir="../../src_base/datastruct"/>	
+	<package dir="../../src_base/function"/>	
+	<package dir="../../src_base/logger"/>
+	<package dir="../../src_base/netstruct"/>
+	<package dir="../../src_base/field"/>
+	<package dir="../../src_base/mdb/mdbbase"/>
+	<package dir="../../src_base/mdb/mdbstruct"/>
+
+	<package dir="../../libs/ofserviceapi" version="1.0" libpath=""/>
+	<package dir="../../libs/ofserviceapi/ofapibase"/>
+	<package dir="../../libs/sqlapi" version="4.1.3" libpath="."/>
+	<package dir="../../libs/sqlapi/dbconnect"/>	
+	<package dir="../../src/modMarketData"/>
+	<package dir="../../src/service/serviceLogin"/>
+	<package dir="../../src/service"/>
+	<package dir="../../src/public"/>
+</project>

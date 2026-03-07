@@ -1,0 +1,137 @@
+
+CPP=cl
+LINK=link
+LIB32=lib 
+PREP=cl -nologo -EP
+COPY=copy /y
+DEL=del
+MAKE=nmake
+ECHO=echo
+
+
+
+	
+	
+ISLIB=Y
+DEFINES=-DWINDOWS -DMSVC -DISLIB
+target=.\.\OneMegaToQQ.dll
+
+APPEND_CPPFLAGS=-nologo -EHsc -MTd -Od -Gm -Zi -FD -Zm200
+
+PROFILE_CPPFLAGS=
+
+WARNING_CPPFLAGS=-W3
+
+CPPFLAGS=   -DDDEBUG_NOT_LOG -DONE_MEGAAPI_IS_LIB -DLIB_ONE_MEGA_API_EXPORT -DMG_ENABLE_OPENSSL=0 $(APPEND_CPPFLAGS) $(PROFILE_CPPFLAGS) $(WARNING_CPPFLAGS) $(DEFINES)
+LIBS= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ws2_32.lib  
+
+DEBUG_LDFLAGS=/DEBUG
+
+MAP_LDFLAGS=
+
+PROFILE_LDFLAGS=
+
+WARNING_LDFLAGS=/WARN:2
+
+LDFLAGS=    -nologo /FIXED:NO $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS) $(WARNING_LDFLAGS)
+LIBARFLAGS=    -nologo $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+DLLARFLAGS=    -nologo /dll $(MAP_LDFLAGS) $(DEBUG_LDFLAGS) $(PROFILE_LDFLAGS)
+
+all: code
+
+code: clearoutput $(target)
+
+clearoutput:
+	@$(ECHO) Compiling...
+	-mkdir  OneMegaToQQ_build_dir
+	-mkdir  .\.\
+	
+datastruct_obj=OneMegaToQQ_build_dir\BigDigit.cpp.obj OneMegaToQQ_build_dir\CDate.cpp.obj OneMegaToQQ_build_dir\CErrorEngine.cpp.obj OneMegaToQQ_build_dir\CSequence.cpp.obj OneMegaToQQ_build_dir\CSVParser.cpp.obj OneMegaToQQ_build_dir\CSVToField.cpp.obj OneMegaToQQ_build_dir\FieldDescribe.cpp.obj 
+datastruct_includedir=-I..\..\..\src_base\datastruct\.
+function_obj=OneMegaToQQ_build_dir\BaseFunction.cpp.obj OneMegaToQQ_build_dir\Config.cpp.obj OneMegaToQQ_build_dir\platform.cpp.obj OneMegaToQQ_build_dir\printinfo.cpp.obj OneMegaToQQ_build_dir\profile.cpp.obj OneMegaToQQ_build_dir\utility.cpp.obj OneMegaToQQ_build_dir\utils.cpp.obj OneMegaToQQ_build_dir\version.cpp.obj 
+function_includedir=-I..\..\..\src_base\function\.
+mongoose79_obj=OneMegaToQQ_build_dir\HttpClient.cpp.obj OneMegaToQQ_build_dir\SMTPClient.cpp.obj OneMegaToQQ_build_dir\WSClient.cpp.obj OneMegaToQQ_build_dir\mongoose.c.obj 
+mongoose79_includedir=-I..\..\..\src_base\mongoose79\.
+tool_obj=OneMegaToQQ_build_dir\tool.cpp.obj 
+tool_includedir=-I..\..\..\src_base\tool\.
+jsoncpp_obj=OneMegaToQQ_build_dir\json_reader.cpp.obj OneMegaToQQ_build_dir\json_value.cpp.obj OneMegaToQQ_build_dir\json_writer.cpp.obj 
+jsoncpp_includedir=-I..\..\..\src_base\jsoncpp\.
+thread_obj=OneMegaToQQ_build_dir\Semaphore.cpp.obj OneMegaToQQ_build_dir\Thread.cpp.obj 
+thread_includedir=-I..\..\..\src_base\thread\.
+include_includedir=-I..\..\..\src_api\include\.
+OneMegaToQQ_obj=OneMegaToQQ_build_dir\Link.cpp.obj 
+OneMegaToQQ_includedir=-I.\.
+
+all_objs=$(datastruct_obj) $(function_obj) $(mongoose79_obj) $(tool_obj) $(jsoncpp_obj) $(thread_obj) $(OneMegaToQQ_obj) 
+
+all_libs=
+INCLUDEDIR= $(datastruct_includedir)  $(function_includedir)  $(mongoose79_includedir)  $(tool_includedir)  $(jsoncpp_includedir)  $(thread_includedir)  $(include_includedir)  $(OneMegaToQQ_includedir) 
+
+OneMegaToQQ_build_dir\BigDigit.cpp.obj: ..\..\..\src_base\datastruct\BigDigit.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\BigDigit.cpp /FoOneMegaToQQ_build_dir\BigDigit.cpp.obj
+OneMegaToQQ_build_dir\CDate.cpp.obj: ..\..\..\src_base\datastruct\CDate.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CDate.cpp /FoOneMegaToQQ_build_dir\CDate.cpp.obj
+OneMegaToQQ_build_dir\CErrorEngine.cpp.obj: ..\..\..\src_base\datastruct\CErrorEngine.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CErrorEngine.cpp /FoOneMegaToQQ_build_dir\CErrorEngine.cpp.obj
+OneMegaToQQ_build_dir\CSequence.cpp.obj: ..\..\..\src_base\datastruct\CSequence.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSequence.cpp /FoOneMegaToQQ_build_dir\CSequence.cpp.obj
+OneMegaToQQ_build_dir\CSVParser.cpp.obj: ..\..\..\src_base\datastruct\CSVParser.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVParser.cpp /FoOneMegaToQQ_build_dir\CSVParser.cpp.obj
+OneMegaToQQ_build_dir\CSVToField.cpp.obj: ..\..\..\src_base\datastruct\CSVToField.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\CSVToField.cpp /FoOneMegaToQQ_build_dir\CSVToField.cpp.obj
+OneMegaToQQ_build_dir\FieldDescribe.cpp.obj: ..\..\..\src_base\datastruct\FieldDescribe.cpp $(datastruct_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\datastruct\FieldDescribe.cpp /FoOneMegaToQQ_build_dir\FieldDescribe.cpp.obj
+OneMegaToQQ_build_dir\BaseFunction.cpp.obj: ..\..\..\src_base\function\BaseFunction.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\BaseFunction.cpp /FoOneMegaToQQ_build_dir\BaseFunction.cpp.obj
+OneMegaToQQ_build_dir\Config.cpp.obj: ..\..\..\src_base\function\Config.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\Config.cpp /FoOneMegaToQQ_build_dir\Config.cpp.obj
+OneMegaToQQ_build_dir\platform.cpp.obj: ..\..\..\src_base\function\platform.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\platform.cpp /FoOneMegaToQQ_build_dir\platform.cpp.obj
+OneMegaToQQ_build_dir\printinfo.cpp.obj: ..\..\..\src_base\function\printinfo.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\printinfo.cpp /FoOneMegaToQQ_build_dir\printinfo.cpp.obj
+OneMegaToQQ_build_dir\profile.cpp.obj: ..\..\..\src_base\function\profile.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\profile.cpp /FoOneMegaToQQ_build_dir\profile.cpp.obj
+OneMegaToQQ_build_dir\utility.cpp.obj: ..\..\..\src_base\function\utility.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utility.cpp /FoOneMegaToQQ_build_dir\utility.cpp.obj
+OneMegaToQQ_build_dir\utils.cpp.obj: ..\..\..\src_base\function\utils.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\utils.cpp /FoOneMegaToQQ_build_dir\utils.cpp.obj
+OneMegaToQQ_build_dir\version.cpp.obj: ..\..\..\src_base\function\version.cpp $(function_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\function\version.cpp /FoOneMegaToQQ_build_dir\version.cpp.obj
+OneMegaToQQ_build_dir\HttpClient.cpp.obj: ..\..\..\src_base\mongoose79\HttpClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\HttpClient.cpp /FoOneMegaToQQ_build_dir\HttpClient.cpp.obj
+OneMegaToQQ_build_dir\SMTPClient.cpp.obj: ..\..\..\src_base\mongoose79\SMTPClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\SMTPClient.cpp /FoOneMegaToQQ_build_dir\SMTPClient.cpp.obj
+OneMegaToQQ_build_dir\WSClient.cpp.obj: ..\..\..\src_base\mongoose79\WSClient.cpp $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\WSClient.cpp /FoOneMegaToQQ_build_dir\WSClient.cpp.obj
+OneMegaToQQ_build_dir\mongoose.c.obj: ..\..\..\src_base\mongoose79\mongoose.c $(mongoose79_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\mongoose79\mongoose.c /FoOneMegaToQQ_build_dir\mongoose.c.obj
+OneMegaToQQ_build_dir\tool.cpp.obj: ..\..\..\src_base\tool\tool.cpp $(tool_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\tool\tool.cpp /FoOneMegaToQQ_build_dir\tool.cpp.obj
+OneMegaToQQ_build_dir\json_reader.cpp.obj: ..\..\..\src_base\jsoncpp\json_reader.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_reader.cpp /FoOneMegaToQQ_build_dir\json_reader.cpp.obj
+OneMegaToQQ_build_dir\json_value.cpp.obj: ..\..\..\src_base\jsoncpp\json_value.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_value.cpp /FoOneMegaToQQ_build_dir\json_value.cpp.obj
+OneMegaToQQ_build_dir\json_writer.cpp.obj: ..\..\..\src_base\jsoncpp\json_writer.cpp $(jsoncpp_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\jsoncpp\json_writer.cpp /FoOneMegaToQQ_build_dir\json_writer.cpp.obj
+OneMegaToQQ_build_dir\Semaphore.cpp.obj: ..\..\..\src_base\thread\Semaphore.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\thread\Semaphore.cpp /FoOneMegaToQQ_build_dir\Semaphore.cpp.obj
+OneMegaToQQ_build_dir\Thread.cpp.obj: ..\..\..\src_base\thread\Thread.cpp $(thread_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c ..\..\..\src_base\thread\Thread.cpp /FoOneMegaToQQ_build_dir\Thread.cpp.obj
+OneMegaToQQ_build_dir\Link.cpp.obj: .\Link.cpp $(OneMegaToQQ_include)
+	$(CPP) $(CPPFLAGS) $(INCLUDEDIR) -c .\Link.cpp /FoOneMegaToQQ_build_dir\Link.cpp.obj
+
+$(target): $(all_objs)
+	$(LINK) $(DLLARFLAGS) -out:$@ -implib:.\.\OneMegaToQQ.lib $(all_objs) $(all_libs) $(LIBS)
+
+clean:
+	-$(DEL) $(datastruct_obj)
+	-$(DEL) $(function_obj)
+	-$(DEL) $(mongoose79_obj)
+	-$(DEL) $(tool_obj)
+	-$(DEL) $(jsoncpp_obj)
+	-$(DEL) $(thread_obj)
+	-$(DEL) $(OneMegaToQQ_obj)
+
+	-$(DEL) $(target)
+	-$(DEL) .\.\OneMegaToQQ.lib
+	-$(DEL) .\.\OneMegaToQQ.pdb
