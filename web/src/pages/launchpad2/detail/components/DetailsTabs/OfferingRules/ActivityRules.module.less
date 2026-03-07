@@ -1,0 +1,177 @@
+.rulesSection {
+  background: transparent;
+  border-radius: 8px;
+  padding: 0;
+  box-shadow: none;
+
+  .rulesTitle {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 32px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rulesContent {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+
+    .sectionBlock {
+      margin-bottom: 32px;
+      padding: 24px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
+      border-radius: 16px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: var(--border-secondary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .sectionTitle {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 16px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sectionContent {
+      background: transparent;
+    }
+
+    .contentItem {
+      padding-left: 0;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-weight: 700;
+        color: var(--text-primary);
+        white-space: nowrap;
+      }
+
+      .value {
+        color: var(--text-secondary);
+        flex: 1;
+      }
+    }
+
+    .contentText {
+      padding-left: 0;
+      margin: 8px 0;
+      color: var(--text-secondary);
+      line-height: 1.8;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+    }
+  }
+
+  // 响应式设计
+  @media (max-width: 768px) {
+    padding: 0;
+
+    .rulesTitle {
+      font-size: 18px;
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    .rulesContent {
+      font-size: 12px;
+      line-height: 1.6;
+
+      .sectionBlock {
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 12px;
+      }
+
+      .sectionTitle {
+        font-size: 13px;
+        margin-bottom: 12px;
+        letter-spacing: 0.03em;
+      }
+
+      .contentItem {
+        flex-direction: column;
+        gap: 2px;
+        margin-bottom: 10px;
+
+        .label {
+          font-size: 12px;
+        }
+
+        .value {
+          font-size: 12px;
+          word-break: break-word;
+        }
+      }
+
+      .contentText {
+        font-size: 12px;
+        line-height: 1.6;
+        margin: 6px 0;
+        word-break: break-word;
+      }
+    }
+  }
+
+  // 超小屏幕优化
+  @media (max-width: 480px) {
+    .rulesTitle {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    .rulesContent {
+      font-size: 11px;
+
+      .sectionBlock {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .sectionTitle {
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .contentItem {
+        margin-bottom: 8px;
+
+        .label,
+        .value {
+          font-size: 11px;
+        }
+      }
+
+      .contentText {
+        font-size: 11px;
+        line-height: 1.5;
+      }
+    }
+  }
+}

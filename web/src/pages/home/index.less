@@ -1,0 +1,39 @@
+@import (reference) "../../component/common.less";
+@import "../../styles/theme-variables.less";
+
+.home {
+  height: 100%;
+  color: var(--text-primary);
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  background-color: var(--bg-primary);
+
+  // 修复顶部空白问题
+  &:global(.app-content) {
+    margin: 0;
+  }
+
+  &-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  &-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: -16px;
+  }
+
+  &-link {
+    height: 44px;
+    line-height: 44px;
+    padding: 0 40px !important;
+    border-radius: 24px;
+    margin-top: 26px;
+    background-color: var(--color-primary);
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+  }
+}

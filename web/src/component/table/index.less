@@ -1,0 +1,94 @@
+@import (reference) '../common.less';
+
+.funny-table (@text-color, @text-third-color) {
+  justify-content: space-between;
+  position: relative;
+  padding: 0 16px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead,
+    tbody {
+      tr {
+
+        th,
+        td {
+          font-size: 12px;
+          text-align: right;
+
+          &:first-child {
+            text-align: left;
+          }
+        }
+      }
+    }
+
+    thead {
+      tr {
+        height: 32px;
+        color: @text-third-color;
+      }
+    }
+
+    tbody {
+      tr {
+        height: 26px;
+        color: @text-color;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.@{funny-prefix}-table-dark {
+  .funny-table(@text-color-dark, @text-third-color-dark)
+}
+
+.@{funny-prefix}-table-light {
+  .funny-table(@text-color-light, @text-third-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-table-auto {
+  justify-content: space-between;
+  position: relative;
+  padding: 0 16px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead,
+    tbody {
+      tr {
+
+        th,
+        td {
+          font-size: 12px;
+          text-align: right;
+
+          &:first-child {
+            text-align: left;
+          }
+        }
+      }
+    }
+
+    thead {
+      tr {
+        height: 32px;
+        color: var(--text-tertiary);
+      }
+    }
+
+    tbody {
+      tr {
+        height: 26px;
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+    }
+  }
+}

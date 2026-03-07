@@ -1,0 +1,147 @@
+{
+  "activeProjects": [
+    {
+      "id": 1,
+      "logo": null,
+      "name": "MetYa X Launch",
+      "description": "MetYa 是一个由 AI 驱动的 Web3 SocialFi + PayFi 生态，围绕代币 $MY 与 MePay 数字银行卡展开，用户可以在平台上配置、刷卡...",
+      "status": "参与中",
+      "countdown": "00天 01时 34分 45秒",
+      "participants": 23845,
+      "totalReward": 4405672,
+      "rewardToken": "MY"
+    },
+    {
+      "id": 2,
+      "logo": null,
+      "name": "Capybobo X Launch",
+      "description": "Capybobo 正在打造新一代 Web3 艺术玩 IP，将游戏、收藏与实体商品结合，项目 X GameFi 为起点，结合品牌...",
+      "status": "新锁仓",
+      "countdown": "00天 03时 34分 20秒",
+      "participants": 34871,
+      "totalReward": 625000000,
+      "rewardToken": "PYBOBO"
+    },
+    {
+      "id": 3,
+      "logo": null,
+      "name": "Recall X Launch II",
+      "description": "Recall 是一个去中心化的 AI 协议平台，让用户可以创建自己的 AI 代理...",
+      "status": "预热中",
+      "countdown": "13天 05时 34分 20秒",
+      "participants": 22369,
+      "totalReward": 2500000,
+      "rewardToken": "RECALL"
+    }
+  ],
+  "allFinishedProjects": [
+    {
+      "id": 1,
+      "logo": null,
+      "name": "Piggycell II X Launch",
+      "endDate": "2025/11/20",
+      "participants": 45098,
+      "totalReward": 500000,
+      "rewardToken": "PIGGY"
+    },
+    {
+      "id": 2,
+      "logo": null,
+      "name": "Audiera X Launch",
+      "endDate": "2025/11/15",
+      "participants": 50600,
+      "totalReward": 3300000,
+      "rewardToken": "BEAT"
+    },
+    {
+      "id": 3,
+      "logo": null,
+      "name": "Lit Protocol X Launch",
+      "endDate": "2025/11/13",
+      "participants": 44770,
+      "totalReward": 2500000,
+      "rewardToken": "LITKEY"
+    },
+    {
+      "id": 4,
+      "logo": null,
+      "name": "Novastro X Launch",
+      "endDate": "2025/11/12",
+      "participants": 42860,
+      "totalReward": 7000000,
+      "rewardToken": "XNL"
+    },
+    {
+      "id": 5,
+      "logo": null,
+      "name": "Bluwhale X Launch II",
+      "endDate": "2025/11/11",
+      "participants": 42800,
+      "totalReward": 50000000,
+      "rewardToken": "BLUAI"
+    },
+    {
+      "id": 6,
+      "logo": null,
+      "name": "Piggycell X Launch",
+      "endDate": "2025/11/11",
+      "participants": 42050,
+      "totalReward": 330000,
+      "rewardToken": "PIGGY"
+    },
+    {
+      "id": 7,
+      "logo": null,
+      "name": "Bluwhale X Launch",
+      "endDate": "2025/11/10",
+      "participants": 41200,
+      "totalReward": 45000000,
+      "rewardToken": "BLUAI"
+    },
+    {
+      "id": 8,
+      "logo": null,
+      "name": "MetYa X Launch",
+      "endDate": "2025/11/09",
+      "participants": 38900,
+      "totalReward": 3500000,
+      "rewardToken": "MY"
+    },
+    {
+      "id": 9,
+      "logo": null,
+      "name": "Capybobo X Launch",
+      "endDate": "2025/11/08",
+      "participants": 35600,
+      "totalReward": 500000000,
+      "rewardToken": "PYBOBO"
+    },
+    {
+      "id": 10,
+      "logo": null,
+      "name": "Recall X Launch",
+      "endDate": "2025/11/07",
+      "participants": 32400,
+      "totalReward": 2000000,
+      "rewardToken": "RECALL"
+    },
+    {
+      "id": 11,
+      "logo": null,
+      "name": "Test Project 1",
+      "endDate": "2025/11/06",
+      "participants": 30000,
+      "totalReward": 1000000,
+      "rewardToken": "TEST"
+    },
+    {
+      "id": 12,
+      "logo": null,
+      "name": "Test Project 2",
+      "endDate": "2025/11/05",
+      "participants": 28000,
+      "totalReward": 1500000,
+      "rewardToken": "TEST"
+    }
+  ]
+}

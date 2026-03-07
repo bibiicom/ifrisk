@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../web"
+		},
+		{
+			"path": "../match/build/wallet"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

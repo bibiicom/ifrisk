@@ -1,0 +1,52 @@
+#!/bin/bash
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+#!/bin/bash
+echo "----------------------------------------------"
+echo "---------- all releases are below  -----------"
+echo "----------------------------------------------"
+v=1
+name=""
+for release in `ls -Ftr ../release/*/*bin*.tar.gz`
+do
+	choice=`echo $release | awk -F / '{print $4}'`
+	echo $v: $choice
+	v=`expr $v + 1`
+done 
+echo "----------------------------------------------"
+echo "input choice (q or null to quit):"
+
+read number
+if [ "q" == "$number" -o "" == "$number" ]
+then
+	cd ..
+	exit
+fi
+
+v=1
+for release in `ls -Ftr ../release/*/*bin*.tar.gz`
+do
+	if [ "$v" == "$number" ]
+	then
+		targetdir=`echo $release | awk -F '/' '{print $3}'`
+		target=`echo $release | awk -F / '{print $4}'` 
+		cntexpr=`wc -l list.hosts | awk '{print $1}'`
+		cntall=`expr $cntexpr`
+		i=0
+		while [ $i -lt $cntall ]
+		do
+			i=`expr $i + 1`
+			read hosts
+			name=`ssh -n $hosts hostname`
+            echo "("$i")" $hosts [$name]
+			ssh -n $hosts mkdir ~/release/ 2>/dev/null
+			ssh -n $hosts mkdir ~/release/$targetdir/ 2>/dev/null
+			scp $release $hosts:~/release/$targetdir/
+		done < list.hosts
+	fi	
+	v=`expr $v + 1`
+done 
+
+echo ""
+./deploy_scp

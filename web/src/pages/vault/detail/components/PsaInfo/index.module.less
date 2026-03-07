@@ -1,0 +1,211 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 24px;
+    background: var(--vault-bg-card-dark);
+    padding: 32px;
+    border-radius: 1.5rem;
+    border: 1px solid var(--vault-border);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.watermark {
+    position: absolute;
+    right: 24px;
+    bottom: 16px;
+    font-size: 60px;
+    font-weight: 900;
+    color: var(--vault-watermark);
+    pointer-events: none;
+    user-select: none;
+    font-style: italic;
+}
+
+.header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--vault-border-light);
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.psaLogo {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vault-psa-red);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+
+    span {
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 14px;
+        letter-spacing: -0.5px;
+    }
+}
+
+.headerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--vault-text-primary);
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 9px;
+    color: var(--vault-text-muted);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+}
+
+.headerRight {
+    text-align: right;
+}
+
+.gradeNumber {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--vault-text-primary);
+    font-style: italic;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin: 0;
+}
+
+.gradeLabel {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--vault-psa-red);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 4px 0 0 0;
+}
+
+.infoGrid {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 24px;
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoLabel {
+    font-size: 9px;
+    color: var(--vault-text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+
+.infoValue {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--vault-text-secondary);
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.statusIndicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--vault-success);
+    box-shadow: 0 0 8px var(--vault-success-glow);
+}
+
+.statusText {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--vault-success);
+}
+
+.verifyLink {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    text-align: center;
+    padding: 12px;
+    background: var(--vault-bg-card);
+    border: 1px solid var(--vault-border-light);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--vault-text-muted);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: var(--vault-text-primary);
+        background: var(--vault-bg-card-dark);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 32px;
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding: 24px;
+        gap: 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .headerRight {
+        text-align: left;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}

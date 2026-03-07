@@ -1,0 +1,164 @@
+@import (reference) '../common.less';
+
+.funny-tab (@text-secondary-color) {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  box-sizing: border-box;
+
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 13px;
+    // color: @text-secondary-color;
+    cursor: pointer;
+
+    &.selected {
+      color: @main-blue;
+      font-weight: 600;
+
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: @main-blue;
+        border-radius: 2px;
+      }
+
+      &[data-tab-position="top"] {
+        &:before {
+          top: 0;
+        }
+      }
+
+      &[data-tab-position="bottom"] {
+        &:before {
+          bottom: 0;
+        }
+      }
+    }
+
+    &.noselected {
+      color: rgba(206, 206, 206, 1);
+    }
+
+    &.selecteds {
+      color: #fff;
+      background-color: rgba(43, 49, 57, 1);
+      border-radius: 8px;
+      font-weight: 600;
+
+      // &:before {
+      //   content: "";
+      //   position: absolute;
+      //   left: 0;
+      //   width: 100%;
+      //   height: 2px;
+      //   background-color: @main-blue;
+      //   border-radius: 2px;
+      // }
+      &[data-tab-position="top"] {
+        &:before {
+          top: 0;
+        }
+      }
+
+      &[data-tab-position="bottom"] {
+        &:before {
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.@{funny-prefix}-tab-dark {
+  .funny-tab(@text-secondary-color-dark)
+}
+
+.@{funny-prefix}-tab-light {
+  .funny-tab(@text-secondary-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-tab-auto {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  box-sizing: border-box;
+
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    &.selected {
+      color: var(--color-primary);
+      font-weight: 600;
+
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--color-primary);
+        border-radius: 2px;
+      }
+
+      &[data-tab-position="top"] {
+        &:before {
+          top: 0;
+        }
+      }
+
+      &[data-tab-position="bottom"] {
+        &:before {
+          bottom: 0;
+        }
+      }
+    }
+
+    &.noselected {
+      color: var(--text-tertiary);
+    }
+
+    &.selecteds {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+      border-radius: 8px;
+      font-weight: 600;
+
+      &[data-tab-position="top"] {
+        &:before {
+          top: 0;
+        }
+      }
+
+      &[data-tab-position="bottom"] {
+        &:before {
+          bottom: 0;
+        }
+      }
+    }
+  }
+}

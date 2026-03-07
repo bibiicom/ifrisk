@@ -1,0 +1,27 @@
+@import (reference) '../common.less';
+
+.funny-checkbox(@text-secondary-color) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: @text-secondary-color;
+  font-size: 12px;
+  fill: @text-secondary-color;
+  cursor: pointer;
+  .funny-checkbox-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    &.checked {
+      fill: @main-blue;
+    }
+  }
+}
+
+.@{funny-prefix}-checkbox-dark {
+  .funny-checkbox(@text-secondary-color-dark)
+}
+
+.@{funny-prefix}-checkbox-light {
+  .funny-checkbox(@text-secondary-color-light)
+}

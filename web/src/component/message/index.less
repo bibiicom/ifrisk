@@ -1,0 +1,59 @@
+@import (reference) "../common";
+
+.@{funny-prefix}-message-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  .message-wrapper {
+    transform: translateX(200px);
+    opacity: 0;
+    &-enter {
+      opacity: 1;
+      transform: translateX(0);
+      transition: all .3s cubic-bezier(.78, .14, .15, .86);
+    }
+    &-leave {
+      opacity: 0;
+      transform: translateY(-80px);
+      transition: all .3s cubic-bezier(.78, .14, .15, .86);
+    }
+  }
+}
+
+.funny-message (@text-color, @background-color) {
+  padding: 22px 20px;
+  margin-bottom: 20px;
+  min-width: 200px;
+  background-color: @background-color;
+  box-shadow: @box-shadow;
+  border-radius: @border-radius;
+  .message-row {
+    align-items: center;
+    color: @text-color;
+    font-size: 14px;
+    &-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+    &-warn-icon {
+      fill: @main-yellow;
+    }
+    &-ok-icon {
+      fill: @main-green;
+    }
+    &-error-icon {
+      fill: @main-red;
+    }
+  }
+}
+
+.@{funny-prefix}-message-dark {
+  .funny-message(@text-color-dark, @popover-background-color-dark)
+}
+
+.@{funny-prefix}-message-light {
+  .funny-message(@text-color-light, @popover-background-color-light)
+}
+

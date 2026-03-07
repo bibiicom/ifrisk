@@ -1,0 +1,25 @@
+@import (reference) "../../component/common.less";
+
+.assets-convert-container {
+  position: relative;
+  padding: 30px 26px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-primary);
+  background-color: var(--bg-secondary);
+
+  .deposit-link {
+    position: absolute;
+    right: 26px;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: @border-radius;
+    background-color: var(--color-primary);
+    color: #fff;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}

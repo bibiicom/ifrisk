@@ -1,0 +1,17 @@
+{
+  "name": "catalt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "task": "node task.js",
+    "http-example": "node example/httpExample.js"
+  },
+  "dependencies": {
+    "log4js": "^6.9.1",
+    "mysql2": "^3.9.7"
+  },
+  "private": true
+}

@@ -1,0 +1,215 @@
+@import (reference) '../../../component/common.less';
+@import (reference) '../common.less';
+@import '../../../styles/theme-variables.less';
+
+.exchange-header (@text-color, @text-secondary-color, @background-secondary-color) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  margin-bottom: 2px;
+
+  @media @min-screen {
+    padding: 3px 10px;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exchange-header-popover-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+
+    @media @min-screen {
+      height: auto;
+    }
+
+    .exchange-header-symbol-spread-button {
+      margin-right: 24px;
+
+      @media @min-screen {
+        display: none;
+      }
+    }
+
+    .exchange-header-symbol-list-popover {
+      @media @min-screen {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding-top: 60px;
+        top: 0;
+        transform: translateY(100%);
+
+        &[data-visible="true"] {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .exchange-header-title {
+    @media @min-screen {
+      width: 100%;
+    }
+  }
+
+  .exchange-header-info-container {
+    gap: 10px 16px;
+
+    @media @min-screen {
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+  }
+
+  .exchange-header-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+
+    .icon {
+      fill: var(--icon-primary);
+
+      &:hover {
+        fill: var(--icon-primary);
+      }
+    }
+  }
+
+  .exchange-header-symbol {
+    display: flex;
+    flex-direction: column;
+    margin-right: 24px;
+
+    @media @min-screen {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    &-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    &-icon {
+      width: 46px;
+      height: 46px;
+      margin-right: 8px;
+      border-radius: 4px;
+      overflow: visible;
+      flex-shrink: 0;
+      // background-color: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-card-popover {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 8px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+
+      &[data-visible="true"] {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    &-arrow {
+      display: none;
+      width: 0;
+      height: 0;
+      border-left: solid 6px transparent;
+      border-right: solid 6px transparent;
+      border-top: solid 7px var(--text-primary);
+      margin: 0 12px 0 6px;
+
+      @media @min-screen {
+        display: flex;
+      }
+    }
+
+    &-price {
+      font-size: 12px;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+  }
+
+  .exchange-header-icon {
+    display: none;
+    margin: 0 9px;
+    width: 16px;
+    height: 16px;
+    fill: var(--icon-primary);
+    transition: all .2s linear;
+    cursor: pointer;
+
+    @media @min-screen {
+      display: initial;
+    }
+  }
+
+  .exchange-header-info-item {
+    .value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .label {
+      color: var(--text-secondary);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+  }
+}
+
+.exchange-header-dark {
+  .exchange-header(@text-color-dark, @text-secondary-color-dark, @background-secondary-color-dark)
+}
+
+.exchange-header-light {
+  .exchange-header(@text-color-light, @text-secondary-color-light, @background-secondary-color-light)
+}
+
+
+// 脉冲动画
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}

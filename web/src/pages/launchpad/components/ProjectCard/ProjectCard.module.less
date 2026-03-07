@@ -1,0 +1,212 @@
+@import '~@/component/common.less';
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.status {
+  background: @main-blue;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.actionBtn {
+  min-width: 100px;
+  height: 32px;
+  border-radius: 6px;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-weight: 600;
+  padding: 0 20px;
+
+  &:hover {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+  }
+
+  &:disabled {
+    background: rgba(255, 255, 255, 1) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    cursor: not-allowed;
+
+    &:hover {
+      background: rgba(255, 255, 255, 1) !important;
+      color: rgba(0, 0, 0, 0.5) !important;
+    }
+  }
+}
+
+.body {
+  // body styles
+}
+
+.info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.logoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+}
+
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.stats {
+  display: flex;
+  gap: 40px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem {
+  // stat item styles
+}
+
+.progressWrapper {
+  width: 220px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progressText {
+  white-space: nowrap;
+}
+
+.progressPercent {
+  font-weight: 600;
+  color: @main-blue;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+
+  &.highlight {
+    color: @main-blue;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .actionBtn {
+    width: 100%;
+  }
+
+  .info {
+    .logo {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  .name {
+    font-size: 16px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
+
+  .stats {
+    gap: 20px;
+  }
+
+  .statItem {
+    flex: 1;
+  }
+
+  .statValue {
+    font-size: 14px;
+  }
+}

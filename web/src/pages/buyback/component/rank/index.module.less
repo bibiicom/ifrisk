@@ -1,0 +1,143 @@
+@import (reference) "../../../../dimension";
+@import (reference) "../../../../component/common.less";
+
+.buyback-panel {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 14px 18px;
+  border: 1px solid var(--border-primary);
+  min-height: 200px;
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .panel-body {
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+}
+
+.ranking-panel {
+  flex: 1;
+}
+
+.ranking-list {
+  .ranking-header {
+    display: grid;
+    grid-template-columns: 60px 1fr 1.5fr 1fr 1fr;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+    font-size: 14px;
+
+    span {
+      text-align: left;
+
+      &:first-child {
+        text-align: center;
+      }
+    }
+  }
+
+  .ranking-item {
+    display: grid;
+    grid-template-columns: 60px 1fr 1.5fr 1fr 1fr;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background: var(--bg-primary);
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--bg-hover);
+    }
+
+    &.selected {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--color-primary);
+    }
+
+    span {
+      text-align: left;
+
+      &:first-child {
+        text-align: center;
+      }
+    }
+  }
+
+  .allRank {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .rankLink {
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media @min-screen {
+  .buyback-panel {
+    padding: 12px 14px;
+
+    .panel-header {
+      font-size: 15px;
+    }
+
+    .panel-body {
+      font-size: 13px;
+    }
+  }
+
+  .ranking-list {
+    .ranking-header {
+      grid-template-columns: 52px 1fr 1fr 0.8fr 0.8fr;
+      padding: 6px 8px;
+      font-size: 13px;
+
+      span {
+        text-align: left;
+
+        &:first-child {
+          text-align: center;
+        }
+      }
+    }
+
+    .ranking-item {
+      grid-template-columns: 52px 1fr 1fr 0.8fr 0.8fr;
+      padding: 6px 8px;
+      font-size: 13px;
+
+      span {
+        text-align: left;
+
+        &:first-child {
+          text-align: center;
+        }
+      }
+    }
+
+    .rankLink {
+      font-size: 13px;
+    }
+  }
+}

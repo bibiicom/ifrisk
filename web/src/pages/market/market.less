@@ -1,0 +1,263 @@
+@import (reference) "../../component/common.less";
+@import (reference) "../../dimension.less";
+
+.market {
+  margin: auto;
+  width: 1200px;
+  padding-bottom: 30px;
+
+  @media @min-screen {
+    width: 100%;
+  }
+
+  .market-index-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: transparent;
+
+    .market-index-item-container {
+      margin-left: 10px;
+
+      .market-index-item {
+        width: 220px;
+        padding: 16px;
+        border-radius: @border-radius;
+        // background-color: #ffffff;
+        transition: all .2s;
+        cursor: pointer;
+        color: @text-secondary-color-dark;
+        font-size: 12px;
+        box-shadow: rgba(0, 0, 0, 0.04) 0 0 20px 0;
+
+        &:hover {
+          box-shadow: 0 6px 6px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .market-index-item-name-container {
+          font-size: 14px;
+          color: @text-color-dark;
+
+          svg {
+            margin-right: 8px;
+          }
+        }
+
+        .market-index-item-last-price-container {
+          margin: 6px 0;
+
+          .market-index-item-last-price {
+            color: @text-color-dark;
+            display: inline-block;
+            margin: 6px 0;
+            font-size: 20px;
+            font-weight: bold;
+          }
+        }
+
+        .market-index-item-change {
+          padding: 1px 6px;
+          border-radius: 2px;
+          background-color: @background-third-color-dark;
+        }
+      }
+    }
+  }
+
+  .market-tab-container {
+    height: 56px;
+    border-bottom: solid 1px var(--border-primary);
+    overflow: auto;
+    white-space: nowrap;
+
+    .market-tab {
+      width: auto;
+      padding: 0 18px;
+      margin: 8px 12px 8px 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+
+      // 这里依赖 Tab 组件本身的选中样式，一般会给 active tab 一个类名
+      // 如果已有 active 类名，可以在全局样式里覆盖；这里先统一做成按钮外观
+      button,
+      & {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 84px;
+        height: 36px;
+        padding: 0 20px;
+        border-radius: 999px;
+        background: #1677ff;
+        border: none;
+      }
+
+      &:last-child {
+        margin-right: 16px;
+        display: none;
+      }
+    }
+  }
+
+  .market-button-container {
+    gap: 10px;
+    padding: 12px 16px 8px;
+
+    // 子 tab 按钮基础尺寸，放大一点
+    button {
+      min-width: 110px;
+      height: 38px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .button-selected {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      border-radius: 999px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: rgba(22, 119, 255, 0.9);
+      font-weight: 600;
+    }
+  }
+
+  .market-list-container {
+    // background-color: #ffffff;
+    border-radius: @border-radius;
+
+    .market-table {
+      min-height: 490px;
+
+      thead {
+        tr {
+          height: 40px;
+          background: var(--bg-tertiary);
+
+          th {
+            border-bottom: none;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+          }
+
+          td {
+            padding: 0 16px;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          height: 50px;
+          border-bottom: solid 1px var(--border-primary);
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--bg-hover);
+          }
+
+          th,
+          td {
+            padding: 0 16px;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .market-table-body-row-cell-sub-text {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      // 状态列样式
+      .market-status {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        min-width: 60px;
+
+        // 停牌状态 - 红色
+        &.status-suspended {
+          background-color: rgba(255, 77, 79, 0.1);
+          color: #ff4d4f;
+          border: 1px solid rgba(255, 77, 79, 0.2);
+        }
+
+        // 正在交易状态 - 绿色
+        &.status-trading {
+          background-color: rgba(82, 196, 26, 0.1);
+          color: #52c41a;
+          border: 1px solid rgba(82, 196, 26, 0.2);
+        }
+
+        // 交割中状态 - 橙色
+        &.status-settlement {
+          background-color: rgba(250, 173, 20, 0.1);
+          color: #faad14;
+          border: 1px solid rgba(250, 173, 20, 0.2);
+        }
+
+        // 默认状态 - 灰色
+        &.status-default {
+          background-color: rgba(140, 140, 140, 0.1);
+          color: #8c8c8c;
+          border: 1px solid rgba(140, 140, 140, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// 移动端自适应：优化顶部大类 tab 和子 tab 的体验
+@media (max-width: 768px) {
+  .market {
+    width: 100%;
+    padding-bottom: 20px;
+
+    .market-tab-container {
+      height: 48px;
+      padding: 0 8px;
+
+      .market-tab {
+        margin: 8px 8px 8px 0;
+        padding: 0 12px;
+
+        button,
+        & {
+          min-width: 72px;
+          height: 32px;
+          padding: 0 12px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .market-button-container {
+      padding: 8px 8px 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+
+      // 隐藏移动端横向滚动条
+      &::-webkit-scrollbar {
+        height: 0;
+      }
+
+      button {
+        min-width: 88px;
+        height: 32px;
+        font-size: 12px;
+      }
+    }
+
+    .market-list-container {
+      margin-top: 8px;
+    }
+  }
+}

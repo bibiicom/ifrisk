@@ -1,0 +1,96 @@
+@import '~@/component/common.less';
+
+.timelineSection {
+  width: 100%;
+  background: linear-gradient(135deg, fade(@main-blue, 8%) 0%, fade(@main-blue, 3%) 100%);
+  border: 1px solid fade(@main-blue, 35%);
+  border-radius: 16px;
+  padding: 28px 32px;
+  position: relative;
+  backdrop-filter: blur(10px);
+
+  .horizontalTimeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+
+    .timelineItem {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+      .timelineNode {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        width: 100%;
+        justify-content: center;
+        position: relative;
+
+        .solidDot {
+          width: 10px;
+          height: 10px;
+          background: @main-blue;
+          border-radius: 50%;
+          box-shadow: 0 0 0 3px fade(@main-blue, 20%), 0 0 8px fade(@main-blue, 40%);
+          position: relative;
+          z-index: 2;
+        }
+
+        .hollowDot {
+          width: 10px;
+          height: 10px;
+          background: rgba(0, 0, 0, 0.5);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+          position: relative;
+          z-index: 2;
+        }
+
+        .timelineLine {
+          position: absolute;
+          left: calc(50% + 5px);
+          right: calc(-50% + 5px);
+          height: 2px;
+          background: rgba(255, 255, 255, 0.1);
+          z-index: 1;
+
+          &.activeLine {
+            background: linear-gradient(90deg, @main-blue 0%, fade(@main-blue, 60%) 100%);
+            box-shadow: 0 0 6px fade(@main-blue, 30%);
+          }
+        }
+      }
+
+      .timelineContent {
+        text-align: center;
+
+        .statLabel {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.5);
+          margin-bottom: 6px;
+          font-weight: 400;
+          letter-spacing: 0.3px;
+        }
+
+        .statValue {
+          font-size: 13px;
+          font-weight: 600;
+          color: @main-blue;
+          display: block;
+          margin-bottom: 2px;
+        }
+
+        .statSubValue {
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.6);
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

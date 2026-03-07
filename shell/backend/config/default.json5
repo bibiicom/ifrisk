@@ -1,0 +1,36 @@
+{
+  // 默认配置 - 所有环境共享
+  "server": {
+    "host": "127.0.0.1",
+    "httpPort": 8080,
+    "https": false,
+    "httpsConfig": {
+      "key": "./config/1.key",
+      "pem": "./config/1.pem",
+    },
+    "userLogDir": "./logs",
+    "adminWebDir": "",
+    "logLevel": "debug",
+    "loggerName": "console",
+    "hotScript": true,
+    "localHost": "http://127.0.0.1:10000",
+    "larkHost": "http://127.0.0.1:8081",
+  },
+  "wallet": {
+    "account": "0x564ac2d78db2eb61e03241b3432775f170a217c3",
+  },
+  "master": {
+    "id": "master",
+    "host": "127.0.0.1",
+    "port": 8080,
+    "client_ip": "127.0.0.1",
+    "client_port": 3001,
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "perpetual",
+    "username": "root",
+    "password": "root",
+  },
+}

@@ -1,0 +1,31 @@
+.cardInfo {
+    padding: 8px 0;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-secondary);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.label {
+    color: var(--text-secondary);
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 80px;
+}
+
+.value {
+    color: var(--text-primary);
+    font-size: 14px;
+    text-align: right;
+    word-break: break-all;
+    flex: 1;
+    margin-left: 12px;
+}

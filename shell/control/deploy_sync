@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sync_ipaddr=`more ../deploy/env.ini | grep sync_ipaddr | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+sync_userid=`more ../deploy/env.ini | grep sync_userid | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+
+mkdir ../release 2>/dev/null
+mkdir ../release/trade/ 2>/dev/null
+scp $sync_userid@$sync_ipaddr:./release/trade/Trade*.tar.gz ../release/trade/
+ssh -n $sync_userid@$sync_ipaddr "rm -rf ./release/trade/Trade*.tar.gz"

@@ -1,0 +1,15 @@
+/node_modules
+/.idea
+/build
+/i18n
+/focus
+/public/article/
+/public/articles.json
+/public/assets
+/public/version.txt
+.package-lock.json
+.env.development.local
+.env.production.local
+/.trae/
+/.kiro/
+.vscode

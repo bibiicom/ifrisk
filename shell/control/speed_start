@@ -1,0 +1,27 @@
+#!/bin/bash
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+cntexpr=`wc -l list.hosts | awk '{print $1}'`
+cntall=`expr $cntexpr`
+
+if [ "$1" == "ws"]
+then
+	module=speedws
+else
+	module=speedhttp
+fi
+
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1 `
+	read hosts
+	name=`ssh -n $hosts hostname`
+	echo "("$i")" $hosts [$name]
+	if [ $i -gt 1 ]
+	then
+		ssh -n $hosts 'cd ./$module;chmod u+x start.sh;nohup ./start.sh 1>>nohup.out 2>&1 &'
+	fi
+done < list.hosts

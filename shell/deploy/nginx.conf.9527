@@ -1,0 +1,102 @@
+worker_processes 4;
+events {
+	worker_connections  1024;
+}
+
+http {
+	include       mime.types;
+	default_type  application/octet-stream;
+
+	sendfile        on;
+	keepalive_timeout  65;
+
+	gzip  on;
+	gzip_buffers 2 8k;
+	gzip_min_length 1k;
+	gzip_types text/plain application/json application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+	gzip_comp_level 2;
+
+	server {
+		listen       9527;
+		server_name  127.0.0.1;
+			
+		location /preview/ {
+			alias preview/;
+			autoindex on;
+			autoindex_exact_size off;
+			autoindex_localtime on;
+			charset utf-8;
+			location ~ \.txt$ {
+			default_type text/plain;
+			}
+		}
+		
+		location /his1h/ {
+			alias his1h/;
+			autoindex on;
+			autoindex_exact_size off;
+			autoindex_localtime on;
+			charset utf-8;
+			location ~ \.csv$ {
+			default_type text/plain;
+			}
+		}
+		
+		location /hisw/ {
+			alias hisw/;
+			autoindex on;
+			autoindex_exact_size off;
+			autoindex_localtime on;
+			charset utf-8;
+			location ~ \.csv$ {
+			default_type text/plain;
+			}
+		}
+
+		location /wspublic {
+			proxy_pass http://127.0.0.1:11500/ws/;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "upgrade";
+			proxy_read_timeout 86400;		
+		}
+		location /wsprivate {
+			proxy_pass http://127.0.0.1:11600/ws/;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "upgrade";
+			proxy_read_timeout 86400;		
+		}
+
+		location /query {
+			proxy_pass http://127.0.0.1:10600/query;
+		}
+		location /action {
+			proxy_pass http://127.0.0.1:10001/action;
+		}
+		location /public {
+			proxy_pass http://127.0.0.1:10500/public;
+		}
+		location /private {
+			proxy_pass http://127.0.0.1:10400/private;
+		}
+		location /admin {
+			proxy_pass http://127.0.0.1:10000/action;
+		}
+
+		location ~ .txt$ {
+			add_header 'Content-type' "text/plain;charset=UTF-8";
+		}
+
+		location / {
+			root   html;
+			index  index.html;
+			try_files $uri $uri /index.html;
+		}
+
+		error_page   500 502 503 504  /50x.html;
+			location = /50x.html {
+			root   html;
+		}
+	}
+}

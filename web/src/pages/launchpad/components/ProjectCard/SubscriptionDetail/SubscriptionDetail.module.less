@@ -1,0 +1,198 @@
+.container {
+  min-height: 100vh;
+  background-color: #000;
+  padding: 32px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 20px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 12px;
+  }
+
+  .mainContent {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    align-items: stretch;
+ 
+
+    @media (max-width: 1024px) {
+      flex-direction: column;
+    }
+  }
+
+  .leftMiddleWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .topRow {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+
+    @media (max-width: 1024px) {
+      flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+      gap: 16px;
+    }
+  }
+
+  .productInfo {
+    flex: 1;
+    // background: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+      gap: 16px;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin: 0;
+      color: #fff;
+      letter-spacing: -0.5px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+
+      @media (max-width: 768px) {
+        font-size: 28px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 24px;
+        letter-spacing: -0.3px;
+      }
+    }
+
+    .infoRow {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 0;
+
+      @media (max-width: 768px) {
+        gap: 12px;
+      }
+
+      @media (max-width: 480px) {
+        gap: 10px;
+      }
+
+      .infoItem {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .infoLabel {
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.5);
+          font-weight: 400;
+        }
+
+        .infoValue {
+          font-size: 15px;
+          color: #fff;
+          text-decoration: underline;
+          cursor: pointer;
+          font-weight: 400;
+          word-break: break-all;
+          max-width: 100%;
+
+          @media (max-width: 768px) {
+            font-size: 14px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 13px;
+          }
+
+          &:hover {
+            color: rgba(255, 255, 255, 0.7);
+          }
+        }
+      }
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 6px 14px;
+        font-size: 13px;
+
+        .tagLabel {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tagValue {
+          color: #fff;
+        }
+      }
+    }
+
+    .priceSection {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 28px;
+      margin: 0;
+
+      .currentPriceLabel {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 16px;
+        font-weight: 400;
+      }
+
+      .priceRow {
+        display: flex;
+        align-items: baseline;
+        gap: 0;
+
+        .currentPrice {
+          font-size: 48px;
+          font-weight: 600;
+          color: #fff;
+          letter-spacing: -1px;
+
+          @media (max-width: 768px) {
+            font-size: 40px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 32px;
+            letter-spacing: -0.5px;
+          }
+        }
+      }
+    }
+  }
+}
+

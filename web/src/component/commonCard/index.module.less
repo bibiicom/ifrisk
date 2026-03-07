@@ -1,0 +1,120 @@
+@import (reference) "../../styles/theme-variables.less";
+
+.card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(22, 119, 255, 0.15);
+        border-color: var(--border-secondary);
+    }
+
+    &.noHover {
+        &:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}
+
+.cardImage {
+    height: 200px;
+    padding-top: 12px;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s;
+    }
+
+    &:hover img {
+        transform: scale(1.05);
+    }
+}
+
+.cardPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.cardContent {
+    padding: 12px;
+    text-align: center;
+}
+
+.cardFooter {
+    padding: 0 12px 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+// 按钮样式
+.cardBtn {
+    flex: 1;
+    padding: 8px 0;
+    background: var(--color-primary);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+
+    &:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        background: var(--bg-tertiary);
+        color: var(--text-tertiary);
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+.cardBtnSecondary {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--text-primary);
+
+    &:hover:not(:disabled) {
+        background: rgba(22, 119, 255, 0.1);
+    }
+}
+
+.cardBtnDanger {
+    background: #ff4d4f;
+
+    &:hover:not(:disabled) {
+        background: #ff7875;
+    }
+}
+
+.cardBtnSuccess {
+    background: #52c41a;
+
+    &:hover:not(:disabled) {
+        background: #73d13d;
+    }
+}

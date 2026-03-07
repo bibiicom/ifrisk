@@ -1,0 +1,335 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.tradeNotice {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+    border: 2px solid var(--color-error);
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-error) 0%, rgba(239, 68, 68, 0.5) 100%);
+    }
+}
+
+.tradeNoticeHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.tradeNoticeIcon {
+    font-size: 24px;
+    color: var(--color-success);
+}
+
+.tradeNoticeTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tradeNoticeText {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+}
+
+.tradeBtn {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--color-success);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(45, 192, 142, 0.25);
+
+    &:hover {
+        background: #26a877;
+        transform: translateY(-1px);
+        box-shadow: 0 12px 32px rgba(45, 192, 142, 0.35);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.tradeArrow {
+    font-size: 20px;
+    transition: transform 0.2s;
+
+    .tradeBtn:hover & {
+        transform: translateX(4px);
+    }
+}
+
+.goalCard {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 32px;
+    padding: 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.goalHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.goalInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.goalLabel {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin: 0 0 8px 0;
+}
+
+.goalValue {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.statRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.statLabel {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.statDivider {
+    flex: 1;
+    border-bottom: 1px dotted var(--border-primary);
+    margin: 0 4px 4px;
+}
+
+.statValue {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    span {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-secondary);
+
+        &.highlight {
+            color: var(--text-primary);
+        }
+    }
+}
+
+.infoBtn {
+    padding: 4px;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:hover {
+        color: var(--primary-color);
+        background: var(--bg-tertiary);
+    }
+}
+
+.subscribeBtn {
+    width: 100%;
+    padding: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+
+    &:hover:not(:disabled) {
+        background: var(--primary-color);
+        transform: translateY(-1px);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        background: var(--bg-tertiary);
+        color: var(--text-tertiary);
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+}
+
+.countdown {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.mySubscription {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 32px;
+    padding: 28px;
+}
+
+.myLabel {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin: 0 0 16px 0;
+}
+
+.myAmount {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1;
+}
+
+.myShares {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.sharesDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+.sharesValue {
+    font-size: 14px;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.sharesLabel {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.statusMessage {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    &.failed {
+        background: rgba(251, 146, 60, 0.1);
+        color: #fb923c;
+        border: 1px solid rgba(251, 146, 60, 0.2);
+    }
+}
+
+.statusIcon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.statusText {
+    flex: 1;
+}
+
+@media (max-width: 1200px) {
+    .sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .goalCard,
+    .mySubscription {
+        border-radius: 24px;
+        padding: 24px;
+    }
+
+    .goalValue {
+        font-size: 28px;
+    }
+
+    .subscribeBtn {
+        padding: 16px;
+        font-size: 16px;
+    }
+}

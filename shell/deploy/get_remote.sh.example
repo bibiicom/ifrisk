@@ -1,0 +1,61 @@
+#!/bin/bash
+
+remote_release_ipaddr=`more env.ini | grep remote_release_ipaddr | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+remote_release_userid=`more env.ini | grep remote_release_userid | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+
+if [ ! -d ../release ]
+then
+	mkdir ../release
+fi
+
+get_trade()
+{
+    echo "Pull the remote trade release file from $remote_release_ipaddr@$remote_release_userid..."
+    if [ ! -d ../release/trade ]
+    then
+        mkdir ../release/trade
+    fi
+	scpname=`ssh -n $remote_release_userid@$remote_release_ipaddr "ls -t ./release/trade/*.tar.gz" | head -n 1`
+    scp $remote_release_userid@$remote_release_ipaddr:$scpname ../release/trade/
+}
+
+get_client()
+{
+    echo "Pull the remote client release file from $remote_release_ipaddr@$remote_release_userid..."
+    if [ ! -d ../release/client ]
+    then
+        mkdir ../release/client
+    fi
+	scpname=`ssh -n $remote_release_userid@$remote_release_ipaddr "ls -t ./release/client/*.tar.gz" | head -n 1`
+    scp $remote_release_userid@$remote_release_ipaddr:$scpname ../release/client/	
+}
+
+get_manage()
+{
+    echo "Pull the remote manage release file from $remote_release_ipaddr@$remote_release_userid..."
+    if [ ! -d ../release/manage ]
+    then
+        mkdir ../release/manage
+    fi
+	scpname=`ssh -n $remote_release_userid@$remote_release_ipaddr "ls -t ./release/manage/*.tar.gz" | head -n 1`
+    scp $remote_release_userid@$remote_release_ipaddr:$scpname ../release/manage/
+}
+
+count=$#
+
+if [ $count -lt 1 ]
+then
+    get_trade
+else
+    for p in "$1"
+    do
+        case $p in
+            trade)  get_trade
+            ;;
+            client)  get_client
+            ;;
+            manage)  get_manage
+            ;;
+        esac
+    done
+fi

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+cntexpr=`wc -l list.hosts | awk '{print $1}'`
+cntall=`expr $cntexpr`
+
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1 `
+	read hosts
+	name=`ssh -n $hosts hostname`
+	echo "("$i")" $hosts [$name]
+	ssh -n $hosts 'cd run;chmod u+x chkver.sh;./chkver.sh'	
+done < list.hosts

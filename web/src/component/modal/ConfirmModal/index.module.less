@@ -1,0 +1,109 @@
+@import (reference) "../../../dimension";
+@import (reference) "../../common.less";
+@import (reference) "../../../styles/theme-variables.less";
+
+.confirmModal {
+  :global(.ant-modal-content) {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+
+  :global(.ant-modal-header) {
+    background: transparent;
+    border-bottom: 1px solid var(--border-primary);
+    padding: 20px 24px;
+
+    :global(.ant-modal-title) {
+      color: var(--text-primary);
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  :global(.ant-modal-close) {
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  :global(.ant-modal-body) {
+    padding: 24px;
+  }
+}
+
+.modalContent {
+  .modalTitle {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+
+    :global(strong) {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+
+  .modalInfoCard {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+
+    .infoLabel {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .infoValue {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-primary);
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .modalTip {
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .modalActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+
+    :global(.ant-btn) {
+      min-width: 100px;
+      height: 40px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    :global(.ant-btn-default) {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
+      color: var(--text-primary);
+
+      &:hover {
+        background: var(--bg-hover);
+        border-color: var(--border-primary);
+      }
+    }
+  }
+}

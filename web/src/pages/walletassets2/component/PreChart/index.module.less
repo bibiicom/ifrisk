@@ -1,0 +1,77 @@
+@import '~@/component/common.less';
+
+.assetsSummary {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.refreshBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--text-primary);
+    background: fade(@main-blue, 15%);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.totalAssets {
+  font-size: 24px;
+}
+
+.label {
+  color: var(--text-secondary);
+}
+
+.value {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.pieChartWrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.emptyChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.historyBtn {
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: lighten(@main-blue, 10%);
+    text-decoration: underline;
+  }
+}

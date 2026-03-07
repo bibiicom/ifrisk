@@ -1,0 +1,33 @@
+@import (reference) "../../../../styles/theme-variables.less";
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tab {
+  padding: 10px 32px;
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.active {
+  background: var(--color-primary);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.45);
+}
+
+.tab:hover:not(.active) {
+  border-color: var(--color-primary);
+  color: @theme-primary-light;
+}

@@ -1,0 +1,97 @@
+@import (reference) "../../dimension";
+@import (reference) "../../component/common.less";
+
+div {
+  box-sizing: border-box;
+}
+
+.buyback-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 40px;
+  min-height: calc(100vh - @footer-height - 60px);
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+
+  .buyback-header {
+    margin-bottom: 16px;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+  }
+
+  .buyback-selector {
+    margin-bottom: 16px;
+  }
+
+  .buyback-empty,
+  .buyback-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
+  }
+
+  .buyback-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .buyback-left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .buyback-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .buyback-left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .buyback-full-width {
+    width: 100%;
+  }
+
+  /* 列表和图表面板样式已迁移到各自组件 */
+
+  @media @min-screen {
+    padding: 16px;
+
+    .buyback-header {
+      margin-bottom: 12px;
+
+      h1 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+    }
+
+    .buyback-content {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+}

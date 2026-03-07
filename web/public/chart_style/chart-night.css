@@ -1,0 +1,11 @@
+.chart-page {
+  background: #121212!important;
+}
+.chart-page [class*="group-"] {
+  background: #121212!important;
+}
+
+[class*="drawingToolbar-"] {
+  background-color: #121212
+}
+

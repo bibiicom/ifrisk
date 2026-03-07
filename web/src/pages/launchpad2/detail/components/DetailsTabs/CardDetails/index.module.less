@@ -1,0 +1,51 @@
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 32px 0;
+}
+
+.cardDetails {
+    .description {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        max-width: 800px;
+        margin: 0 0 32px 0;
+    }
+}
+
+.highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.highlightBox {
+    background: var(--bg-tertiary);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border-primary);
+}
+
+.highlightTitle {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 8px 0;
+}
+
+.highlightValue {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .highlights {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,143 @@
+.hero {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.mainImage {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.imageGlow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: blur(120px);
+        opacity: 0.15;
+        transform: scale(1.5);
+    }
+}
+
+.imageWrapper {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 32px 0;
+
+    img {
+        height: 100%;
+        max-height: 300px;
+        width: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.12));
+    }
+}
+
+.indicators {
+    position: relative;
+    z-index: 20;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.indicator {
+    height: 3px;
+    width: 6px;
+    border-radius: 2px;
+    background: var(--text-tertiary);
+    opacity: 0.4;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+
+    &:hover {
+        opacity: 0.6;
+        background: var(--text-secondary);
+    }
+
+    &.active {
+        width: 32px;
+        background: var(--text-primary);
+        opacity: 1;
+    }
+}
+
+.thumbnails {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 8px 4px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.thumbnail {
+    flex-shrink: 0;
+    width: 112px;
+    aspect-ratio: 16 / 11;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid var(--border-primary);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 0.8;
+        border-color: var(--border-secondary);
+    }
+
+    &.active {
+        opacity: 1;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainImage {
+        height: 320px;
+        border-radius: 24px;
+    }
+
+    .imageWrapper {
+        padding: 24px;
+    }
+
+    .thumbnail {
+        width: 80px;
+    }
+}

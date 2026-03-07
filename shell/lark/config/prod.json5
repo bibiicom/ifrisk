@@ -1,0 +1,7 @@
+{
+  // 生产环境配置
+  "server": {
+    "logLevel": "warn",
+    "hotScript": false,
+  },
+}

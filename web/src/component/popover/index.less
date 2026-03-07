@@ -1,0 +1,50 @@
+@import (reference) '../common.less';
+
+.funny-popover (@border-secondary, @popover-background-color) {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: @popover-background-color;
+  border: @border-secondary;
+  box-shadow: @box-shadow;
+  border-radius: @border-radius;
+  z-index: 99;
+  transition: all .2s;
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+
+  &[data-visible="true"] {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.@{funny-prefix}-popover-dark {
+  .funny-popover(@border-secondary-dark, @popover-background-color-dark)
+}
+
+.@{funny-prefix}-popover-light {
+  .funny-popover(@border-secondary-light, @popover-background-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-popover-auto {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: var(--bg-popover);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-primary);
+  border-radius: @border-radius;
+  z-index: 99;
+  transition: all .2s;
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+
+  &[data-visible="true"] {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

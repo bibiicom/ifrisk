@@ -1,0 +1,46 @@
+{
+  "name": "game_server_3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/app.js",
+  "scripts": {
+    "build": "tsc && node build.js",
+    "start": "cross-env NODE_ENV=dev node ./dist/app.js",
+    "debug": "cross-env NODE_ENV=local node tsrun.js",
+    "dev": "cross-env NODE_ENV=local ts-node app.ts",
+    "clean": "rmdir /s /q .\\dist & rmdir /s /q .\\logs & rmdir /s /q .\\node_modules",
+    "testHttp": "cross-env NODE_ENV=local ts-node test/testHttp.ts",
+    "testNum": "cross-env NODE_ENV=local ts-node test/testNum.ts",
+    "testAddLaunchpadInfo": "cross-env NODE_ENV=local ts-node test/testAddLaunchpadInfo.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/multer": "^3.0.2",
+    "@types/node": "^16",
+    "decimal.js": "^10.6.0",
+    "ethers": "^6.16.0",
+    "koa": "^2.16.3",
+    "koa-bodyparser": "^4.4.1",
+    "koa-session": "^6.4.0",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "log4js": "^6.9.1",
+    "mysql2": "^3.15.3",
+    "sequelize": "^6.37.7",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "json5": "^2.2.3",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@types/koa__multer": "^2.0.7",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-session": "^6.4.5",
+    "@types/koa-static": "^4.0.4",
+    "@types/koa2-cors": "^2.0.5",
+    "tslint": "^5.20.1",
+    "typescript": "^5.9.3"
+  }
+}

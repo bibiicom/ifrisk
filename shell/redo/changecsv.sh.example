@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cat UserSession.csv | awk -F , '{$2=null;print $0}'}' > 1
+
+
+awk -F , -v OFS=, '{ for (i=1;i<=NF-4;i++){ printf $i, }; printf "\n"}'

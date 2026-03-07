@@ -1,0 +1,33 @@
+@import (reference) '../common.less';
+
+.exchange-show {
+  display: flex;
+  @media @min-screen {
+    display: flex;
+  }
+}
+
+.exchange-chart {
+  width: @chart-width;
+  height: 560px;
+  @media @medium-screen {
+    width: @chart-width-middle-screen;
+  }
+  &-content {
+    // height: calc(100% - @chart-nav-height - 2px);
+    // height: 100%;
+    height: 495px;
+    margin-top: 2px;
+    @media @min-screen {
+      margin-top: 0;
+      // height: calc(100% - @chart-nav-height-min-screen);
+      height:316px;
+    }
+    .chart-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      border-radius: 4px;
+    }
+  }
+}

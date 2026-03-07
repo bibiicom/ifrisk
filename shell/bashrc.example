@@ -1,0 +1,7 @@
+alias ls="ls --color"
+alias ll="ls -l"
+alias del="rm -rf"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+export LANG=en_US.UTF-8
+export PATH=$PATH:$HOME/run
+export PATH=$PATH:$HOME/control

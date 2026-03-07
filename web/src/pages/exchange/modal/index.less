@@ -1,0 +1,97 @@
+@import (reference) '../../../component/common.less';
+
+.exchange-modal (@text-color, @text-secondary-color) {
+  .exchange-modal-symbol {
+    color: fade(@text-color, 80%);
+    font-size: 14px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .exchange-modal-tag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 8px;
+    height: 18px;
+    border-radius: 9px;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    border: solid 1px;
+  }
+
+  .exchange-modal-row {
+    margin-bottom: 12px;
+    justify-content: space-between;
+    color: @text-secondary-color;
+    font-size: 12px;
+
+    .value {
+      color: fade(@text-color, 80%);
+      font-weight: 600;
+    }
+  }
+
+  .exchange-modal-input {
+    margin-bottom: 20px;
+  }
+}
+
+.exchange-modal-dark {
+  .exchange-modal(@text-color-dark, @text-secondary-color-dark)
+}
+
+.exchange-modal-light {
+  .exchange-modal(@text-color-light, @text-secondary-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.exchange-modal-auto {
+  .exchange-modal-symbol {
+    color: var(--text-primary);
+    font-size: 14px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .exchange-modal-tag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 8px;
+    height: 18px;
+    border-radius: 9px;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    border: solid 1px;
+  }
+
+  .exchange-modal-row {
+    margin-bottom: 12px;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 12px;
+
+    .value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+  }
+
+  .exchange-modal-input {
+    margin-bottom: 20px;
+  }
+}
+
+.exchange-modal-mobile {
+  align-items: flex-end;
+  transform: translateY(100%);
+  transform-origin: bottom;
+
+  &[data-visible="true"] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

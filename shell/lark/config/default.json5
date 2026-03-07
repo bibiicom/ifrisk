@@ -1,0 +1,29 @@
+{
+  // 默认配置 - 所有环境共享
+  "server": {
+    "host": "127.0.0.1",
+    "httpPort": 8081,
+    "https": false,
+    "httpsConfig": {
+      "key": "./config/1.key",
+      "pem": "./config/1.pem",
+    },
+    "userLogDir": "./logs",
+    "adminWebDir": "",
+    "logLevel": "debug",
+    "loggerName": "console",
+    "hotScript": true,
+    "localHost": "http://127.0.0.1:8080",
+    "lark": {
+      "app_id": "cli_a9ce51e111389e1a",
+      "app_secret": "ktPpU2QBXzkJqZrpHYcgLcpUv4GQurp1",
+    },
+  },
+  "master": {
+    "id": "master",
+    "host": "127.0.0.1",
+    "port": 8081,
+    "client_ip": "127.0.0.1",
+    "client_port": 3002,
+  },
+}

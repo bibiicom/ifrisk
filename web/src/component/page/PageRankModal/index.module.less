@@ -1,0 +1,97 @@
+@import (reference) "../../../dimension";
+@import (reference) "../../common.less";
+@import (reference) "../../../styles/theme-variables.less";
+
+// PageRankModal 特有样式
+.pageRankModal {
+  :global(.ant-modal-body) {
+    padding: 0 18px 18px;
+  }
+}
+
+.panelBody {
+  font-size: 14px;
+  color: var(--text-primary);
+  height: 50vh;
+  overflow: auto;
+}
+
+.emptyWrapper {
+  padding: 24px 0;
+}
+
+.rankingList {
+  .rankingHeader {
+    display: grid;
+    grid-template-columns: 60px 1.6fr 1fr 0.8fr;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+    font-size: 14px;
+
+    span:nth-child(3),
+    span:nth-child(4) {
+      text-align: right;
+    }
+  }
+
+  .rankingItem {
+    display: grid;
+    grid-template-columns: 60px 1.6fr 1fr 0.8fr;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background: var(--bg-secondary);
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--bg-hover);
+    }
+
+    .amount,
+    .percentage {
+      text-align: right;
+    }
+
+    .address {
+      font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    }
+  }
+}
+
+@media @min-screen {
+  .panelBody {
+    font-size: 13px;
+  }
+
+  .rankingList {
+    .rankingHeader {
+      grid-template-columns: 52px 1fr 0.9fr;
+      padding: 6px 8px;
+      font-size: 13px;
+
+      span:nth-child(2) {
+        display: none;
+      }
+
+      span:nth-child(3),
+      span:nth-child(4) {
+        text-align: right;
+      }
+    }
+
+    .rankingItem {
+      grid-template-columns: 52px 1fr 0.9fr;
+      padding: 6px 8px;
+      font-size: 13px;
+
+      .address {
+        display: none;
+      }
+    }
+  }
+}

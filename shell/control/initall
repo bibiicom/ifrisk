@@ -1,0 +1,69 @@
+#!/bin/bash
+
+if [ "$1" == "" ]
+then
+	echo "usage: initall parma"
+	echo "Options:"
+	echo " param	:[8g|16g|32g|64g] if 8g use "../test/*/*.8g" as config file"
+	exit
+fi
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+chmod u+x *
+
+#main machine can ini backup
+mkdir ../backup 2>/dev/null
+cp -v ../test/backup/*.sh ../backup/ 2>/dev/null
+chmod u+x ../backup/*.sh
+
+cntexpr=`wc -l list.hosts | awk '{print $1}'`
+cntall=`expr $cntexpr`
+
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1 `
+	read hosts
+	name=`ssh -n $hosts hostname`
+	echo "("$i")" $hosts [$name]
+	ssh -n $hosts "mkdir deploy 2>/dev/null"
+	scp ./$i.list.run $hosts:./deploy/list.run
+	
+	if [ $i -eq 1 ]
+	then
+		continue
+	fi	
+
+	ssh -n $hosts "mkdir run 2>/dev/null"
+	ssh -n $hosts "mkdir test 2>/dev/null"
+	scp ../deploy/network.ini $hosts:./deploy/
+	scp ../deploy/*.sh $hosts:./deploy/
+	
+	if [ -d "../deploy/test" ] 
+	then
+		scp -r ../deploy/test $hosts:./deploy/
+	fi
+	if [ -d "../deploy/test_$i" ] 
+	then
+		scp -r ../deploy/test_$i $hosts:./deploy/test
+	fi
+
+#	if [ ! "$2" == "" ]
+#	then
+#		ssh -n $hosts "rm -rf test 2>/dev/null"
+#		echo scp -r ../test $hosts:./
+#		scp -r ../test $hosts:./ 1>/dev/null
+#	fi
+done < list.hosts
+
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1 `
+	read hosts
+	echo $hosts
+	ssh -n $hosts "cd deploy;chmod u+x init.sh;./init.sh $1"
+done < list.hosts
+

@@ -1,0 +1,1 @@
+*/5 * * * * /home/trade/run/cleanlog.sh 10 >> /home/trade/a

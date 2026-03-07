@@ -1,0 +1,269 @@
+@import '~@/component/common.less';
+
+.page {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  background: #000;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.tabsSection {
+  margin-top: 40px;
+}
+
+.tabs {
+  margin-bottom: 30px;
+
+  :global {
+    .ant-tabs-nav {
+      &::before {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .ant-tabs-tab {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 0;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: #fff;
+        }
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background: @main-blue;
+      height: 3px;
+    }
+  }
+}
+
+.activeProjectsSection {
+  margin-bottom: 60px;
+  min-height: 400px;
+}
+
+.finishedSection {
+  min-height: 400px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.finishedProjectsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  background: transparent;
+}
+
+.pagination {
+  background: transparent !important;
+
+  :global {
+    .ant-pagination {
+      background: transparent !important;
+    }
+
+    .ant-pagination-item {
+      min-width: 48px;
+      height: 48px;
+      line-height: 48px;
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      margin: 0 6px;
+
+      a {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      &:hover {
+        background: transparent;
+
+        a {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      &.ant-pagination-item-active {
+        background: #fff;
+
+        a {
+          color: #000;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      min-width: 48px;
+      height: 48px;
+      line-height: 48px;
+      margin: 0 6px;
+
+      .ant-pagination-item-link {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+
+      &.ant-pagination-disabled {
+        .ant-pagination-item-link {
+          color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+
+    .ant-pagination-jump-prev,
+    .ant-pagination-jump-next {
+      min-width: 48px;
+      height: 48px;
+      line-height: 48px;
+      margin: 0 6px;
+
+      .ant-pagination-item-container {
+        .ant-pagination-item-ellipsis {
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 16px;
+        }
+
+        .ant-pagination-item-link-icon {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      &:hover {
+        .ant-pagination-item-container {
+          .ant-pagination-item-ellipsis {
+            color: rgba(255, 255, 255, 0.3);
+          }
+
+          .ant-pagination-item-link-icon {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+
+  p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (max-width: 992px) {
+  .finishedProjectsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .tabsSection {
+    margin-top: 30px;
+  }
+
+  .tabs {
+    :global {
+      .ant-tabs-tab {
+        font-size: 14px;
+        padding: 10px 0;
+      }
+    }
+  }
+
+  .activeProjectsSection {
+    margin-bottom: 40px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .finishedProjectsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pagination {
+    :global {
+      .ant-pagination-item {
+        min-width: 40px;
+        height: 40px;
+        line-height: 40px;
+        margin: 0 4px;
+
+        a {
+          font-size: 14px;
+        }
+      }
+
+      .ant-pagination-prev,
+      .ant-pagination-next {
+        min-width: 40px;
+        height: 40px;
+        line-height: 40px;
+        margin: 0 4px;
+
+        .ant-pagination-item-link {
+          font-size: 16px;
+        }
+      }
+
+      .ant-pagination-jump-prev,
+      .ant-pagination-jump-next {
+        min-width: 40px;
+        height: 40px;
+        line-height: 40px;
+        margin: 0 4px;
+      }
+    }
+  }
+}

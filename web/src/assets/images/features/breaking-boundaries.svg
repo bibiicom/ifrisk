@@ -1,0 +1,69 @@
+<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景光晕 -->
+  <circle cx="36" cy="36" r="36" fill="url(#grad_outer)" opacity="0.3" filter="drop-shadow(0 0 12px rgba(139, 92, 246, 0.5))"/>
+  <!-- 主体圆形 -->
+  <circle cx="36" cy="36" r="35" fill="url(#grad_inner)" stroke="url(#grad_stroke)" stroke-width="2" filter="drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))"/>
+  <!-- 圆形阴影 -->
+  <circle cx="36" cy="36" r="35" fill="none" stroke="rgba(0, 0, 0, 0.5)" stroke-width="1" filter="blur(3px)" transform="translate(0, 2)" opacity="0.7"/>
+  
+  <!-- 内部矩形 - 多层设计 -->
+  <rect x="16" y="20" width="40" height="24" rx="4" fill="url(#rect_gradient)" opacity="0.2"/>
+  <rect x="16" y="20" width="40" height="24" rx="4" stroke="url(#rect_stroke)" stroke-width="2.5"/>
+  
+  <!-- 边界线 - 增强深度感 -->
+  <path d="M12 24H16" stroke="url(#line_gradient)" stroke-width="2" stroke-linecap="round" filter="drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))"/>
+  <path d="M56 24H60" stroke="url(#line_gradient)" stroke-width="2" stroke-linecap="round" filter="drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))"/>
+  <path d="M18 18V30" stroke="url(#line_gradient)" stroke-width="2" stroke-linecap="round" filter="drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))"/>
+  <path d="M30 18V30" stroke="url(#line_gradient)" stroke-width="2" stroke-linecap="round" filter="drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))"/>
+  
+  <!-- 发光效果 -->
+  <circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1" filter="blur(2px)"/>
+  
+  <!-- 高光效果 -->
+  <circle cx="30" cy="30" r="5" fill="url(#highlight)" opacity="0.8"/>
+  <circle cx="48" cy="26" r="3" fill="url(#sparkle)" opacity="0.7"/>
+  <circle cx="24" cy="46" r="3" fill="url(#sparkle)" opacity="0.6"/>
+  
+  <defs>
+    <!-- 外部光晕渐变 -->
+    <linearGradient id="grad_outer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <!-- 内部圆形渐变 -->
+    <linearGradient id="grad_inner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(139, 92, 246, 0.15)"/>
+      <stop offset="100%" stop-color="rgba(124, 58, 237, 0.15)"/>
+    </linearGradient>
+    <!-- 边框渐变 -->
+    <linearGradient id="grad_stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+    <!-- 矩形填充渐变 -->
+    <linearGradient id="rect_gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.1)"/>
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.05)"/>
+    </linearGradient>
+    <!-- 矩形边框渐变 -->
+    <linearGradient id="rect_stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <!-- 线条渐变 -->
+    <linearGradient id="line_gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e9d5ff"/>
+      <stop offset="100%" stop-color="#c4b5fd"/>
+    </linearGradient>
+    <!-- 高光渐变 -->
+    <radialGradient id="highlight" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.9)"/>
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0)"/>
+    </radialGradient>
+    <!-- 闪光渐变 -->
+    <radialGradient id="sparkle" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.8)"/>
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0)"/>
+    </radialGradient>
+  </defs>
+</svg>

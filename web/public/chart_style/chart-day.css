@@ -1,0 +1,19 @@
+.chart-page {
+  background: #ffffff!important;
+}
+
+.chart-page [class*="group-"] {
+  background: #ffffff!important;
+}
+
+.chart-page [class*="group-"] [class*="button-"] {
+  color: #989696!important;
+}
+
+.chart-page [class*="menuWrap-"] [class*="scrollWrap-"] [class*="menuBox-"] [class*="item-"] {
+  color: #989696!important;
+}
+
+.chart-page [class*="menuWrap-"] [class*="scrollWrap-"] [class*="menuBox-"] [class*="isActive-"] {
+  color: #ffffff!important;
+}

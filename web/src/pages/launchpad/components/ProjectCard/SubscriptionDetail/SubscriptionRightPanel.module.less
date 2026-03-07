@@ -1,0 +1,437 @@
+@import '~@/component/common.less';
+
+.rightSection {
+  width: 420px;
+  background: rgba(16, 18, 24, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px 24px 20px;
+  min-height: 650px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 100%;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    min-height: auto;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px 16px 16px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 12px 12px;
+  }
+
+  .projectTitle {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 18px 0;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+  }
+
+  .progressSection {
+    margin-bottom: 20px;
+
+    .progressHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .progressLabel {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .progressAmount {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .progressBar {
+      :global {
+        .ant-progress-bg {
+          height: 10px !important;
+          /* 蓝色渐变 */
+          background: linear-gradient(90deg, @main-blue 0%, lighten(@main-blue, 15%) 100%) !important;
+        }
+
+        .ant-progress-inner {
+          /* 稍微亮一点的轨道颜色，方便区分 */
+          background: rgba(255, 255, 255, 0.12) !important;
+          border-radius: 10px !important;
+        }
+      }
+    }
+
+    .progressInfo {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0;
+      font-size: 12px;
+    }
+
+    .progressPercent {
+      color: @main-blue;
+      font-weight: 500;
+    }
+  }
+
+  .subscriptionForm {
+    background: #141823;
+    border-radius: 12px;
+    padding: 16px 16px 18px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    .formRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .formLabel {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .formValue {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .formInputGroup {
+      margin: 16px 0;
+
+      .inputWrapper {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 0 16px;
+        height: 48px;
+        transition: all 0.3s;
+
+        &:hover {
+          border-color: fade(@main-blue, 40%);
+        }
+
+        &:focus-within {
+          border-color: @main-blue;
+          box-shadow: 0 0 0 2px fade(@main-blue, 10%);
+        }
+
+        .amountInput {
+          flex: 1;
+          height: 100%;
+          background: transparent;
+          border: none;
+          color: #fff;
+          font-size: 15px;
+          padding: 0;
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: none;
+          }
+
+          :global {
+            .ant-input {
+              background: transparent !important;
+              color: #fff !important;
+              border: none !important;
+              box-shadow: none !important;
+              padding: 0 !important;
+
+              &::placeholder {
+                color: rgba(255, 255, 255, 0.3) !important;
+              }
+
+              &:focus {
+                box-shadow: none !important;
+              }
+            }
+          }
+        }
+
+        .tokenSelect {
+          width: 100px;
+          flex-shrink: 0;
+
+          :global {
+            .ant-select-selector {
+              background: transparent !important;
+              border: none !important;
+              color: #fff !important;
+              font-weight: 600;
+              padding: 0 !important;
+              box-shadow: none !important;
+            }
+
+            .ant-select-selection-item {
+              color: #fff !important;
+              font-size: 15px;
+              padding-right: 0 !important;
+            }
+
+            .ant-select-arrow {
+              color: rgba(255, 255, 255, 0.5);
+            }
+
+            .ant-select-focused .ant-select-selector {
+              box-shadow: none !important;
+            }
+          }
+        }
+
+        .tokenLabel {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 15px;
+          font-weight: 500;
+          padding-left: 12px;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .subscribeButton {
+      width: 100%;
+      height: 44px;
+      margin-top: 16px;
+
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      transition: all 0.25s ease-out;
+
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .priceInfo {
+      text-align: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 12px;
+
+      .priceInfoText {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+
+  .statusSection {
+    background: fade(@main-blue, 5%);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    border: 1px solid fade(@main-blue, 15%);
+
+    .statusMessage {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 12px;
+    }
+
+    .viewButton {
+      width: 100%;
+      height: 44px;
+      background: fade(@main-blue, 10%);
+      border: 1px solid fade(@main-blue, 30%);
+      border-radius: 8px;
+      font-weight: 600;
+      color: @main-blue;
+      transition: all 0.3s;
+
+      &:hover {
+        background: fade(@main-blue, 20%) !important;
+        border-color: fade(@main-blue, 50%) !important;
+        color: @main-blue !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px fade(@main-blue, 20%);
+      }
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 20px 0 16px;
+  }
+
+  .userSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .userLabel {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .userAddress {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .historyButton {
+      padding: 0;
+      height: auto;
+      font-size: 14px;
+      color: @main-blue;
+      text-decoration: underline;
+
+      &:hover {
+        color: lighten(@main-blue, 10%);
+      }
+    }
+  }
+
+  .avatarSection {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      position: relative;
+      background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.28), rgba(0, 0, 0, 0.85));
+      border: 1px solid rgba(105, 172, 255, 0.7);
+      box-shadow:
+        0 0 20px rgba(22, 119, 255, 0.4),
+        0 10px 25px rgba(0, 0, 0, 0.8),
+        inset 0 0 12px rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+        pointer-events: none;
+      }
+    }
+  }
+
+  .verificationSection {
+    text-align: center;
+    margin-bottom: 28px;
+
+    .verificationText {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .verifyButton {
+      width: 60%;
+      height: 44px;
+      border-radius: 8px;
+      background: fade(@main-blue, 10%);
+      border: 1px solid fade(@main-blue, 30%);
+      color: @main-blue;
+      font-weight: 600;
+      transition: all 0.3s;
+
+      &:hover {
+        background: fade(@main-blue, 20%) !important;
+        color: @main-blue !important;
+        border-color: fade(@main-blue, 50%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px fade(@main-blue, 20%);
+      }
+    }
+  }
+
+  .priceDetails {
+    background: #141823;
+    border-radius: 12px;
+    padding: 16px 16px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    .priceRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      .priceLabel {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 400;
+      }
+
+      .priceValue {
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        text-align: right;
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  // 本地开发配置
+  "server": {
+    "localHost": "http://43.134.74.19:10000",
+    "hotScript": true,
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "perpetual",
+    "username": "root",
+    "password": "root",
+  }
+}

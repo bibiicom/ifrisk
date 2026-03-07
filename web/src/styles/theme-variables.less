@@ -1,0 +1,122 @@
+// 全局主题变量文件
+// 使用 CSS 变量实现主题切换
+
+// Less 变量（保持兼容）
+@theme-primary: #1677ff;
+@theme-primary-10: fade(@theme-primary, 10%);
+@theme-primary-20: fade(@theme-primary, 20%);
+@theme-primary-30: fade(@theme-primary, 30%);
+@theme-primary-40: fade(@theme-primary, 40%);
+@theme-primary-50: fade(@theme-primary, 50%);
+@theme-primary-light: lighten(@theme-primary, 10%);
+@theme-primary-dark: darken(@theme-primary, 10%);
+
+// CSS 变量定义 - 暗色主题（默认）
+:root {
+    // 文字颜色
+    --text-primary: rgba(255, 255, 255, 0.85);
+    --text-secondary: rgba(255, 255, 255, 0.45);
+    --text-tertiary: rgba(255, 255, 255, 0.3);
+
+    // 背景颜色
+    --bg-primary: #121212;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #232323;
+    --bg-hover: #333333;
+    --bg-popover: #252525;
+
+    // 边框颜色
+    --border-primary: rgba(255, 255, 255, 0.1);
+    --border-secondary: rgba(255, 255, 255, 0.05);
+
+    // 主题色
+    --color-primary: #1677ff;
+    --color-primary-light: #4096ff;
+    --color-success: #2DC08E;
+    --color-warning: #f3891a;
+    --color-error: #F92855;
+
+    // 图标颜色
+    --icon-primary: rgba(255, 255, 255, 0.85);
+    --icon-secondary: rgba(255, 255, 255, 0.45);
+
+    // 阴影
+    --shadow-primary: 0px 8px 24px rgba(0, 0, 0, 0.3), 0px 16px 48px rgba(0, 0, 0, 0.3);
+
+    // 保险库卡片详情页专用变量
+    --vault-bg-main: #020617;
+    --vault-bg-card: rgba(15, 23, 42, 0.2);
+    --vault-bg-card-dark: #0b1221;
+    --vault-border: rgba(100, 116, 139, 0.3);
+    --vault-border-light: rgba(100, 116, 139, 0.2);
+    --vault-text-primary: #ffffff;
+    --vault-text-secondary: #e2e8f0;
+    --vault-text-tertiary: #94a3b8;
+    --vault-text-muted: #64748b;
+    --vault-accent: #f59e0b;
+    --vault-accent-bg: rgba(245, 158, 11, 0.1);
+    --vault-accent-border: rgba(245, 158, 11, 0.3);
+    --vault-success: #22c55e;
+    --vault-success-glow: rgba(34, 197, 94, 0.4);
+    --vault-divider: rgba(30, 41, 59, 0.6);
+    --vault-gallery-bg: #070b14;
+    --vault-gradient-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+    --vault-psa-red: #e11d48;
+    --vault-watermark: rgba(30, 41, 59, 0.1);
+    --vault-status-gradient: rgba(67, 56, 202, 0.2);
+}
+
+// CSS 变量定义 - 亮色主题
+[data-theme='light'] {
+    // 文字颜色
+    --text-primary: #1c1c1e;
+    --text-secondary: rgba(0, 0, 0, 0.45);
+    --text-tertiary: rgba(0, 0, 0, 0.3);
+
+    // 背景颜色
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-tertiary: #fafafa;
+    --bg-hover: #e8e8e8;
+    --bg-popover: #ffffff;
+
+    // 边框颜色
+    --border-primary: rgba(0, 0, 0, 0.1);
+    --border-secondary: rgba(0, 0, 0, 0.05);
+
+    // 主题色（保持不变）
+    --color-primary: #1677ff;
+    --color-primary-light: #4096ff;
+    --color-success: #2DC08E;
+    --color-warning: #f3891a;
+    --color-error: #F92855;
+
+    // 图标颜色
+    --icon-primary: #1c1c1e;
+    --icon-secondary: rgba(0, 0, 0, 0.45);
+
+    // 阴影
+    --shadow-primary: 0px 8px 24px rgba(0, 0, 0, 0.1), 0px 16px 48px rgba(0, 0, 0, 0.1);
+
+    // 保险库卡片详情页专用变量 - 亮色模式
+    --vault-bg-main: rgb(245, 247, 251);
+    --vault-bg-card: #ffffff;
+    --vault-bg-card-dark: #ffffff;
+    --vault-border: rgba(226, 232, 240, 0.8);
+    --vault-border-light: rgba(226, 232, 240, 0.5);
+    --vault-text-primary: #0f172a;
+    --vault-text-secondary: #1e293b;
+    --vault-text-tertiary: #475569;
+    --vault-text-muted: #94a3b8;
+    --vault-accent: #f59e0b;
+    --vault-accent-bg: rgba(245, 158, 11, 0.1);
+    --vault-accent-border: rgba(245, 158, 11, 0.3);
+    --vault-success: #22c55e;
+    --vault-success-glow: rgba(34, 197, 94, 0.4);
+    --vault-divider: rgba(226, 232, 240, 0.8);
+    --vault-gallery-bg: #ffffff;
+    --vault-gradient-overlay: none;
+    --vault-psa-red: #e11d48;
+    --vault-watermark: rgba(226, 232, 240, 0.3);
+    --vault-status-gradient: rgba(226, 232, 240, 0.2);
+}

@@ -1,0 +1,287 @@
+.modal {
+  :global(.ant-modal-content) {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+  }
+
+  :global(.ant-modal-header) {
+    background: transparent;
+    border-bottom: none;
+    padding: 14px 18px 10px;
+
+    :global(.ant-modal-title) {
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  :global(.ant-modal-close) {
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  :global(.ant-modal-body) {
+    padding: 0 18px 18px;
+  }
+
+  // Tabs 样式
+  :global(.ant-tabs-nav) {
+    margin-bottom: 10px;
+
+    &::before {
+      border-bottom-color: var(--border-primary);
+    }
+  }
+
+  :global(.ant-tabs-tab) {
+    color: var(--text-secondary);
+    font-size: 14px;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  :global(.ant-tabs-tab-active) {
+    :global(.ant-tabs-tab-btn) {
+      color: var(--text-primary);
+    }
+  }
+
+  :global(.ant-tabs-ink-bar) {
+    background: var(--color-primary);
+  }
+
+  // Table 样式
+  :global(.ant-table) {
+    background: transparent;
+  }
+
+  :global(.ant-table-thead > tr > th) {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-bottom: none;
+    font-weight: 500;
+    border-radius: 6px;
+  }
+
+  :global(.ant-table-tbody > tr > td) {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-bottom: none;
+  }
+
+  :global(.ant-table-tbody > tr) {
+    border-radius: 6px;
+    margin-bottom: 4px;
+  }
+
+  :global(.ant-table-tbody > tr:hover > td) {
+    background: var(--bg-hover);
+  }
+
+  :global(.ant-table-placeholder) {
+    background: transparent;
+
+    :global(.ant-empty-description) {
+      color: var(--text-tertiary);
+    }
+  }
+
+  // Pagination 样式
+  :global(.ant-pagination) {
+    margin-top: 16px;
+
+    :global(.ant-pagination-item) {
+      background: var(--bg-tertiary);
+      border-color: var(--border-primary);
+      margin-right: 8px;
+
+      a {
+        color: var(--text-secondary);
+      }
+
+      &:hover {
+        border-color: var(--border-secondary);
+
+        a {
+          color: var(--text-primary);
+        }
+      }
+    }
+
+    :global(.ant-pagination-item-active) {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+
+      a {
+        color: var(--text-primary);
+      }
+    }
+
+    :global(.ant-pagination-prev),
+    :global(.ant-pagination-next) {
+      margin-right: 8px;
+
+      button {
+        background: var(--bg-tertiary);
+        border-color: var(--border-primary);
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  // Form 样式
+  :global(.ant-form-item-label > label) {
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  :global(.ant-form-item-explain-error) {
+    color: #ff4d4f;
+    font-size: 12px;
+  }
+
+  :global(.ant-input),
+  :global(.ant-input-affix-wrapper) {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+    border-radius: 6px;
+
+    &::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    &:hover {
+      border-color: var(--border-secondary);
+    }
+
+    &:focus,
+    &-focused {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+    }
+  }
+
+  :global(.ant-input-textarea) {
+    :global(.ant-input) {
+      background: var(--bg-tertiary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+
+      &::placeholder {
+        color: var(--text-tertiary);
+      }
+
+      &:hover {
+        border-color: var(--border-secondary);
+      }
+
+      &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+      }
+    }
+  }
+
+  :global(.ant-select) {
+    :global(.ant-select-selector) {
+      background: var(--bg-tertiary) !important;
+      border-color: var(--border-primary) !important;
+      color: var(--text-primary);
+      border-radius: 6px;
+    }
+
+    :global(.ant-select-arrow) {
+      color: var(--text-tertiary);
+    }
+
+    &:hover {
+      :global(.ant-select-selector) {
+        border-color: var(--border-secondary) !important;
+      }
+    }
+  }
+}
+
+// 弹框内容区域
+.content {
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+// 弹框底部按钮区域
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-primary);
+}
+
+.cancelBtn {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: var(--border-secondary);
+    color: var(--text-primary);
+  }
+}
+
+.confirmBtn {
+  padding: 8px 20px;
+  background: var(--text-primary);
+  border: none;
+  border-radius: 6px;
+  color: var(--bg-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+.primaryBtn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+
+  &:hover {
+    background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+  }
+
+  &:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+  }
+}

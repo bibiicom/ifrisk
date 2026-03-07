@@ -1,0 +1,24 @@
+@import (reference) '../../../../../component/common.less';
+
+.exchange-simple-chart-timezone {
+  &-select {
+    font-size: 14px;
+    height: 42px;
+    &-selector {
+      border-radius: @border-radius;
+      padding: 0 16px;
+    }
+    &-row {
+      height: 40px!important;
+      padding: 0 16px!important;
+      &:first-child {
+        border-top-left-radius: 4px!important;
+        border-top-right-radius: 4px!important;
+      }
+      &:last-child {
+        border-bottom-left-radius: 4px!important;
+        border-bottom-right-radius: 4px!important;
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+@import (reference) '../common.less';
+
+.funny-marquee(@text-color) {
+  font-size: 12px;
+  overflow: hidden;
+  height: 20px;
+  line-height: 22px;
+  color: @text-color;
+  cursor: pointer;
+  .funny-marquee-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.@{funny-prefix}-marquee-dark {
+  .funny-marquee(@text-color-dark)
+}
+
+.@{funny-prefix}-marquee-light {
+  .funny-marquee(@text-color-light)
+}
+

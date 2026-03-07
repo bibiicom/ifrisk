@@ -1,0 +1,36 @@
+#!/bin/bash
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+if [ "$1" == "" ]
+then
+	read -r -p "Are You Sure? [Y/n] " input	
+	case $input in
+		[yY][eE][sS]|[yY])
+			echo "Yes"
+			;;
+		[nN][oO]|[nN])
+			echo "No"
+			exit 1
+			;;
+		*)
+			echo "Invalid input..."
+			exit 1
+			;;
+	esac
+fi
+
+
+cntexpr=`wc -l list.hosts | awk '{print $1}'`
+cntall=`expr $cntexpr`
+
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1 `
+	read hosts
+	name=`ssh -n $hosts hostname`
+	echo "("$i")" $hosts [$name]
+	ssh -n $hosts 'cd run;chmod u+x stop.sh;./stop.sh Y'	
+done < list.hosts

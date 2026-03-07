@@ -1,0 +1,41 @@
+@import (reference) './common.less';
+@import (reference) '../../dimension.less';
+@import '../../styles/theme-variables.less';
+
+.exchange(@bg-color) {
+  background-color: @bg-color;
+  box-sizing: border-box;
+  min-height: calc(100vh - @header-height - @footer-height);
+
+  .exchange-middle-container {
+    display: flex;
+    flex-direction: row;
+    margin: 2px 0;
+    height: @middle-section-height;
+
+    @media @min-screen {
+      height: auto;
+    }
+
+    .exchange-middle-symbol-container {
+      margin-right: @section-gap;
+      height: 100%;
+    }
+
+    .exchange-middle-order-board-container {
+      display: flex;
+      flex-direction: column;
+      width: calc(100% - @order-book-deal-detail-width-min-screen);
+      padding: 6px 4px 0 4px;
+    }
+  }
+}
+
+// 使用 CSS 变量支持主题切换
+.exchange-light {
+  .exchange(var(--bg-primary));
+}
+
+.exchange-dark {
+  .exchange(var(--bg-primary));
+}

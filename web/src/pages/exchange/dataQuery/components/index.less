@@ -1,0 +1,26 @@
+@import (reference) '../../../../component/common.less';
+
+.exchange-data-query-logout (@text-color) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  font-size: 16px;
+  color: @text-color;
+  pointer-events: none;
+  a {
+    color: @main-blue;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+}
+
+.exchange-data-query-logout-dark {
+  .exchange-data-query-logout(@text-color-dark)
+}
+
+.exchange-data-query-logout-light {
+  .exchange-data-query-logout(@text-color-light)
+}

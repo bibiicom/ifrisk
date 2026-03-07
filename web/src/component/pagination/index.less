@@ -1,0 +1,152 @@
+@import (reference) '../common.less';
+
+.funny-pagination (@text-color, @text-secondary-color, @border, @border-secondary, @background-secondary-color, @background-third-color, @disabled-background-color) {
+  justify-content: center;
+
+  .funny-pagination-button {
+    width: 28px;
+    height: 26px;
+    background-color: @background-third-color;
+    border: @border-secondary;
+    color: @text-secondary-color;
+    padding: 0;
+    margin-left: 8px;
+    font-weight: normal;
+    fill: @text-secondary-color;
+    cursor: pointer;
+
+    &:hover {
+      color: fade(@text-color, 70%);
+      border: @border;
+      background-color: @background-third-color;
+      fill: fade(@text-color, 70%);
+    }
+
+    &:disabled {
+      background-color: @disabled-background-color !important;
+      border: 1px solid @disabled-background-color !important;
+      fill: @background-secondary-color !important;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &-active-button {
+    background-color: @background-third-color !important;
+    border: @border-secondary !important;
+    color: @text-color !important;
+    fill: @text-color !important;
+  }
+
+  &-jump-button {
+    svg {
+      &[data-type="jump"] {
+        display: none;
+      }
+
+      &[data-type="more"] {
+        display: inline-block;
+      }
+    }
+
+    &:hover {
+      svg {
+        &[data-type="jump"] {
+          display: inline-block;
+        }
+
+        &[data-type="more"] {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.funny-pagination-dark {
+  .funny-pagination(@text-color-dark,
+    @text-secondary-color-dark,
+    @border-dark,
+    @border-secondary-dark,
+    @background-secondary-color-dark,
+    @background-third-color-dark,
+    @disabled-background-color-dark )
+}
+
+.funny-pagination-light {
+  .funny-pagination(@text-color-light,
+    @text-secondary-color-light,
+    @border-light,
+    @border-secondary-light,
+    @background-secondary-color-light,
+    @background-third-color-light,
+    @disabled-background-color-light )
+}
+
+// CSS 变量版本 - 自动适配主题
+.funny-pagination-auto {
+  justify-content: center;
+
+  .funny-pagination-button {
+    width: 28px;
+    height: 26px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    color: var(--text-secondary);
+    padding: 0;
+    margin-left: 8px;
+    font-weight: normal;
+    fill: var(--text-secondary);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      border: 1px solid var(--border-primary);
+      background-color: var(--bg-tertiary);
+      fill: var(--text-primary);
+    }
+
+    &:disabled {
+      background-color: var(--bg-tertiary) !important;
+      border: 1px solid var(--bg-tertiary) !important;
+      fill: var(--text-tertiary) !important;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &-active-button {
+    background-color: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-secondary) !important;
+    color: var(--text-primary) !important;
+    fill: var(--text-primary) !important;
+  }
+
+  &-jump-button {
+    svg {
+      &[data-type="jump"] {
+        display: none;
+      }
+
+      &[data-type="more"] {
+        display: inline-block;
+      }
+    }
+
+    &:hover {
+      svg {
+        &[data-type="jump"] {
+          display: inline-block;
+        }
+
+        &[data-type="more"] {
+          display: none;
+        }
+      }
+    }
+  }
+}

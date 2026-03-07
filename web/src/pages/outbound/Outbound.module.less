@@ -1,0 +1,257 @@
+.container {
+    min-height: calc(100vh - 120px);
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    max-width: 1400px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.headerButtons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.ruleBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+
+    &:hover {
+        background: var(--bg-hover);
+        border-color: var(--border-secondary);
+    }
+}
+
+.cardList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+.emptyState {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-tertiary);
+    font-size: 16px;
+}
+
+.loadingState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+}
+
+// 卡片内容样式
+.cardName {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardStatus {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 10px;
+
+    &.available {
+        background: rgba(82, 196, 26, 0.2);
+        color: #52c41a;
+    }
+
+    &.unavailable {
+        background: rgba(255, 77, 79, 0.2);
+        color: #ff4d4f;
+    }
+}
+
+.cardMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.cardMetaItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+
+    .label {
+        color: var(--text-tertiary);
+    }
+
+    .value {
+        color: var(--text-primary);
+    }
+}
+
+
+// 规则内容样式
+.ruleContent {
+    line-height: 1.8;
+
+    h3 {
+        color: var(--text-primary);
+        font-size: 15px;
+        font-weight: 500;
+        margin: 16px 0 8px;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    ul {
+        padding-left: 20px;
+        margin: 8px 0;
+
+        li {
+            color: var(--text-secondary);
+            margin: 6px 0;
+            font-size: 14px;
+        }
+    }
+}
+
+// 卡片预览样式
+.cardPreview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.cardPreviewImage {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--bg-hover);
+}
+
+.cardPreviewInfo {
+    flex: 1;
+
+    .name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .id {
+        font-size: 12px;
+        color: var(--text-tertiary);
+    }
+}
+
+
+// 分页器样式
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    padding-bottom: 20px;
+
+    :global(.ant-pagination-item) {
+        background: var(--bg-tertiary);
+        border-color: var(--border-primary);
+
+        a {
+            color: var(--text-secondary);
+        }
+
+        &:hover {
+            border-color: var(--border-secondary);
+
+            a {
+                color: var(--text-primary);
+            }
+        }
+    }
+
+    :global(.ant-pagination-item-active) {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+
+        a {
+            color: #fff;
+        }
+    }
+
+    :global(.ant-pagination-prev),
+    :global(.ant-pagination-next) {
+        button {
+            background: var(--bg-tertiary);
+            border-color: var(--border-primary);
+            color: var(--text-secondary);
+
+            &:hover {
+                border-color: var(--border-secondary);
+                color: var(--text-primary);
+            }
+        }
+    }
+
+    :global(.ant-pagination-options-quick-jumper) {
+        color: var(--text-secondary);
+
+        input {
+            background: var(--bg-tertiary);
+            border-color: var(--border-primary);
+            color: var(--text-primary);
+
+            &:hover,
+            &:focus {
+                border-color: var(--border-secondary);
+            }
+        }
+    }
+
+    :global(.ant-pagination-total-text) {
+        color: var(--text-secondary);
+    }
+}

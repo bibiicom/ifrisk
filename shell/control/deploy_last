@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#!/bin/bash
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+release=`ls -t ../release/trade/*.tar.gz | head -n 1`
+
+target=`echo $release | awk -F / '{print $4}'` 
+cntexpr=`wc -l list.hosts | awk '{print $1}'`
+cntall=`expr $cntexpr`
+i=0
+while [ $i -lt $cntall ]
+do
+	i=`expr $i + 1`
+	read hosts
+	name=`ssh -n $hosts hostname`
+	echo "("$i")" $hosts [$name]
+	scp $release $hosts:~/test/
+	ssh -n $hosts "tar -xvf ~/test/$target -C ~/test/ 1>/dev/null"
+	ssh -n $hosts "rm -rf ~/test/$target"
+done < list.hosts

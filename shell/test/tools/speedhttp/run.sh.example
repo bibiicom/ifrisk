@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#date "+%H:%M:%S.%N"
+#curl -o /dev/null -s -w '%{time_total}\n' -d "{\"UserID\":\"$1\",\"ExchangeID\":\"$2\",\"InstrumentID\":\"$3\",\"OrderPriceType\":\"0\",\"Price\":$4,\"Volume\":1,\"Direction\":\"0\",\"OffsetFlag\":\"0\"}"  -X POST  http://172.31.36.146:$5/spotaction/v1.0/SendOrderInsert
+curl -o /dev/null -s -d "{\"UserID\":\"$1\",\"ExchangeID\":\"$2\",\"InstrumentID\":\"$3\",\"OrderPriceType\":\"0\",\"Price\":$4,\"Volume\":1,\"Direction\":\"0\",\"OffsetFlag\":\"0\"}"  -X POST  http://172.31.36.146:$5/spotaction/v1.0/SendOrderInsert
+curl -o /dev/null -s -d "{\"UserID\":\"$1\",\"ActionFlag\":\"1\",\"ExchangeID\":\"$2\",\"InstrumentID\":\"$3\"}"  -X POST  http://172.31.36.146:$5/spotaction/v1.0/SendOrderAction
+
+curl -o /dev/null -s -d "{\"UserID\":\"$1\",\"ExchangeID\":\"$2\",\"InstrumentID\":\"$3\",\"OrderPriceType\":\"0\",\"Price\":$4,\"Volume\":1,\"Direction\":\"0\",\"OffsetFlag\":\"0\"}"  -X POST  http://172.31.36.146:$5/spotaction/v1.0/SendOrderInsert
+curl -o /dev/null -s -d "{\"UserID\":\"$1\",\"ActionFlag\":\"1\",\"ExchangeID\":\"$2\",\"InstrumentID\":\"$3\"}"  -X POST  http://172.31.36.146:$5/spotaction/v1.0/SendOrderAction
+
+#curl -o /dev/null -s -w '%{time_total}\n' 'http://127.0.0.1:$1/query/v1.0/marketdata?ProductGroup=Swap&ExchangeID=RRBIT&InstrumentID=BTCUSD'

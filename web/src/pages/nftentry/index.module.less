@@ -1,0 +1,23 @@
+@import (reference) "../../styles/theme-variables.less";
+
+.page {
+  padding: 24px 40px;
+  min-height: calc(100vh - 200px);
+}
+
+.empty,
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+
+  .ant-empty-description {
+    color: var(--text-secondary);
+    font-size: 16px;
+  }
+
+  .ant-spin-text {
+    color: var(--text-secondary);
+  }
+}

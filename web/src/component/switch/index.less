@@ -1,0 +1,70 @@
+@import (reference) '../common.less';
+
+.funny-switch (@thumb-color, @background-third-color, @border-secondary) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 36px;
+  border-radius: 100px;
+  background-color: @background-third-color;
+  border: @border-secondary;
+  transition: all 0.2s;
+  cursor: pointer;
+  padding: 2px;
+
+  .funny-switch-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: @thumb-color;
+    transition: all 0.2s;
+  }
+
+  &.open {
+    background-color: @main-blue;
+    border: 1px solid @main-blue;
+
+    .funny-switch-thumb {
+      transform: translateX(16px);
+    }
+  }
+}
+
+.@{funny-prefix}-switch-dark {
+  .funny-switch(#FFFFFF, @background-secondary-color-dark, @border-secondary-dark)
+}
+
+.@{funny-prefix}-switch-light {
+  .funny-switch(#FFFFFF, @background-secondary-color-light, @border-secondary-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-switch-auto {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 36px;
+  border-radius: 100px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-secondary);
+  transition: all 0.2s;
+  cursor: pointer;
+  padding: 2px;
+
+  .funny-switch-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    transition: all 0.2s;
+  }
+
+  &.open {
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+
+    .funny-switch-thumb {
+      transform: translateX(16px);
+    }
+  }
+}

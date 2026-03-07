@@ -1,0 +1,262 @@
+@import (reference) "./dimension";
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./source/fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+html {
+  font: 14px/1.4 Roboto, Open Sans, PingFang SC, Hiragino Sans GB, Heiti SC, Microsoft YaHei, WenQuanYi Micro Hei;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  max-width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header,
+footer,
+section,
+ul,
+li,
+input {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+div,
+span {
+  box-sizing: border-box;
+}
+
+p {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+a {
+  color: var(--text-primary);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+input {
+  outline: none;
+  box-sizing: border-box;
+  border-style: none;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+button {
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+}
+
+ul,
+li {
+  list-style: none;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+svg:not(.anticon svg) {
+  fill: var(--text-primary);
+}
+
+.os-scrollbar-handle {
+  background: rgba(0, 0, 0, .05) !important;
+}
+
+.app-content {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  margin: 4px 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Markdown 渲染通用样式
+.markdown-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+
+  // 标题样式
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text-primary);
+    margin: 16px 0 8px 0;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  // 段落样式
+  p {
+    margin: 8px 0;
+    color: var(--text-secondary);
+  }
+
+  // 表格样式
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+
+  th,
+  td {
+    border: 1px solid var(--border-primary);
+    padding: 8px 12px;
+    text-align: left;
+    color: var(--text-primary);
+  }
+
+  th {
+    background: var(--bg-tertiary);
+    font-weight: 600;
+  }
+
+  // 有序列表
+  ol,
+  ol li {
+    list-style-type: decimal !important;
+  }
+
+  ol {
+    padding-left: 24px;
+    margin: 8px 0;
+  }
+
+  ol li {
+    display: list-item !important;
+    margin: 4px 0;
+  }
+
+  // 无序列表
+  ul {
+    padding-left: 24px;
+    margin: 8px 0;
+  }
+
+  ul li {
+    margin: 4px 0;
+    list-style-type: disc;
+  }
+
+  // 链接样式
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // 代码块样式
+  code {
+    background: var(--bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  pre {
+    background: var(--bg-tertiary);
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+
+    code {
+      background: transparent;
+      padding: 0;
+    }
+  }
+
+  // 引用样式
+  blockquote {
+    border-left: 4px solid var(--primary-color);
+    margin: 16px 0;
+    padding: 8px 16px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+
+  // 分割线
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-primary);
+    margin: 24px 0;
+  }
+
+  // 强调样式
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  // 图片样式
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+}

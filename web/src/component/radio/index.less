@@ -1,0 +1,44 @@
+@import (reference) '../common.less';
+
+.funny-radio(@text-secondary-color) {
+  color: @text-secondary-color;
+  font-size: 12px;
+  fill: @text-secondary-color;
+  cursor: pointer;
+
+  .funny-radio-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+
+    &.checked {
+      fill: @main-blue;
+    }
+  }
+}
+
+.@{funny-prefix}-radio-dark {
+  .funny-radio(@text-secondary-color-dark)
+}
+
+.@{funny-prefix}-radio-light {
+  .funny-radio(@text-secondary-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-radio-auto {
+  color: var(--text-secondary);
+  font-size: 12px;
+  fill: var(--text-secondary);
+  cursor: pointer;
+
+  .funny-radio-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+
+    &.checked {
+      fill: var(--color-primary);
+    }
+  }
+}

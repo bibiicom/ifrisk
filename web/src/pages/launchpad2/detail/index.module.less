@@ -1,0 +1,261 @@
+.page {
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.loading,
+.notFound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: var(--text-secondary);
+
+    button {
+        padding: 8px 24px;
+        background: var(--primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.headerContent {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+
+    &:hover {
+        color: var(--text-primary);
+        border-color: var(--border-secondary);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.headerTitle {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.statusBadge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+
+    // Live - 绿色 (进行中)
+    &.status_live {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.2);
+
+        .statusDot {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .statusText {
+            color: #10b981;
+        }
+    }
+
+    // Future - 蓝色 (即将开始)
+    &.status_future {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.2);
+
+        .statusDot {
+            background: #3b82f6;
+            animation: none;
+        }
+
+        .statusText {
+            color: #3b82f6;
+        }
+    }
+
+    // Ended - 灰色 (已结束)
+    &.status_ended {
+        background: rgba(107, 114, 128, 0.1);
+        border-color: rgba(107, 114, 128, 0.2);
+
+        .statusDot {
+            background: #6b7280;
+            animation: none;
+        }
+
+        .statusText {
+            color: #6b7280;
+        }
+    }
+
+    // Coming Soon - 橙色 (敬请期待)
+    &.status_coming_soon {
+        background: rgba(245, 158, 11, 0.1);
+        border-color: rgba(245, 158, 11, 0.2);
+
+        .statusDot {
+            background: #f59e0b;
+            animation: pulse 2s infinite;
+        }
+
+        .statusText {
+            color: #f59e0b;
+        }
+    }
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+.statusText {
+    font-size: 11px;
+    font-weight: 800;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+
+.content {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+}
+
+.leftColumn {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.rightColumn {
+    flex: 1;
+    position: sticky;
+    top: 120px;
+    align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .rightColumn {
+        position: static;
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        height: 64px;
+    }
+
+    .headerContent {
+        padding: 0 16px;
+    }
+
+    .headerTitle {
+        font-size: 16px;
+    }
+
+    .main {
+        padding: 24px 16px;
+    }
+
+    .content {
+        gap: 32px;
+    }
+
+    .leftColumn {
+        gap: 32px;
+    }
+}

@@ -1,0 +1,13 @@
+{
+  // 开发环境配置
+  "server": {
+    "hotScript": false,
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "perpetual",
+    "username": "root",
+    "password": "!QAZ2wsx",
+  }
+}

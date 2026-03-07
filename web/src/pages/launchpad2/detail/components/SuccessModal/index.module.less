@@ -1,0 +1,231 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-primary);
+    opacity: 0;
+    transition: opacity 1s ease;
+
+    &.show {
+        opacity: 1;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        opacity: 0.5;
+    }
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    padding: 24px;
+    opacity: 0;
+    transform: scale(0.9) translateY(48px);
+    transition: all 1s ease;
+
+    &.show {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.imageSection {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imageGlow {
+    position: absolute;
+    inset: -120px;
+    background: rgba(59, 130, 246, 0.15);
+    filter: blur(120px);
+    border-radius: 50%;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 3 / 4.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 50px 100px rgba(0, 0, 0, 0.2));
+        transition: transform 0.7s ease;
+
+        &:hover {
+            transform: scale(1.02);
+        }
+    }
+}
+
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.title {
+    h2 {
+        font-size: 48px;
+        font-weight: 900;
+        color: var(--text-primary);
+        font-style: italic;
+        text-transform: uppercase;
+        margin: 0 0 16px 0;
+        line-height: 1.1;
+    }
+
+    p {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .cardName {
+        color: var(--text-primary);
+    }
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    padding-left: 32px;
+    border-left: 4px solid var(--border-primary);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.statLabel {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+
+.statValue {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.shareBtn {
+    padding: 20px 64px;
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.closeBtn {
+    padding: 20px 32px;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .imageWrapper {
+        max-width: 300px;
+    }
+
+    .title h2 {
+        font-size: 36px;
+    }
+
+    .title p {
+        font-size: 18px;
+    }
+
+    .statValue {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats {
+        gap: 32px;
+        padding-left: 24px;
+    }
+
+    .actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .shareBtn,
+    .closeBtn {
+        width: 100%;
+    }
+}

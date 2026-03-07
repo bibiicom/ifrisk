@@ -1,0 +1,53 @@
+.animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  canvas {
+    max-width: 100%;
+    max-height: 80%;
+    /* 开启 GPU 硬件加速 */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .skip-btn {
+    margin-top: 20px;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #fff;
+    }
+  }
+
+  .glow {
+    animation: glow-animation 1.5s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes glow-animation {
+  from {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  to {
+    box-shadow: 0 0 20px rgba(22, 119, 255, 0.6), 0 0 40px rgba(22, 119, 255, 0.6);
+  }
+}

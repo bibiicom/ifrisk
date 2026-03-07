@@ -1,0 +1,89 @@
+// TransferModal 特有样式
+.content {
+    color: var(--text-primary);
+}
+
+.directionRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.directionItem {
+    flex: 1;
+}
+
+.swapBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--text-secondary);
+}
+
+.label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.formItem {
+    margin-bottom: 20px;
+}
+
+.select {
+    width: 100%;
+
+    :global(.ant-select-selector) {
+        background: var(--bg-tertiary) !important;
+        border: 1px solid var(--border-primary) !important;
+        border-radius: 6px !important;
+        height: 40px !important;
+        padding: 0 12px !important;
+
+        :global(.ant-select-selection-item) {
+            color: var(--text-primary) !important;
+            line-height: 38px !important;
+        }
+    }
+
+    :global(.ant-select-arrow) {
+        color: var(--text-secondary);
+    }
+
+    &:hover {
+        :global(.ant-select-selector) {
+            border-color: var(--color-primary) !important;
+        }
+    }
+}
+
+.input {
+    background: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-primary) !important;
+    border-radius: 6px !important;
+    height: 40px !important;
+    color: var(--text-primary) !important;
+
+    :global(.ant-input) {
+        background: transparent !important;
+        color: var(--text-primary) !important;
+
+        &::placeholder {
+            color: var(--text-tertiary) !important;
+        }
+    }
+
+    :global(.ant-input-suffix) {
+        color: var(--text-secondary);
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+        border-color: var(--color-primary) !important;
+        box-shadow: none !important;
+    }
+}

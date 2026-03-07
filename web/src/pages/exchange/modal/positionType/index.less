@@ -1,0 +1,25 @@
+@import (reference) '../../../../component/common.less';
+
+.exchange-position-type-tip {
+  font-size: 12px;
+  color: @main-yellow;
+  margin-top: 30px;
+}
+
+.exchange-position-type-content (@text-color, @text-secondary-color) {
+  font-size: 12px;
+  color: @text-secondary-color;
+  .radio {
+    font-size: 14px;
+    color: fade(@text-color, 80%);
+    margin-bottom: 4px;
+  }
+}
+
+.exchange-position-type-content-dark {
+  .exchange-position-type-content(@text-color-dark, @text-secondary-color-dark)
+}
+
+.exchange-position-type-content-light {
+  .exchange-position-type-content(@text-color-light, @text-secondary-color-light)
+}

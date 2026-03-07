@@ -1,0 +1,62 @@
+@import (reference) '../../../../../component/common.less';
+
+.exchange-simple-chart-indicator (
+  @text-color, @text-secondary-color, @border, @border-secondary, @background-secondary-color, @background-third-color
+) {
+  .exchange-simple-chart-indicator-title {
+    padding-bottom: 10px;
+    color: @text-secondary-color;
+  }
+  .exchange-simple-chart-indicator-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+    color: @text-secondary-color;
+    &-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 32px;
+      border-radius: 2px;
+      background: @background-third-color;
+      border: @border-secondary;
+      margin-right: 8px;
+      cursor: pointer;
+      &:last-child {
+        margin-right: 0;
+      }
+      &.selected, &:hover {
+        font-weight: 600;
+        color: fade(@text-color, 80%);
+        background-color: @background-secondary-color;
+        border: @border;
+      }
+    }
+  }
+}
+
+.exchange-simple-chart-indicator-dark {
+  .exchange-simple-chart-indicator(
+    @text-color-dark,
+    @text-secondary-color-dark,
+    @border-dark,
+    @border-secondary-dark,
+    @background-secondary-color-dark,
+    @background-third-color-dark
+  )
+}
+
+.exchange-simple-chart-indicator-light {
+  .exchange-simple-chart-indicator(
+    @text-color-light,
+    @text-secondary-color-light,
+    @border-light,
+    @border-secondary-light,
+    @background-secondary-color-light,
+    @background-third-color-light
+  )
+}
+

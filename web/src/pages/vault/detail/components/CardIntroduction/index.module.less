@@ -1,0 +1,37 @@
+.container {
+    position: relative;
+    padding: 24px 28px;
+    background: var(--vault-bg-card);
+    border-left: 3px solid var(--vault-accent);
+    border-radius: 8px;
+}
+
+.quoteIcon {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--vault-accent-bg);
+    line-height: 1;
+    font-family: Georgia, serif;
+}
+
+.description {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--vault-text-tertiary);
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding: 20px 24px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+}

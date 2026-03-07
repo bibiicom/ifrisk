@@ -1,0 +1,21 @@
+@import (reference) '../../../../component/common.less';
+
+.exchange-section(@bgColor) {
+  background-color: @bgColor;
+  border-radius: @border-radius;
+  .exchange-section-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+}
+
+.exchange-section-dark {
+  .exchange-section(#121212)
+}
+
+.exchange-section-light {
+  .exchange-section(#ffffff)
+}

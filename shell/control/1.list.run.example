@@ -1,0 +1,16 @@
+trade
+sinkdb 1
+sinkdb 2
+sinkredis
+triggerorder
+query 0
+query 1
+front 3
+redis
+marketmaker
+risk
+client
+cservice
+wallet
+mclient
+mservice

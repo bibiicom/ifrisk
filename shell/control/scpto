@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]
+then
+	echo scp No object
+	exit
+fi
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+
+if [ "$1" == "backup" -o "$1" == "redo" ]
+then
+	backup_release_ipaddr=`more ../deploy/env.ini | grep backup_release_ipaddr | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+	echo backup_release_ipaddr:$backup_release_ipaddr
+	backup_release_userid=`more ../deploy/env.ini | grep backup_release_userid | grep -v \# | awk -F = '{print $2}'| tr -d '\r'`
+	echo backup_release_userid:$backup_release_userid
+	backup=$backup_release_userid@$backup_release_ipaddr
+	cd -
+	echo scp $2 $backup:./
+	scp $2 $backup:$3
+else
+	cntexpr=`wc -l list.hosts | awk '{print $1}'`
+	cntall=`expr $cntexpr`
+	i=0
+	while [ $i -lt $cntall ]
+	do
+		i=`expr $i + 1 `
+		read hosts
+		if [ "$i" = "$1" ]
+		then
+			thishost=$hosts
+		fi
+	done < list.hosts
+	cd -
+	echo scp $2 $thishost:$3
+	scp $2 $thishost:$3
+fi
+

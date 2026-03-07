@@ -1,0 +1,67 @@
+.section {
+    margin-bottom: 96px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding: 0 8px;
+}
+
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+
+    @media (min-width: 768px) {
+        font-size: 24px;
+    }
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    background: #16a34a;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 8px;
+}
+
+.emptyState {
+    position: relative;
+    padding: 64px;
+    border: 1px dashed var(--border-primary);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--bg-secondary);
+    margin: 0 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.emptyText {
+    color: var(--text-quaternary);
+    font-weight: 500;
+    font-style: italic;
+}

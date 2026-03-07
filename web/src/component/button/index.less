@@ -1,0 +1,187 @@
+@import (reference) '../common.less';
+@import (reference) "../../dimension.less";
+
+.funny-button(@text-color,
+  @text-secondary-color,
+  @text-third-color,
+  @border,
+  @border-secondary,
+  @background-color,
+  @background-secondary-color,
+  @background-third-color,
+  @disabled-background-color) {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  background: @main-blue;
+  border: @border;
+  border-radius: @border-radius;
+  padding: 6px 20px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+
+  @media @min-screen {
+    padding: 5px 14px;
+  }
+
+  &:hover {
+    background-color: desaturate(@main-blue, 15%);
+  }
+
+  &[data-size="big"] {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  &[data-size="small"] {
+    font-size: 12px;
+    padding: 2px;
+    border-radius: 2px;
+  }
+
+  &[data-type="secondary"] {
+    color: @main-blue;
+    background-color: fade(@main-blue, 5%);
+    border: 1px solid fade(@main-blue, 5%);
+
+    &:hover {
+      background-color: fade(@main-blue, 10%);
+      border: 1px solid fade(@main-blue, 10%);
+    }
+  }
+
+  &[data-type="tertiary"] {
+    background-color: @background-third-color;
+    color: @text-secondary-color;
+    border: @border-secondary;
+
+    &:hover {
+      background: @background-secondary-color;
+      border: @border;
+    }
+  }
+
+  &[data-text="true"] {
+    border: none;
+    background: transparent;
+    color: @text-secondary-color;
+
+    &:hover {
+      background-color: transparent;
+      border: none;
+      color: fade(@text-color, 70%)
+    }
+  }
+
+  &:disabled {
+    background-color: @disabled-background-color !important;
+    color: @text-third-color;
+    border: none !important;
+    cursor: not-allowed;
+  }
+}
+
+.@{funny-prefix}-button-dark {
+  .funny-button(@text-color-dark,
+    @text-secondary-color-dark,
+    @text-third-color-dark,
+    @border-dark,
+    @border-secondary-dark,
+    @background-color-dark,
+    @background-secondary-color-dark,
+    @background-third-color-dark,
+    @disabled-background-color-dark )
+}
+
+.@{funny-prefix}-button-light {
+  .funny-button(@text-color-light,
+    @text-secondary-color-light,
+    @text-third-color-light,
+    @border-light,
+    @border-secondary-light,
+    @background-color-light,
+    @background-secondary-color-light,
+    @background-third-color-light,
+    @disabled-background-color-light )
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-button-auto {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  background: var(--color-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: @border-radius;
+  padding: 6px 20px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+
+  @media @min-screen {
+    padding: 5px 14px;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &[data-size="big"] {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  &[data-size="small"] {
+    font-size: 12px;
+    padding: 2px;
+    border-radius: 2px;
+  }
+
+  &[data-type="secondary"] {
+    color: var(--color-primary);
+    background-color: fade(@main-blue, 5%);
+    border: 1px solid fade(@main-blue, 5%);
+
+    &:hover {
+      background-color: fade(@main-blue, 10%);
+      border: 1px solid fade(@main-blue, 10%);
+    }
+  }
+
+  &[data-type="tertiary"] {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-secondary);
+
+    &:hover {
+      background: var(--bg-hover);
+      border: 1px solid var(--border-primary);
+    }
+  }
+
+  &[data-text="true"] {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+
+    &:hover {
+      background-color: transparent;
+      border: none;
+      color: var(--text-primary);
+    }
+  }
+
+  &:disabled {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-tertiary);
+    border: none !important;
+    cursor: not-allowed;
+  }
+}

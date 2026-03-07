@@ -1,0 +1,36 @@
+@import (reference) '../common.less';
+
+.funny-toggle (@text-color, @text-secondary-color, @border, @background-third-color) {
+  padding: 2px;
+  height: 32px;
+  border: @border;
+  background-color: @background-third-color;
+  border-radius: @border-radius;
+  box-sizing: border-box;
+  .funny-toggle-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    font-size: 12px;
+    height: 100%;
+    color: @text-secondary-color;
+    border-radius: 2px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    &.selected {
+      color: @main-blue;
+      background-color: fade(@main-blue, 20%);
+    }
+  }
+}
+
+.@{funny-prefix}-toggle-dark {
+  .funny-toggle(@text-color-dark, @text-secondary-color-dark, @border-dark, @background-third-color-dark)
+}
+
+.@{funny-prefix}-toggle-light {
+  .funny-toggle(@text-color-light, @text-secondary-color-light, @border-light, @background-third-color-light)
+}

@@ -1,0 +1,8 @@
+{
+  // 本地开发配置
+  "server": {
+//    "localHost": "https://scardex.com",
+    "localHost": "http://127.0.0.1:8080",
+    "hotScript": true,
+  },
+}

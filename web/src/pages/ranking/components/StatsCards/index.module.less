@@ -1,0 +1,83 @@
+.statsCards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.statsCard {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--border-primary);
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        border-color: var(--primary-color);
+        /* background: var(--bg-hover); */
+        /* box-shadow: 0 0 0 1px var(--primary-color); */
+    }
+}
+
+.statsCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.statsCardTitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.statsCardIcon {
+    font-size: 16px;
+    opacity: 0.6;
+}
+
+.statsCardValue {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.coinName {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.statsValueNumber {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .statsCards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .statsCardValue {
+        gap: 8px;
+    }
+
+    .coinName {
+        font-size: 12px;
+    }
+
+    .statsValueNumber {
+        font-size: 14px;
+    }
+}

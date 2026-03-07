@@ -1,0 +1,139 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.videoWrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--vault-border);
+    background: var(--vault-bg-card-dark);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.playOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    .videoWrapper:hover & {
+        background: rgba(0, 0, 0, 0.2);
+    }
+}
+
+.playButton {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.playIcon {
+    width: 32px;
+    height: 32px;
+    margin-left: 4px;
+}
+
+.pauseButton {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    border-radius: 50%;
+    color: #ffffff;
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .videoWrapper:hover & {
+        opacity: 1;
+    }
+}
+
+.pauseIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.vaultStamp {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    padding: 4px 12px;
+    background: rgba(239, 68, 68, 0.8);
+    backdrop-filter: blur(12px);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border-radius: 4px;
+    border: 1px solid #ef4444;
+    color: #ffffff;
+}
+
+.info {
+    padding: 0 16px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--vault-text-primary);
+    margin: 0 0 4px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--vault-text-muted);
+    margin: 0;
+}
+
+@media (max-width: 767px) {
+    .playButton {
+        width: 64px;
+        height: 64px;
+    }
+
+    .playIcon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .vaultStamp {
+        font-size: 8px;
+        padding: 3px 8px;
+    }
+}

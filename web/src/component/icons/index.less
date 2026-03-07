@@ -1,0 +1,23 @@
+@import (reference) '../common.less';
+
+.funny-icon (@text-color, @text-secondary-color, @disabled-color) {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  fill: @text-secondary-color;
+  &:hover {
+    fill: fade(@text-color, 70%)
+  }
+  &[data-status="disabled"] {
+    fill: @disabled-color!important;
+    cursor: not-allowed;
+  }
+}
+
+.@{funny-prefix}-icon-dark {
+  .funny-icon(@text-color-dark, @text-secondary-color-dark, @text-third-color-dark)
+}
+
+.@{funny-prefix}-icon-light {
+  .funny-icon(@text-color-light, @text-secondary-color-light, @text-third-color-light)
+}

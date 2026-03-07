@@ -1,0 +1,73 @@
+@import (reference) '../component/common.less';
+
+.color-theme(@buy-rise-color, @sell-fail-color) {
+  .buy-rise-color {
+    color: @buy-rise-color;
+  }
+
+  .buy-rise-color-opacity-70 {
+    color: fade(@buy-rise-color, 70%)
+  }
+
+  .buy-rise-background {
+    background-color: @buy-rise-color;
+  }
+
+  .buy-rise-border-background-opacity-10 {
+    border-color: fade(@buy-rise-color, 10%);
+    background-color: fade(@buy-rise-color, 10%);
+  }
+
+  .sell-fail-color {
+    color: @sell-fail-color;
+  }
+
+  .sell-fail-color-opacity-70 {
+    color: fade(@sell-fail-color, 70%);
+  }
+
+  .sell-fail-background {
+    background-color: @sell-fail-color;
+  }
+
+  .sell-fail-border-background-opacity-5 {
+    border-color: fade(@sell-fail-color, 5%);
+    background-color: fade(@sell-fail-color, 5%);
+  }
+
+  .sell-fail-border-background-opacity-10 {
+    border-color: fade(@sell-fail-color, 10%);
+    background-color: fade(@sell-fail-color, 10%);
+  }
+
+  .buy-rise-button {
+    border: solid 1px @buy-rise-color;
+    background-color: @buy-rise-color;
+    color: #FFFFFF;
+    &:hover {
+      background-color: desaturate(@buy-rise-color, 20%);
+    }
+  }
+
+  .sell-fail-button {
+    border: solid 1px @sell-fail-color;
+    background-color: @sell-fail-color;
+    color: #FFFFFF;
+    &:hover {
+      background-color: desaturate(@sell-fail-color, 20%);
+    }
+  }
+
+  .yellow {
+    color: @main-yellow;
+  }
+}
+
+.color-theme-buy-rise-green {
+  .color-theme(@main-green, @main-red);
+}
+
+.color-theme-buy-rise-red {
+  .color-theme(@main-red, @main-green);
+}
+

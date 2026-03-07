@@ -1,0 +1,213 @@
+@import '~@/component/common.less';
+
+.leftSection {
+  flex: 1;
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: none;
+
+  .galleryContainer {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .thumbnailColumn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      .scrollButton {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.6);
+        transition: all 0.3s;
+
+        &:hover:not(:disabled) {
+          background: fade(@main-blue, 10%);
+          border-color: fade(@main-blue, 50%);
+          color: @main-blue;
+          transform: scale(1.05);
+        }
+
+        &:disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+      }
+
+      .thumbnailList {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow-y: auto;
+        max-height: 500px;
+        padding: 4px;
+        user-select: none;
+
+        /* 隐藏滚动条 */
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Firefox */
+        scrollbar-width: none;
+
+        /* IE and Edge */
+        -ms-overflow-style: none;
+
+        .thumbnail {
+          min-width: 90px;
+          width: 90px;
+          height: 90px;
+          border-radius: 4px;
+          overflow: hidden;
+          cursor: pointer;
+          border: 3px solid transparent;
+          transition: all 0.3s;
+          flex-shrink: 0;
+
+          &:hover {
+            border-color: @main-blue;
+            transform: scale(1.05);
+          }
+
+          &.activeThumbnail {
+            border-color: @main-blue;
+            box-shadow: 0 0 12px fade(@main-blue, 30%);
+          }
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+
+    .mainMedia {
+      flex: 1;
+      aspect-ratio: 4/3;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .mainImage {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .statsSection {
+    margin-top: 24px;
+    background: linear-gradient(135deg, fade(@main-blue, 8%) 0%, fade(@main-blue, 3%) 100%);
+    border: 1px solid fade(@main-blue, 15%);
+    border-radius: 16px;
+    padding: 40px 32px;
+    position: relative;
+    backdrop-filter: blur(10px);
+
+    .horizontalTimeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0;
+
+      .timelineItem {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        .timelineNode {
+          display: flex;
+          align-items: center;
+          margin-bottom: 16px;
+          width: 100%;
+          justify-content: center;
+          position: relative;
+
+          .solidDot {
+            width: 14px;
+            height: 14px;
+            background: @main-blue;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px fade(@main-blue, 20%), 0 0 12px fade(@main-blue, 40%);
+            position: relative;
+            z-index: 2;
+          }
+
+          .hollowDot {
+            width: 14px;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 2;
+          }
+
+          .timelineLine {
+            position: absolute;
+            left: calc(50% + 7px);
+            right: calc(-50% + 7px);
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+
+            &.activeLine {
+              background: linear-gradient(90deg, @main-blue 0%, fade(@main-blue, 60%) 100%);
+              box-shadow: 0 0 8px fade(@main-blue, 30%);
+            }
+          }
+        }
+
+        .timelineContent {
+          text-align: center;
+
+          .statLabel {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+          }
+
+          .statValue {
+            font-size: 17px;
+            font-weight: 600;
+            color: @main-blue;
+            display: block;
+            margin-bottom: 4px;
+          }
+
+          .statSubValue {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+.progressRing {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.sizeDefault {
+    width: 48px;
+    height: 48px;
+
+    @media (min-width: 768px) {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+.sizeSm {
+    width: 40px;
+    height: 40px;
+}
+
+.sizeLg {
+    width: 64px;
+    height: 64px;
+}
+
+.svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.bgCircle {
+    fill: none;
+    stroke: var(--progress-ring-bg);
+    transition: stroke 0.3s ease;
+}
+
+.fillCircle {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s;
+}
+
+.colorBlue {
+    stroke: #3b82f6;
+}
+
+.colorGray {
+    stroke: #6b7280;
+}
+
+.colorGreen {
+    stroke: #22c55e;
+}
+
+.percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--progress-ring-text);
+    transition: color 0.3s ease;
+}
+
+.percentSm {
+    font-size: 9px;
+}
+
+.percentLg {
+    font-size: 12px;
+}

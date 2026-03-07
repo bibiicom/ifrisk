@@ -1,0 +1,64 @@
+#!/bin/bash
+
+workdir=$(cd $(dirname $0); pwd)
+cd $workdir
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+ulimit -c unlimited
+ulimit  unlimited
+umask 0027
+
+if [ "$1" == "" ]
+then
+	port=127.0.0.1:8000
+else
+	port=$1
+fi
+
+if [ "$1" == "" ]
+then
+	port=127.0.0.1:8000
+else
+	port=$1
+fi
+
+echo echo $port
+
+chmod u+x wsclient
+
+#./wsclient ws://127.0.0.1:8000 '{"SendUserLogin":{"UserID":"1121","Password":"11111"}}" "{"RequestNo":11,"Zip":3,"SendTopicAction":{"Action":"1","Index":"","LocalNo":4,"ResumeNo":-1,"TopicID":"9"}}'
+
+#./wsclient ws://127.0.0.1:11500 zip=1 '{"RequestNo":11,"Zip":3,"SendTopicAction":{"Action":"1","Index":"Test_BTCUSD","LocalNo":4,"ResumeNo":-5,"TopicID":"25"}}'
+
+#./wsclient ws://127.0.0.1:8103 '{"RequestNo":11,"Zip":3,"SendTopicAction":{"Action":"1","Index":"Test_BTC/USDT_15m","Zip":4,"ResumeNo":-20,"TopicID":"11"}}'
+
+#./wsclient ws://127.0.0.1:8103 '{"RequestNo":11,"Zip":3,"SendTopicAction":{"Action":"1","Index":"Test_BTC/USDT_15m","LocalNo":4,"ResumeNo":-20,"TopicID":"11"}}'
+
+
+#./wsclient ws://$port -l '{"RequestNo":2,"Zip":3,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}}'
+
+#./wsclient ws://127.0.0.1:$port -l '{"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}}' '{"RequestNo":2,"SendOrderInsert":{"InstrumentID":"BTCUSD","ExchangeID":"Test","OrderPriceType":"0","Price":10000,"Volume":1,"Direction":"0","OffsetFlag":"0"}}'
+
+## call wsclient.exe ws://127.0.0.1:8000  {"RequestNo":11,"Zip":3,"SendUserLogin":{"UserID":"1120","Password":"111111"}} {"RequestNo":11,"Zip":3,"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"9","Index":"","ResumeNo":-1}}
+
+## {"SendTopicAction":{"Action":"1","Index":"DeepCoin_BTCUSD_15m","LocalNo":6,"ResumeNo":-1,"TopicID":"4"}}
+##
+##
+## ws://127.0.0.1:8000 
+## ws://47.103.71.106:8000 
+## ws://52.220.59.134:8000
+##
+## {"SendUserLogin":{"UserID":"112001","Password":"111111"}} 
+##
+## {"SendTopicAction":{"Action":"1","LocalNo":2,"TopicID":"4","Index":"DeepCoin_BTCUSD","ResumeNo":-1}} 
+##
+## Topic_Market_Trade" value="2" comment="成交明细,
+## Topic_Private_Trade" value="3" comment="私有交易主题
+## Topic_Market_KLine" value="4" comment="最新K线主题,
+## Topic_Market_Depth_5" value="5" comment="5档行情快照主题,
+## Topic_Broad" value="6" comment="广播主题,合约变化,时钟心跳等
+## Topic_Market_OverView" value="7" comment="行情概要快照主题
+## Topic_Market_Depth_All" value="8" comment="全档行情增量主题
+## Topic_Private_Risk" value="9" comment="风控数据
+## Topic_Market_Depth_10" value="10" comment="10档行情快照主题
+## Topic_Market_Depth_25" value="25" comment="25档行情增量主题
+## Topic_Market_Depth_100" value="100" comment="100档行情增量主题

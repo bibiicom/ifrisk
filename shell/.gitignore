@@ -1,0 +1,6 @@
+# Default ignored files
+/.idea/
+/catalt/node_modules/
+/catalt/logs/
+/test/wallet/node_modules/
+/.trae/

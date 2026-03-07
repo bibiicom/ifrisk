@@ -1,0 +1,178 @@
+@import (reference) '../../../component/common.less';
+@import (reference) '../common.less';
+@import '../../../styles/theme-variables.less';
+
+.exchange-order-board (@text-color, @text-secondary-color, @text-third-color, @border-secondary) {
+  width: @order-board-width;
+  padding: 5px 12px;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+
+  @media @min-screen {
+    height: auto;
+    width: 100%;
+    padding: 0;
+  }
+
+  .exchange-order-board-open-close-toggle {
+    height: 36px;
+    margin-bottom: 16px;
+
+    @media @min-screen {
+      margin-bottom: 5px;
+      height: 30px;
+    }
+
+    .button {
+      font-size: 14px;
+      width: 50%;
+    }
+  }
+
+  .exchange-order-board-order-type-toggle {
+    margin-bottom: 16px;
+
+    @media @min-screen {
+      margin-bottom: 5px;
+    }
+
+    .button {
+      width: calc(100% / 3);
+    }
+  }
+
+  .stop-profit-loss-button {
+    height: 34px;
+    // width: 100%;
+    padding: 0;
+
+    .tip-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--icon-primary);
+    }
+
+    &:disabled {
+      .tip-icon {
+        fill: var(--text-tertiary);
+      }
+    }
+  }
+
+  .stop-profit-loss-button-icon {
+    fill: var(--icon-secondary);
+    margin-left: 16px;
+  }
+
+  .exchange-order-board-box {
+    padding: 16px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .exchange-order-board-item {
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+
+    @media @min-screen {
+      margin-bottom: 5px;
+    }
+
+    .order-button {
+      height: 34px;
+      width: calc(50% - 6px);
+      padding: 0;
+      border-radius: 2px;
+    }
+
+    .align {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .value {
+      .align;
+      padding: 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .checkbox {
+      color: var(--text-primary);
+    }
+
+    .select {
+      height: 18px;
+      font-size: 12px;
+      color: var(--text-primary);
+      margin: 0 10px;
+
+      &-selector {
+        padding: 0;
+        border: none;
+        background: transparent;
+
+        &-arrow {
+          width: 14px;
+          height: 14px;
+          margin: 0 2px;
+          fill: var(--icon-primary);
+
+          &:hover {
+            fill: var(--icon-primary);
+          }
+        }
+      }
+
+      &-popover-row {
+        height: 26px !important;
+        padding: 0 !important;
+        justify-content: center;
+        color: var(--text-primary);
+
+        &:first-child {
+          border-top-left-radius: 2px !important;
+          border-top-right-radius: 2px !important;
+        }
+
+        &:last-child {
+          border-bottom-left-radius: 2px !important;
+          border-bottom-right-radius: 2px !important;
+        }
+      }
+    }
+  }
+
+  .exchange-order-board-logout-button {
+    height: 34px;
+    width: 100%;
+    padding: 0;
+    font-size: 16px;
+    background-color: #670099;
+
+    &:hover {
+      background-color: rgba(103, 0, 153, 0.8);
+    }
+
+    color: #fff !important;
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      color: #fff;
+    }
+  }
+}
+
+.exchange-order-board-dark {
+  .exchange-order-board(@text-color-dark, @text-secondary-color-dark, @text-third-color-dark, @border-secondary-dark)
+}
+
+.exchange-order-board-light {
+  .exchange-order-board(@text-color-light, @text-secondary-color-light, @text-third-color-light, @border-secondary-light)
+}

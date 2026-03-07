@@ -1,0 +1,104 @@
+@import (reference) '../common.less';
+
+.funny-tooltip(@text-color, @popover-background-color) {
+  position: relative;
+
+  .funny-tooltip-popover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    bottom: calc(100% - 8px);
+    transition: bottom .2s ease-in-out, opacity .2s ease-in-out;
+    width: 240px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    opacity: 0 !important;
+    top: unset;
+    pointer-events: none;
+
+    &-tip {
+      text-align: left;
+      background-color: @popover-background-color;
+      padding: 16px;
+      box-shadow: @box-shadow;
+      border-radius: @border-radius;
+      font-size: 12px;
+      color: fade(@text-color, 80%);
+    }
+
+    &-arrow {
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid @popover-background-color;
+    }
+  }
+
+  &:hover {
+    .funny-tooltip-popover {
+      bottom: calc(100% + 2px) !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+.@{funny-prefix}-tooltip-dark {
+  .funny-tooltip(@text-color-dark, @popover-background-color-dark)
+}
+
+.@{funny-prefix}-tooltip-light {
+  .funny-tooltip(@text-color-light, @popover-background-color-light)
+}
+
+// CSS 变量版本 - 自动适配主题
+.@{funny-prefix}-tooltip-auto {
+  position: relative;
+
+  .funny-tooltip-popover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    bottom: calc(100% - 8px);
+    transition: bottom .2s ease-in-out, opacity .2s ease-in-out;
+    width: 240px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    opacity: 0 !important;
+    top: unset;
+    pointer-events: none;
+
+    &-tip {
+      text-align: left;
+      background-color: var(--bg-popover);
+      padding: 16px;
+      box-shadow: var(--shadow-primary);
+      border-radius: @border-radius;
+      font-size: 12px;
+      color: var(--text-primary);
+    }
+
+    &-arrow {
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--bg-popover);
+    }
+  }
+
+  &:hover {
+    .funny-tooltip-popover {
+      bottom: calc(100% + 2px) !important;
+      opacity: 1 !important;
+    }
+  }
+}

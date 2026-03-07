@@ -1,0 +1,113 @@
+// 主题 CSS 变量定义
+// 通过 html[data-theme] 切换主题
+
+// ============ 暗色主题 (默认) ============
+:root,
+:root[data-theme='dark'] {
+    // 背景色
+    --bg-primary: #121212;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #232425;
+    --bg-card: #1e1e1e;
+    --bg-elevated: #1a1a2e;
+    --bg-hover: #2a2a2a;
+    --bg-mask: rgba(0, 0, 0, 0.6);
+    --bg-image-section: #0c0c0e;
+
+    // 文字色
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-tertiary: rgba(255, 255, 255, 0.65);
+    --text-quaternary: rgba(255, 255, 255, 0.45);
+    --text-disabled: rgba(255, 255, 255, 0.25);
+
+    // 边框色
+    --border-primary: rgba(255, 255, 255, 0.1);
+    --border-secondary: rgba(255, 255, 255, 0.06);
+    --border-hover: rgba(255, 255, 255, 0.2);
+
+    // 功能色
+    --color-success: #52c41a;
+    --color-warning: #faad14;
+    --color-error: #ff4d4f;
+    --color-info: #1677ff;
+
+    // 主题色
+    --color-primary: #1677ff;
+    --color-primary-hover: #4096ff;
+    --color-primary-active: #0958d9;
+    --color-primary-bg: rgba(22, 119, 255, 0.1);
+
+    // 特殊色
+    --color-live-dot: #22c55e;
+    --color-badge-bg: #374151;
+
+    // 进度环
+    --progress-ring-bg: rgba(255, 255, 255, 0.05);
+    --progress-ring-text: rgba(255, 255, 255, 0.9);
+
+    // 阴影
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    // Hero 卡片特殊样式
+    --hero-card-bg: #0a0a0a;
+    --hero-card-border: rgba(255, 255, 255, 0.1);
+}
+
+// ============ 亮色主题 ============
+:root[data-theme='light'] {
+    // 背景色
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f0f2f5;
+    --bg-card: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-hover: #f0f0f0;
+    --bg-mask: rgba(0, 0, 0, 0.45);
+    --bg-image-section: #f5f5f7;
+
+    // 文字色
+    --text-primary: #1a1a1a;
+    --text-secondary: rgba(0, 0, 0, 0.88);
+    --text-tertiary: rgba(0, 0, 0, 0.65);
+    --text-quaternary: rgba(0, 0, 0, 0.45);
+    --text-disabled: rgba(0, 0, 0, 0.25);
+
+    // 边框色
+    --border-primary: rgba(0, 0, 0, 0.12);
+    --border-secondary: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(0, 0, 0, 0.2);
+
+    // 功能色
+    --color-success: #52c41a;
+    --color-warning: #faad14;
+    --color-error: #ff4d4f;
+    --color-info: #1677ff;
+
+    // 主题色
+    --color-primary: #1677ff;
+    --color-primary-hover: #4096ff;
+    --color-primary-active: #0958d9;
+    --color-primary-bg: rgba(22, 119, 255, 0.1);
+
+    // 特殊色
+    --color-live-dot: #22c55e;
+    --color-badge-bg: #e5e7eb;
+
+    // 进度环
+    --progress-ring-bg: rgba(0, 0, 0, 0.08);
+    --progress-ring-text: rgba(0, 0, 0, 0.85);
+
+    // 阴影
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    // Hero 卡片特殊样式
+    --hero-card-bg: #f0f0f0;
+    --hero-card-border: rgba(0, 0, 0, 0.1);
+}

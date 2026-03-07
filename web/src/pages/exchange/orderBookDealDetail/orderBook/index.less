@@ -1,0 +1,133 @@
+@import (reference) '../../common.less';
+@import (reference) '../../../../component/common.less';
+
+.exchange-order-book (@text-color, @text-secondary-color, @text-third-color, @background-third-color) {
+  font-size: 12px;
+  color: @text-color;
+  .exchange-order-book-title {
+    color: @text-third-color;
+    height: 24px;
+  }
+  .exchange-order-book-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px;
+    @media @min-screen {
+      padding: 0;
+    }
+    span {
+      display: inline-block;
+      text-align: right;
+      &[data-type="price"] {
+        width: 28%;
+        text-align: left;
+        @media @min-screen {
+          width: auto;
+        }
+      }
+      &[data-type="volume"] {
+        width: 28%;
+        @media @min-screen {
+          width: auto;
+        }
+      }
+      &[data-type="sum"] {
+        width: 44%;
+        @media @min-screen {
+          display: none;
+        }
+      }
+    }
+  }
+  .exchange-order-book-list {
+    li {
+      position: relative;
+      height: 22px;
+      cursor: pointer;
+      span {
+        &[data-type="price"] {
+          font-weight: 600;
+        }
+      }
+      &:hover {
+        background-color: @hover-background-color;
+      }
+      .volume-rate-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 1;
+        height: calc(100% - 2px);
+        pointer-events: none;
+        .volume-rate {
+          display: inline-block;
+          height: 100%;
+          opacity: .1;
+          transition: all .2s;
+        }
+      }
+    }
+  }
+  .exchange-order-book-ask-list {
+    &[data-order-book-type="ask"] {
+      margin-top: 7px;
+    }
+  }
+  .exchange-order-book-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 40px;
+    font-size: 14px;
+    background-color: @background-third-color;
+    padding: 0 12px;
+    margin: 7px 0;
+    font-size: 12px;
+    color: @text-color;
+    @media @min-screen {
+      margin: 0;
+      height: 36px;
+      background-color: transparent;
+      padding: 0;
+    }
+    &-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .last {
+        font-size: 14px;
+        font-weight: 600;
+        margin-right: 6px;
+      }
+      &.mark-price-content {
+        @media @min-screen {
+          display: none;
+        }
+      }
+      .mark-label {
+        color: @text-secondary-color;
+      }
+      .mark {
+        font-size: 16px;
+        font-weight: 600;
+        margin-left: 6px;
+      }
+    }
+    &[data-order-book-type="ask"] {
+      margin-bottom: 0
+    }
+  }
+}
+
+.exchange-order-book-dark {
+  .exchange-order-book(@text-color-dark, @text-secondary-color-dark, @text-third-color-dark, @background-third-color-dark)
+}
+
+.exchange-order-book-light {
+  .exchange-order-book(@text-color-light, @text-secondary-color-light, @text-third-color-light, @background-third-color-light)
+}

@@ -1,0 +1,47 @@
+@import (reference) '../common.less';
+
+.funny-list(@text-color, @text-third-color) {
+  font-size: 12px;
+  color: @text-color;
+  height: 100%;
+  position: relative;
+  .funny-list-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 12px;
+    cursor: pointer;
+    span {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      &:first-child {
+        justify-content: flex-start;
+      }
+    }
+  }
+  .funny-list-title {
+    color: @text-third-color;
+    height: 22px;
+    padding: 0 12px;
+    cursor: default;
+  }
+  .funny-list-content {
+    height: calc(100% - 22px);
+    ul {
+      li {
+        &:hover {
+          background-color: @hover-background-color
+        }
+      }
+    }
+  }
+}
+
+.@{funny-prefix}-list-dark {
+  .funny-list(@text-color-dark, @text-third-color-dark)
+}
+.@{funny-prefix}-list-light {
+  .funny-list(@text-color-light, @text-third-color-light)
+}

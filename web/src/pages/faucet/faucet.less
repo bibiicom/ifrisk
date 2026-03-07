@@ -1,0 +1,82 @@
+.faucet {
+  display: flex;
+  justify-content: center;  // 页面水平居中
+  align-items: flex-start;  // 页面靠上
+  padding-top: 40px;        // 可以调节页面距离顶部的距离
+  min-height: 100vh;
+}
+
+.faucet-content-container {
+  width: 480px;            // 和上面任务列表一样的宽度
+  padding: 20px 32px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .wallet-info p {
+    font-weight: bold;
+    word-break: break-all;
+    text-align: left;      // 内部文字靠左
+    margin: 4px 0;
+  }
+
+  .tasks-list {
+    margin-top: 20px;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #a09a9a;
+
+      span {
+        text-align: left;   // task 文本靠左
+      }
+
+      button {
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .faucet-history {
+    margin-top: 30px;
+
+    h3 {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #524d4d;
+
+        &.title {
+          font-weight: bold;
+          border-bottom: 1px solid #979393;
+        }
+      }
+    }
+  }
+
+  .faucet-claim-button {
+    margin-top: 20px;
+    align-self: center;
+  }
+}

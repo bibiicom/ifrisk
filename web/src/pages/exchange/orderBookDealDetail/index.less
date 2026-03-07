@@ -1,0 +1,110 @@
+@import (reference) '../../../component/common.less';
+@import (reference) '../common.less';
+@import '../../../styles/theme-variables.less';
+
+.exchange-order-book-deal-detail (@text-color, @text-secondary-color) {
+  height: 100%;
+  width: @order-book-deal-detail-width;
+  margin: 0 @section-gap;
+  background-color: var(--bg-secondary);
+
+  @media @min-screen {
+    width: @order-book-deal-detail-width-min-screen;
+    margin: 0;
+    padding: 0 6px;
+    height: auto;
+  }
+
+  .exchange-order-book-deal-detail-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 12px;
+    color: var(--text-primary);
+
+    .module {
+      width: 13px;
+      height: 13px;
+      opacity: .2;
+      margin-left: 8px;
+      cursor: pointer;
+
+      &:first-child {
+        @media @min-screen {
+          margin-left: 0;
+        }
+      }
+
+      &.selected,
+      &:hover {
+        opacity: 1;
+      }
+
+      i {
+        display: block;
+        width: 100%;
+        height: 6px;
+
+        &:last-child {
+          margin-top: 1px;
+        }
+      }
+    }
+
+    .precision-select {
+      height: 20px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 14px;
+
+      &-selector {
+        padding: 0;
+        border: none;
+        background: transparent;
+
+        &-arrow {
+          border-top-color: var(--text-secondary);
+        }
+      }
+
+      &-popover {
+        width: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+        background-color: var(--bg-popover);
+      }
+
+      &-popover-row {
+        color: var(--text-secondary) !important;
+        height: 26px !important;
+        padding: 0 8px !important;
+        justify-content: center;
+
+        &:first-child {
+          border-top-left-radius: 2px !important;
+          border-top-right-radius: 2px !important;
+        }
+
+        &:last-child {
+          border-bottom-left-radius: 2px !important;
+          border-bottom-right-radius: 2px !important;
+        }
+
+        &:hover {
+          color: var(--text-primary) !important;
+          background-color: var(--bg-hover);
+        }
+      }
+    }
+  }
+}
+
+.exchange-order-book-deal-detail-dark {
+  .exchange-order-book-deal-detail(@text-color-dark, @text-secondary-color-dark)
+}
+
+.exchange-order-book-deal-detail-light {
+  .exchange-order-book-deal-detail(@text-color-light, @text-secondary-color-light)
+}

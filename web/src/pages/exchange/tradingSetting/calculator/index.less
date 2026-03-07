@@ -1,0 +1,102 @@
+@import (reference) '../../../../component/common.less';
+@import (reference) '../../common.less';
+
+.exchange-calculator-title-tab (@text-secondary-color) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  height: 32px;
+  color: @text-secondary-color;
+  font-size: 14px;
+  font-weight: normal;
+  margin-right: 12px;
+  cursor: pointer;
+  &.selected {
+    color: @main-blue;
+    font-weight: bold;
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      bottom: 0;
+      height: 1px;
+      background: @main-blue;
+    }
+  }
+}
+
+.exchange-calculator-title-tab-dark {
+  .exchange-calculator-title-tab(@text-secondary-color-dark)
+}
+
+.exchange-calculator-title-tab-light {
+  .exchange-calculator-title-tab(@text-secondary-color-light)
+}
+
+.exchange-calculator-content (@text-color, @text-secondary-color, @background-third-color) {
+  position: relative;
+  padding-bottom: 24px;
+  justify-content: space-between;
+  align-items: flex-start;
+  .item {
+    width: calc(50% - 24px);
+    .result-title {
+      color: @text-color;
+      font-weight: 600;
+      font-size: 20px
+    }
+    .result-label {
+      margin-top: 24px;
+      font-size: 14px;
+      color: @text-secondary-color;
+    }
+    .result-value {
+      font-size: 14px;
+      margin-top: 2px;
+      color: fade(@text-color, 80%);
+      font-weight: 600;
+    }
+  }
+  .left-item {
+    @media @min-screen {
+      width: calc(68% - 24px);
+    }
+    
+  }
+  .right-item {
+    @media @min-screen {
+      width: calc(32% - 24px);
+    }
+  }
+  .split-line {
+    position: absolute;
+    display: inline-block;
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    background-color: @background-third-color;
+    @media @min-screen {
+      left: 68%
+    }
+  }
+}
+
+.exchange-calculator-content-dark {
+  .exchange-calculator-content(@text-color-dark, @text-secondary-color-dark, @background-third-color-dark)
+}
+
+.exchange-calculator-content-light {
+  .exchange-calculator-content(@text-color-light, @text-secondary-color-light, @background-third-color-light)
+}
+
+.exchange-calculator-mobile {
+  align-items: flex-end;
+  transform: translateY(100%);
+  transform-origin: bottom;
+  &[data-visible="true"] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

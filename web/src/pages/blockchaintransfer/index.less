@@ -1,0 +1,82 @@
+@import (reference) "../../component/common.less";
+
+.blockchain-tranfer-step-container {
+  padding: 30px 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  .step-title {
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 16px;
+    font-weight: bold;
+    .step-title-tag {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 12px;
+      background-color: @main-blue;
+    }
+  }
+  .step-select-title {
+    color: @text-color-light;
+    font-size: 12px;
+    padding-bottom: 4px;
+    .operate-button {
+      padding: 2px 6px;
+      height: auto;
+      border-radius: 2px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+  }
+  .step-input, .step-select {
+    max-width: 430px;
+  }
+  
+  .step-address {
+    justify-content: space-between;
+    font-size: 14px;
+    color: @text-color-light;
+    margin-top: 6px;
+    width: 430px;
+    cursor: pointer;
+    svg {
+      opacity: 0;
+      width: 14px;
+      height: 14px;
+      transition: all .2s ease-in-out;
+      &:hover {
+        fill: @main-blue;
+      }
+    }
+    &:hover {
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+  .step-tip {
+    color: @main-yellow;
+    font-size: 12px;
+    margin-top: 6px;
+    opacity: 0.8;
+  }
+}
+
+.blockchain-transfer-table-container {
+  border-radius: 2px;
+  margin-top: 20px;
+  background-color: #fff;
+  .table-title {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: @border-light;
+  }
+}

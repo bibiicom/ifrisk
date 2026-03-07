@@ -1,0 +1,80 @@
+@import (reference) '../common.less';
+
+.funny-input (@text-color, @text-secondary-color, @border, @border-secondary, @disabled-background-color) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  height: 38px;
+  border: @border;
+  border-radius: @border-radius;
+  padding: 0 12px;
+  font-size: 12px;
+  margin: 6px 0;
+  color: @text-secondary-color;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  &[data-status="focus"] {
+    border-color: fade(@main-blue, 60%);
+  }
+  &[data-status="disabled"] {
+    background: @disabled-background-color;
+    border: @border-secondary;
+    cursor: not-allowed;
+  }
+  &[data-status="error"] {
+    border: solid 1px @main-red;
+  }
+  .funny-input-prefix {
+    white-space: nowrap;
+    padding-right: 10px;
+  }
+  .funny-input-suffix {
+    white-space: nowrap;
+    padding-left: 10px;
+  }
+  .funny-input-value {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: @text-color;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .funny-input-error {
+    display: inline-block;
+    position: absolute;
+    font-size: 12px;
+    color: @main-red;
+    left: 0;
+    top: 100%;
+    opacity: 0;
+    transition: all .2s ease-in-out;
+    &[data-visible="true"] {
+      opacity: 1
+    }
+  }
+}
+
+.@{funny-prefix}-input-dark {
+  .funny-input(
+    @text-color-dark,
+    @text-secondary-color-dark,
+    @border-dark,
+    @border-secondary-dark,
+    @disabled-background-color-dark
+  )
+}
+
+.@{funny-prefix}-input-light {
+  .funny-input(
+    @text-color-light,
+    @text-secondary-color-light,
+    @border-light,
+    @border-secondary-light,
+    @disabled-background-color-light
+  )
+}

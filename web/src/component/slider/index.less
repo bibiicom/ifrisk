@@ -1,0 +1,96 @@
+@import (reference) '../common.less';
+
+.funny-slider (@text-color, @text-secondary-color, @border, @background-color, @background-secondary-color) {
+  .funny-slider-row {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .funny-slider-track {
+    left: 0;
+    width: 100%;
+    position: absolute;
+    height: 4px;
+    margin: auto 0;
+    background-color: @background-secondary-color;
+    cursor: pointer;
+  }
+  .funny-slider-track-active {
+    left: 0;
+    position: absolute;
+    height: 4px;
+    margin: auto 0;
+    background-color: @text-secondary-color;
+    pointer-events: none;
+  }
+  .funny-slider-dot {
+    position: absolute;
+    margin: 0 auto;
+    width: 4px;
+    height: 8px;
+    background-color: @background-color;
+    transform: translateX(-50%);
+    cursor: pointer;
+    pointer-events: none;
+    &.active {
+      background-color: @text-secondary-color;
+    }
+  }
+  .funny-slider-dot-label {
+    position: absolute;
+    top: 0;
+    color: @text-secondary-color;
+    font-size: 12px;
+    transform: translateX(-50%);
+  }
+  .funny-slider-thumb {
+    position: absolute;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    background-color: desaturate(@text-color, 50%);
+    border: @border;
+    border-radius: 7px;
+    transform: translateX(-50%);
+    cursor: pointer;
+    &-circle {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: @main-blue;
+    }
+  }
+  .funny-slider-tip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 16px;
+    border-radius: 8px;
+    padding: 0 6px;
+    font-size: 12px;
+    background-color: @background-color;
+    color: @text-color;
+    z-index: 10;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity .2s linear .2s;
+    &.show {
+      opacity: 1;
+    }
+  }
+}
+
+.@{funny-prefix}-slider-dark {
+  .funny-slider(@text-color-dark, @text-secondary-color-dark, @border-dark, @background-color-dark, @background-secondary-color-dark)
+}
+
+.@{funny-prefix}-slider-light {
+  .funny-slider(@text-color-light, @text-secondary-color-light, @border-light, @background-color-light, @background-secondary-color-light)
+}

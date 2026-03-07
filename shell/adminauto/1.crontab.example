@@ -1,0 +1,19 @@
+00 * * * * /home/trade/run/cleanlog.sh >> /home/trade/a
+00 * * * * /home/trade/run/backup.sh >> /home/trade/a
+09 * * * * rm -rf /home/trade/backup/202*
+05 * * * * rm -rf /home/trade/run/risk/keep.sh
+#09 * * * * /home/trade/backup/gzip_dir.sh
+00 00 1 * * rm -rf /home/trade/a
+#*/5 * * * * /home/trade/run/trade/snapgen.sh >> /home/trade/run/trade/snapgen.log
+#*/2 * * * * /home/trade/run/trade/snapdiff.sh
+#*/20 * * * * /home/trade/run/trade/snapcheck.sh >> /home/trade/run/trade/snapcheck.log
+#10 * * * * /home/exchange/run/trade/account_init.sh >> /home/exchange/run/trade/account_init.log
+
+
+*/10 * * * * /home/server/run/cleanlog.sh >> /home/server/b
+*/20 * * * * /home/server/run/backup_remote.sh server@172.18.1.26 >> /home/server/a
+
+
+
+10 * * * * /home/server/run/backup.sh >> /home/server/a
+*/10 * * * * /home/server/backup/gzip_dir.sh >> /home/server/a
